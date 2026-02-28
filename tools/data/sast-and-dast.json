@@ -1,0 +1,127 @@
+{
+  "source": "dataset_information.json",
+  "scope": "SN 01-26",
+  "rule": "SAST='Yes' or 'Sometimes' treated as SAST-capable; DAST='Yes' treated as DAST-capable.",
+  "group": "sast-and-dast",
+  "count": 13,
+  "percentage_of_core_dataset": 50.0,
+  "items": [
+    {
+      "sn": "01",
+      "vulnerability_name": "SQL Injection",
+      "primary_cwe": "CWE-89",
+      "generally_detectable_by_sast": "Yes",
+      "generally_detectable_by_dast": "Yes",
+      "code_location": "login()",
+      "repeated_cwe_occurrence": "Yes (1/2)"
+    },
+    {
+      "sn": "02",
+      "vulnerability_name": "Cross-Site Scripting (XSS)",
+      "primary_cwe": "CWE-79",
+      "generally_detectable_by_sast": "Yes",
+      "generally_detectable_by_dast": "Yes",
+      "code_location": "profile()",
+      "repeated_cwe_occurrence": "No"
+    },
+    {
+      "sn": "03",
+      "vulnerability_name": "Information Leakage",
+      "primary_cwe": "CWE-209",
+      "generally_detectable_by_sast": "Yes",
+      "generally_detectable_by_dast": "Yes",
+      "code_location": "login()",
+      "repeated_cwe_occurrence": "No"
+    },
+    {
+      "sn": "04",
+      "vulnerability_name": "Frame Injection",
+      "primary_cwe": "CWE-1021",
+      "generally_detectable_by_sast": "Yes",
+      "generally_detectable_by_dast": "Yes",
+      "code_location": "frame_content()",
+      "repeated_cwe_occurrence": "Yes (1/2)"
+    },
+    {
+      "sn": "05",
+      "vulnerability_name": "Open URL Redirection",
+      "primary_cwe": "CWE-601",
+      "generally_detectable_by_sast": "Yes",
+      "generally_detectable_by_dast": "Yes",
+      "code_location": "open_redirect()",
+      "repeated_cwe_occurrence": "No"
+    },
+    {
+      "sn": "07",
+      "vulnerability_name": "GET vs POST misuse for credentials",
+      "primary_cwe": "CWE-598",
+      "generally_detectable_by_sast": "Yes",
+      "generally_detectable_by_dast": "Yes",
+      "code_location": "login()",
+      "repeated_cwe_occurrence": "No"
+    },
+    {
+      "sn": "09",
+      "vulnerability_name": "Clickjacking (missing anti-frame headers)",
+      "primary_cwe": "CWE-1021",
+      "generally_detectable_by_sast": "Sometimes",
+      "generally_detectable_by_dast": "Yes",
+      "code_location": "after_request()",
+      "repeated_cwe_occurrence": "Yes (2/2)"
+    },
+    {
+      "sn": "13",
+      "vulnerability_name": "CRLF Injection",
+      "primary_cwe": "CWE-113",
+      "generally_detectable_by_sast": "Yes",
+      "generally_detectable_by_dast": "Yes",
+      "code_location": "crlf_injection()",
+      "repeated_cwe_occurrence": "No"
+    },
+    {
+      "sn": "15",
+      "vulnerability_name": "Directory Traversal",
+      "primary_cwe": "CWE-22",
+      "generally_detectable_by_sast": "Yes",
+      "generally_detectable_by_dast": "Yes",
+      "code_location": "directory_traversal()",
+      "repeated_cwe_occurrence": "No"
+    },
+    {
+      "sn": "19",
+      "vulnerability_name": "SQL Injection via ORM-style query",
+      "primary_cwe": "CWE-89",
+      "generally_detectable_by_sast": "Yes",
+      "generally_detectable_by_dast": "Yes",
+      "code_location": "sql_injection_orm()",
+      "repeated_cwe_occurrence": "Yes (2/2)"
+    },
+    {
+      "sn": "22",
+      "vulnerability_name": "SSRF (Server-Side Request Forgery)",
+      "primary_cwe": "CWE-918",
+      "generally_detectable_by_sast": "Yes",
+      "generally_detectable_by_dast": "Yes",
+      "code_location": "ssrf_vulnerability()",
+      "repeated_cwe_occurrence": "No"
+    },
+    {
+      "sn": "24",
+      "vulnerability_name": "Insecure Deserialization",
+      "primary_cwe": "CWE-502",
+      "generally_detectable_by_sast": "Yes",
+      "generally_detectable_by_dast": "Yes",
+      "code_location": "insecure_deserialization()",
+      "repeated_cwe_occurrence": "No"
+    },
+    {
+      "sn": "25",
+      "vulnerability_name": "Command Injection",
+      "primary_cwe": "CWE-78",
+      "generally_detectable_by_sast": "Yes",
+      "generally_detectable_by_dast": "Yes",
+      "code_location": "command_injection()",
+      "repeated_cwe_occurrence": "No"
+    }
+  ]
+}

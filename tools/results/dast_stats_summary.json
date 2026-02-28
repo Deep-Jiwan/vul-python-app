@@ -1,0 +1,126 @@
+{
+  "inputs": {
+    "zap_report": "artifacts\\full-scan-report.json",
+    "dast_only": "tools\\data\\dast-only.json",
+    "sast_and_dast": "tools\\data\\sast-and-dast.json"
+  },
+  "mapping_rule": "ZAP alert name -> SN mapping defined in ALERT_TO_SN",
+  "detected_alert_names": [
+    "Application Error Disclosure",
+    "Authentication Request Identified",
+    "Buffer Overflow",
+    "Content Security Policy (CSP) Header Not Set",
+    "Cross Site Scripting (Reflected)",
+    "Cross-Origin-Embedder-Policy Header Missing or Invalid",
+    "Cross-Origin-Opener-Policy Header Missing or Invalid",
+    "Cross-Origin-Resource-Policy Header Missing or Invalid",
+    "External Redirect",
+    "Format String Error",
+    "Full Path Disclosure",
+    "GET for POST",
+    "HTTP Only Site",
+    "Information Disclosure - Sensitive Information in URL",
+    "Information Disclosure - Suspicious Comments",
+    "Integer Overflow Error",
+    "Missing Anti-clickjacking Header",
+    "Modern Web Application",
+    "Non-Storable Content",
+    "Off-site Redirect",
+    "Path Traversal",
+    "Permissions Policy Header Not Set",
+    "Remote OS Command Injection",
+    "SQL Injection",
+    "SQL Injection - SQLite",
+    "Sec-Fetch-Dest Header is Missing",
+    "Sec-Fetch-Mode Header is Missing",
+    "Sec-Fetch-Site Header is Missing",
+    "Sec-Fetch-User Header is Missing",
+    "Server Leaks Version Information via \"Server\" HTTP Response Header Field",
+    "Server Side Request Forgery",
+    "Server Side Template Injection",
+    "Source Code Disclosure - File Inclusion",
+    "Source Code Disclosure - SQL",
+    "Storable and Cacheable Content",
+    "User Agent Fuzzer",
+    "User Controllable HTML Element Attribute (Potential XSS)",
+    "X-Content-Type-Options Header Missing"
+  ],
+  "unmapped_detected_alert_names": [
+    "Authentication Request Identified",
+    "Buffer Overflow",
+    "Content Security Policy (CSP) Header Not Set",
+    "Cross-Origin-Embedder-Policy Header Missing or Invalid",
+    "Cross-Origin-Opener-Policy Header Missing or Invalid",
+    "Cross-Origin-Resource-Policy Header Missing or Invalid",
+    "Format String Error",
+    "Full Path Disclosure",
+    "HTTP Only Site",
+    "Information Disclosure - Suspicious Comments",
+    "Integer Overflow Error",
+    "Modern Web Application",
+    "Non-Storable Content",
+    "Permissions Policy Header Not Set",
+    "Sec-Fetch-Dest Header is Missing",
+    "Sec-Fetch-Mode Header is Missing",
+    "Sec-Fetch-Site Header is Missing",
+    "Sec-Fetch-User Header is Missing",
+    "Server Leaks Version Information via \"Server\" HTTP Response Header Field",
+    "Storable and Cacheable Content",
+    "User Agent Fuzzer",
+    "User Controllable HTML Element Attribute (Potential XSS)",
+    "X-Content-Type-Options Header Missing"
+  ],
+  "detected_sn_total": [
+    "01",
+    "02",
+    "03",
+    "05",
+    "07",
+    "09",
+    "10",
+    "15",
+    "19",
+    "21",
+    "22",
+    "25"
+  ],
+  "groups": {
+    "dast_only": {
+      "covered_count": 2,
+      "total": 6,
+      "percentage": 33.33,
+      "covered_sn": [
+        "10",
+        "21"
+      ],
+      "not_covered_sn": [
+        "08",
+        "11",
+        "16",
+        "23"
+      ]
+    },
+    "sast_and_dast": {
+      "covered_count": 10,
+      "total": 13,
+      "percentage": 76.92,
+      "covered_sn": [
+        "01",
+        "02",
+        "03",
+        "05",
+        "07",
+        "09",
+        "15",
+        "19",
+        "22",
+        "25"
+      ],
+      "not_covered_sn": [
+        "04",
+        "13",
+        "24"
+      ]
+    }
+  }
+}

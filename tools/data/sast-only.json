@@ -1,0 +1,73 @@
+{
+  "source": "dataset_information.json",
+  "scope": "SN 01-26",
+  "rule": "SAST='Yes' or 'Sometimes' treated as SAST-capable; DAST='Yes' treated as DAST-capable.",
+  "group": "sast-only",
+  "count": 7,
+  "percentage_of_core_dataset": 26.92,
+  "items": [
+    {
+      "sn": "06",
+      "vulnerability_name": "Missing Session Timeout",
+      "primary_cwe": "CWE-613",
+      "generally_detectable_by_sast": "Yes",
+      "generally_detectable_by_dast": "No",
+      "code_location": "App/session configuration",
+      "repeated_cwe_occurrence": "No"
+    },
+    {
+      "sn": "12",
+      "vulnerability_name": "Weak Encryption (DES)",
+      "primary_cwe": "CWE-327",
+      "generally_detectable_by_sast": "Yes",
+      "generally_detectable_by_dast": "No",
+      "code_location": "encrypt_data()",
+      "repeated_cwe_occurrence": "No"
+    },
+    {
+      "sn": "14",
+      "vulnerability_name": "Trust Boundary Violation",
+      "primary_cwe": "CWE-501",
+      "generally_detectable_by_sast": "Sometimes",
+      "generally_detectable_by_dast": "No",
+      "code_location": "trust_boundary()",
+      "repeated_cwe_occurrence": "No"
+    },
+    {
+      "sn": "17",
+      "vulnerability_name": "Risky Crypto Algorithm (MD5)",
+      "primary_cwe": "CWE-328",
+      "generally_detectable_by_sast": "Yes",
+      "generally_detectable_by_dast": "No",
+      "code_location": "init_database()",
+      "repeated_cwe_occurrence": "No"
+    },
+    {
+      "sn": "18",
+      "vulnerability_name": "Credential Management (hardcoded secrets)",
+      "primary_cwe": "CWE-798",
+      "generally_detectable_by_sast": "Yes",
+      "generally_detectable_by_dast": "No",
+      "code_location": "Global constants",
+      "repeated_cwe_occurrence": "No"
+    },
+    {
+      "sn": "20",
+      "vulnerability_name": "Resource Shutdown / Resource Leak",
+      "primary_cwe": "CWE-772",
+      "generally_detectable_by_sast": "Yes",
+      "generally_detectable_by_dast": "No",
+      "code_location": "resource_leak()",
+      "repeated_cwe_occurrence": "No"
+    },
+    {
+      "sn": "26",
+      "vulnerability_name": "XML parser misuse (labeled as XXE in dataset)",
+      "primary_cwe": "CWE-611",
+      "generally_detectable_by_sast": "Yes",
+      "generally_detectable_by_dast": "No",
+      "code_location": "xxe_vulnerability()",
+      "repeated_cwe_occurrence": "No"
+    }
+  ]
+}

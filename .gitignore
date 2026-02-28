@@ -2,3 +2,5 @@ securityvulnerabilities
 vulnerable_app.db
 .venv
 artifacts
+docs
+.env

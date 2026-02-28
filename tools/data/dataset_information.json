@@ -1,0 +1,390 @@
+{
+	"title": "Dataset information",
+	"source_file": "vulnerable_app.py",
+	"ground_truth_counting_rule": {
+		"dataset_unit": "one labeled vulnerability instance per SN (01-26)",
+		"exclude_from_core_totals": [
+			"00"
+		],
+		"cwe_frequency_basis": "primary_cwe_per_sn",
+		"note": "If a CWE appears in multiple SN entries (for example SQL Injection), it is counted multiple times."
+	},
+	"dataset_summary_core": {
+		"total_labeled_vulnerability_instances": 26,
+		"unique_primary_cwes": 24,
+		"repeated_cwes": [
+			{
+				"cwe": "CWE-89",
+				"name": "SQL Injection",
+				"occurrences": 2,
+				"sns": [
+					"01",
+					"19"
+				]
+			},
+			{
+				"cwe": "CWE-1021",
+				"name": "Improper Restriction of Rendered UI Layers",
+				"occurrences": 2,
+				"sns": [
+					"04",
+					"09"
+				]
+			}
+		]
+	},
+	"vulnerabilities": [
+		{
+			"sn": "00",
+			"vulnerability_name": "Multi-security composite sample",
+			"primary_cwe": [
+				"CWE-798",
+				"CWE-327",
+				"CWE-89",
+				"CWE-79",
+				"CWE-78"
+			],
+			"generally_detectable_by_sast": "Yes",
+			"generally_detectable_by_dast": "Yes",
+			"code_location": "Global config + runtime (ADMIN_*, API_KEY, app.secret_key, app.run(debug=True))",
+			"repeated_cwe_occurrence": "-"
+		},
+		{
+			"sn": "01",
+			"vulnerability_name": "SQL Injection",
+			"primary_cwe": "CWE-89",
+			"generally_detectable_by_sast": "Yes",
+			"generally_detectable_by_dast": "Yes",
+			"code_location": "login()",
+			"repeated_cwe_occurrence": "Yes (1/2)"
+		},
+		{
+			"sn": "02",
+			"vulnerability_name": "Cross-Site Scripting (XSS)",
+			"primary_cwe": "CWE-79",
+			"generally_detectable_by_sast": "Yes",
+			"generally_detectable_by_dast": "Yes",
+			"code_location": "profile()",
+			"repeated_cwe_occurrence": "No"
+		},
+		{
+			"sn": "03",
+			"vulnerability_name": "Information Leakage",
+			"primary_cwe": "CWE-209",
+			"generally_detectable_by_sast": "Yes",
+			"generally_detectable_by_dast": "Yes",
+			"code_location": "login()",
+			"repeated_cwe_occurrence": "No"
+		},
+		{
+			"sn": "04",
+			"vulnerability_name": "Frame Injection",
+			"primary_cwe": "CWE-1021",
+			"generally_detectable_by_sast": "Yes",
+			"generally_detectable_by_dast": "Yes",
+			"code_location": "frame_content()",
+			"repeated_cwe_occurrence": "Yes (1/2)"
+		},
+		{
+			"sn": "05",
+			"vulnerability_name": "Open URL Redirection",
+			"primary_cwe": "CWE-601",
+			"generally_detectable_by_sast": "Yes",
+			"generally_detectable_by_dast": "Yes",
+			"code_location": "open_redirect()",
+			"repeated_cwe_occurrence": "No"
+		},
+		{
+			"sn": "06",
+			"vulnerability_name": "Missing Session Timeout",
+			"primary_cwe": "CWE-613",
+			"generally_detectable_by_sast": "Yes",
+			"generally_detectable_by_dast": "No",
+			"code_location": "App/session configuration",
+			"repeated_cwe_occurrence": "No"
+		},
+		{
+			"sn": "07",
+			"vulnerability_name": "GET vs POST misuse for credentials",
+			"primary_cwe": "CWE-598",
+			"generally_detectable_by_sast": "Yes",
+			"generally_detectable_by_dast": "Yes",
+			"code_location": "login()",
+			"repeated_cwe_occurrence": "No"
+		},
+		{
+			"sn": "08",
+			"vulnerability_name": "Session ID/Cookie flags not secure",
+			"primary_cwe": "CWE-614",
+			"generally_detectable_by_sast": "No",
+			"generally_detectable_by_dast": "Yes",
+			"code_location": "App/session configuration",
+			"repeated_cwe_occurrence": "No"
+		},
+		{
+			"sn": "09",
+			"vulnerability_name": "Clickjacking (missing anti-frame headers)",
+			"primary_cwe": "CWE-1021",
+			"generally_detectable_by_sast": "Sometimes",
+			"generally_detectable_by_dast": "Yes",
+			"code_location": "after_request()",
+			"repeated_cwe_occurrence": "Yes (2/2)"
+		},
+		{
+			"sn": "10",
+			"vulnerability_name": "Password Hint Exposure",
+			"primary_cwe": "CWE-200",
+			"generally_detectable_by_sast": "No",
+			"generally_detectable_by_dast": "Yes",
+			"code_location": "profile()",
+			"repeated_cwe_occurrence": "No"
+		},
+		{
+			"sn": "11",
+			"vulnerability_name": "Cache Info in Browser (missing cache control)",
+			"primary_cwe": "CWE-525",
+			"generally_detectable_by_sast": "No",
+			"generally_detectable_by_dast": "Yes",
+			"code_location": "after_request()",
+			"repeated_cwe_occurrence": "No"
+		},
+		{
+			"sn": "12",
+			"vulnerability_name": "Weak Encryption (DES)",
+			"primary_cwe": "CWE-327",
+			"generally_detectable_by_sast": "Yes",
+			"generally_detectable_by_dast": "No",
+			"code_location": "encrypt_data()",
+			"repeated_cwe_occurrence": "No"
+		},
+		{
+			"sn": "13",
+			"vulnerability_name": "CRLF Injection",
+			"primary_cwe": "CWE-113",
+			"generally_detectable_by_sast": "Yes",
+			"generally_detectable_by_dast": "Yes",
+			"code_location": "crlf_injection()",
+			"repeated_cwe_occurrence": "No"
+		},
+		{
+			"sn": "14",
+			"vulnerability_name": "Trust Boundary Violation",
+			"primary_cwe": "CWE-501",
+			"generally_detectable_by_sast": "Sometimes",
+			"generally_detectable_by_dast": "No",
+			"code_location": "trust_boundary()",
+			"repeated_cwe_occurrence": "No"
+		},
+		{
+			"sn": "15",
+			"vulnerability_name": "Directory Traversal",
+			"primary_cwe": "CWE-22",
+			"generally_detectable_by_sast": "Yes",
+			"generally_detectable_by_dast": "Yes",
+			"code_location": "directory_traversal()",
+			"repeated_cwe_occurrence": "No"
+		},
+		{
+			"sn": "16",
+			"vulnerability_name": "Session Fixation",
+			"primary_cwe": "CWE-384",
+			"generally_detectable_by_sast": "No",
+			"generally_detectable_by_dast": "Yes",
+			"code_location": "session_fixation()",
+			"repeated_cwe_occurrence": "No"
+		},
+		{
+			"sn": "17",
+			"vulnerability_name": "Risky Crypto Algorithm (MD5)",
+			"primary_cwe": "CWE-328",
+			"generally_detectable_by_sast": "Yes",
+			"generally_detectable_by_dast": "No",
+			"code_location": "init_database()",
+			"repeated_cwe_occurrence": "No"
+		},
+		{
+			"sn": "18",
+			"vulnerability_name": "Credential Management (hardcoded secrets)",
+			"primary_cwe": "CWE-798",
+			"generally_detectable_by_sast": "Yes",
+			"generally_detectable_by_dast": "No",
+			"code_location": "Global constants",
+			"repeated_cwe_occurrence": "No"
+		},
+		{
+			"sn": "19",
+			"vulnerability_name": "SQL Injection via ORM-style query",
+			"primary_cwe": "CWE-89",
+			"generally_detectable_by_sast": "Yes",
+			"generally_detectable_by_dast": "Yes",
+			"code_location": "sql_injection_orm()",
+			"repeated_cwe_occurrence": "Yes (2/2)"
+		},
+		{
+			"sn": "20",
+			"vulnerability_name": "Resource Shutdown / Resource Leak",
+			"primary_cwe": "CWE-772",
+			"generally_detectable_by_sast": "Yes",
+			"generally_detectable_by_dast": "No",
+			"code_location": "resource_leak()",
+			"repeated_cwe_occurrence": "No"
+		},
+		{
+			"sn": "21",
+			"vulnerability_name": "CSRF (Cross-Site Request Forgery)",
+			"primary_cwe": "CWE-352",
+			"generally_detectable_by_sast": "No",
+			"generally_detectable_by_dast": "Yes",
+			"code_location": "csrf_vulnerability()",
+			"repeated_cwe_occurrence": "No"
+		},
+		{
+			"sn": "22",
+			"vulnerability_name": "SSRF (Server-Side Request Forgery)",
+			"primary_cwe": "CWE-918",
+			"generally_detectable_by_sast": "Yes",
+			"generally_detectable_by_dast": "Yes",
+			"code_location": "ssrf_vulnerability()",
+			"repeated_cwe_occurrence": "No"
+		},
+		{
+			"sn": "23",
+			"vulnerability_name": "Broken Access Control (IDOR)",
+			"primary_cwe": "CWE-639",
+			"generally_detectable_by_sast": "No",
+			"generally_detectable_by_dast": "Yes",
+			"code_location": "idor_vulnerability()",
+			"repeated_cwe_occurrence": "No"
+		},
+		{
+			"sn": "24",
+			"vulnerability_name": "Insecure Deserialization",
+			"primary_cwe": "CWE-502",
+			"generally_detectable_by_sast": "Yes",
+			"generally_detectable_by_dast": "Yes",
+			"code_location": "insecure_deserialization()",
+			"repeated_cwe_occurrence": "No"
+		},
+		{
+			"sn": "25",
+			"vulnerability_name": "Command Injection",
+			"primary_cwe": "CWE-78",
+			"generally_detectable_by_sast": "Yes",
+			"generally_detectable_by_dast": "Yes",
+			"code_location": "command_injection()",
+			"repeated_cwe_occurrence": "No"
+		},
+		{
+			"sn": "26",
+			"vulnerability_name": "XML parser misuse (labeled as XXE in dataset)",
+			"primary_cwe": "CWE-611",
+			"generally_detectable_by_sast": "Yes",
+			"generally_detectable_by_dast": "No",
+			"code_location": "xxe_vulnerability()",
+			"repeated_cwe_occurrence": "No"
+		}
+	],
+	"primary_cwe_frequency_core_dataset": [
+		{
+			"cwe": "CWE-22",
+			"occurrences": 1
+		},
+		{
+			"cwe": "CWE-78",
+			"occurrences": 1
+		},
+		{
+			"cwe": "CWE-79",
+			"occurrences": 1
+		},
+		{
+			"cwe": "CWE-89",
+			"occurrences": 2
+		},
+		{
+			"cwe": "CWE-113",
+			"occurrences": 1
+		},
+		{
+			"cwe": "CWE-200",
+			"occurrences": 1
+		},
+		{
+			"cwe": "CWE-209",
+			"occurrences": 1
+		},
+		{
+			"cwe": "CWE-327",
+			"occurrences": 1
+		},
+		{
+			"cwe": "CWE-328",
+			"occurrences": 1
+		},
+		{
+			"cwe": "CWE-352",
+			"occurrences": 1
+		},
+		{
+			"cwe": "CWE-384",
+			"occurrences": 1
+		},
+		{
+			"cwe": "CWE-501",
+			"occurrences": 1
+		},
+		{
+			"cwe": "CWE-502",
+			"occurrences": 1
+		},
+		{
+			"cwe": "CWE-525",
+			"occurrences": 1
+		},
+		{
+			"cwe": "CWE-598",
+			"occurrences": 1
+		},
+		{
+			"cwe": "CWE-601",
+			"occurrences": 1
+		},
+		{
+			"cwe": "CWE-611",
+			"occurrences": 1
+		},
+		{
+			"cwe": "CWE-613",
+			"occurrences": 1
+		},
+		{
+			"cwe": "CWE-614",
+			"occurrences": 1
+		},
+		{
+			"cwe": "CWE-639",
+			"occurrences": 1
+		},
+		{
+			"cwe": "CWE-772",
+			"occurrences": 1
+		},
+		{
+			"cwe": "CWE-798",
+			"occurrences": 1
+		},
+		{
+			"cwe": "CWE-918",
+			"occurrences": 1
+		},
+		{
+			"cwe": "CWE-1021",
+			"occurrences": 2
+		}
+	],
+	"notes": [
+		"SN 00 is intentionally composite and should not be used in denominator-based detection metrics.",
+		"SN 04 and SN 09 both map to CWE-1021 but are different manifestations (iframe src injection vs missing anti-framing headers).",
+		"SN 26 remains labeled as CWE-611 in the dataset, but practical exploitability depends on XML parser behavior and configuration."
+	]
+}

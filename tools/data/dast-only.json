@@ -1,0 +1,64 @@
+{
+  "source": "dataset_information.json",
+  "scope": "SN 01-26",
+  "rule": "SAST='Yes' or 'Sometimes' treated as SAST-capable; DAST='Yes' treated as DAST-capable.",
+  "group": "dast-only",
+  "count": 6,
+  "percentage_of_core_dataset": 23.08,
+  "items": [
+    {
+      "sn": "08",
+      "vulnerability_name": "Session ID/Cookie flags not secure",
+      "primary_cwe": "CWE-614",
+      "generally_detectable_by_sast": "No",
+      "generally_detectable_by_dast": "Yes",
+      "code_location": "App/session configuration",
+      "repeated_cwe_occurrence": "No"
+    },
+    {
+      "sn": "10",
+      "vulnerability_name": "Password Hint Exposure",
+      "primary_cwe": "CWE-200",
+      "generally_detectable_by_sast": "No",
+      "generally_detectable_by_dast": "Yes",
+      "code_location": "profile()",
+      "repeated_cwe_occurrence": "No"
+    },
+    {
+      "sn": "11",
+      "vulnerability_name": "Cache Info in Browser (missing cache control)",
+      "primary_cwe": "CWE-525",
+      "generally_detectable_by_sast": "No",
+      "generally_detectable_by_dast": "Yes",
+      "code_location": "after_request()",
+      "repeated_cwe_occurrence": "No"
+    },
+    {
+      "sn": "16",
+      "vulnerability_name": "Session Fixation",
+      "primary_cwe": "CWE-384",
+      "generally_detectable_by_sast": "No",
+      "generally_detectable_by_dast": "Yes",
+      "code_location": "session_fixation()",
+      "repeated_cwe_occurrence": "No"
+    },
+    {
+      "sn": "21",
+      "vulnerability_name": "CSRF (Cross-Site Request Forgery)",
+      "primary_cwe": "CWE-352",
+      "generally_detectable_by_sast": "No",
+      "generally_detectable_by_dast": "Yes",
+      "code_location": "csrf_vulnerability()",
+      "repeated_cwe_occurrence": "No"
+    },
+    {
+      "sn": "23",
+      "vulnerability_name": "Broken Access Control (IDOR)",
+      "primary_cwe": "CWE-639",
+      "generally_detectable_by_sast": "No",
+      "generally_detectable_by_dast": "Yes",
+      "code_location": "idor_vulnerability()",
+      "repeated_cwe_occurrence": "No"
+    }
+  ]
+}

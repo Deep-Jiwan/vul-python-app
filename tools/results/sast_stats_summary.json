@@ -1,0 +1,80 @@
+{
+  "inputs": {
+    "sarif": "artifacts\\python-results.sarif",
+    "sast_only": "tools\\data\\sast-only.json",
+    "sast_and_dast": "tools\\data\\sast-and-dast.json"
+  },
+  "mapping_rule": "CodeQL ruleId -> SN mapping defined in RULE_TO_SN",
+  "mapping_note": "SN26 uses py/xxe as primary mapping; py/xml-bomb is also mapped for XML parser misuse coverage.",
+  "detected_rule_ids": [
+    "py/command-line-injection",
+    "py/flask-debug",
+    "py/full-ssrf",
+    "py/path-injection",
+    "py/reflective-xss",
+    "py/sql-injection",
+    "py/stack-trace-exposure",
+    "py/template-injection",
+    "py/unsafe-deserialization",
+    "py/url-redirection",
+    "py/weak-cryptographic-algorithm",
+    "py/xml-bomb"
+  ],
+  "unmapped_detected_rule_ids": [
+    "py/flask-debug"
+  ],
+  "detected_sn_total": [
+    "01",
+    "02",
+    "03",
+    "05",
+    "12",
+    "15",
+    "17",
+    "19",
+    "22",
+    "24",
+    "25",
+    "26"
+  ],
+  "groups": {
+    "sast_only": {
+      "covered_count": 3,
+      "total": 7,
+      "percentage": 42.86,
+      "covered_sn": [
+        "12",
+        "17",
+        "26"
+      ],
+      "not_covered_sn": [
+        "06",
+        "14",
+        "18",
+        "20"
+      ]
+    },
+    "sast_and_dast": {
+      "covered_count": 9,
+      "total": 13,
+      "percentage": 69.23,
+      "covered_sn": [
+        "01",
+        "02",
+        "03",
+        "05",
+        "15",
+        "19",
+        "22",
+        "24",
+        "25"
+      ],
+      "not_covered_sn": [
+        "04",
+        "07",
+        "09",
+        "13"
+      ]
+    }
+  }
+}
