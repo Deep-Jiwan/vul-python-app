@@ -489,7 +489,21 @@ if __name__ == '__main__':
     print("=" * 70)
     print("STARTING WEB APPLICATION")
     print("=" * 70)
-    print("Flask web server starting...")
+    if __name__ == '__main__':
+        print("=" * 70)
+        print("STARTING WEB APPLICATION")
+        print("=" * 70)
+        print("Flask web server starting...")
+        print("=" * 70)
+    
+        # --------------------------------------------
+        init_database()
+        print("\n[+] Database initialized with sample data")
+        print("[+] Starting Flask server on http://127.0.0.1:3000")
+        print("[+] Press Ctrl+C to stop\n")
+    
+        # --------------------------------------------
+        app.run(debug=False, host='127.0.0.1', port=3000)
     print("=" * 70)
     
     # --------------------------------------------
