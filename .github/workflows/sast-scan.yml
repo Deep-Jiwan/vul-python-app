@@ -1,0 +1,68 @@
+name: SAST Security Scan
+
+on:
+  schedule:
+    - cron: '0 6 * * 0'  # Weekly on Sunday at 6 AM
+  workflow_dispatch:  # Allow manual trigger
+
+jobs:
+  sast-scan:
+    name: Run SAST Analysis
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+      actions: read
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history for better analysis
+      
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: python
+          queries: security-extended
+        env:
+          CODEQL_RAM: 4096
+          CODEQL_THREADS: 4
+      
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: codeql-python
+          output: sarif-results
+          upload: false
+      
+      - name: Locate and rename SARIF file
+        run: |
+          mkdir -p sarif-output
+          find sarif-results -name "*.sarif" -exec cp {} sarif-output/python-results.sarif \;
+          ls -la sarif-output/
+      
+      - name: Upload SARIF artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: sast-results
+          path: sarif-output/python-results.sarif
+          retention-days: 30
+      
+      - name: Upload SARIF to GitHub Security
+        uses: github/codeql-action/upload-sarif@v3
+        continue-on-error: true
+        with:
+          sarif_file: sarif-output/python-results.sarif
+          category: codeql
+      
+      - name: Create scan summary
+        if: always()
+        run: |
+          echo "## SAST Scan Complete 🔍" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Tool:** CodeQL (Python security analysis)" >> $GITHUB_STEP_SUMMARY
+          echo "**Artifacts uploaded:**" >> $GITHUB_STEP_SUMMARY
+          echo "- python-results.sarif" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Next step:** Download artifacts using the agent" >> $GITHUB_STEP_SUMMARY
