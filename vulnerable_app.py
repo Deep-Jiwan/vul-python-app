@@ -397,26 +397,28 @@ def insecure_deserialization():
 # PING ENDPOINT
 # ============================================================================
 
+@app.route('/ping')
 def command_injection():
     # --------------------------------------------
     host = request.args.get('host', 'localhost')
     
     # --------------------------------------------
-    # Validate host against allowlist to prevent command injection
-    import re
-    if not re.match(r'^[a-zA-Z0-9.-]+$', host):
-        return "Error: Invalid host format"
-    
     if os.name == 'nt':  # Windows
-        command = ['ping', '-n', '2', host]
+        command = f'ping -n 2 {host}'
     else:  # Linux/Mac
-        command = ['ping', '-c', '2', host]
+        command = f'ping -c 2 {host}'
     
     try:
-        result = subprocess.check_output(command, shell=False, stderr=subprocess.STDOUT, timeout=5)
+        result = subprocess.check_output(command, shell=True, stderr=subprocess.STDOUT, timeout=5)
         return f"<h2>Ping Results:</h2><pre>{result.decode()}</pre>"
     except Exception as e:
         return f"Error executing command: {str(e)}"
+
+
+# ============================================================================
+# XML PARSER ENDPOINT
+# ============================================================================
+
 @app.route('/parse_xml', methods=['POST'])
 def xxe_vulnerability():
     # --------------------------------------------
@@ -502,4 +504,4 @@ if __name__ == '__main__':
     print("[+] Press Ctrl+C to stop\n")
     
     # --------------------------------------------
-    app.run(debug=True, host='127.0.0.1', port=3000)
+    app.run(debug=False, host='127.0.0.1', port=3000)
