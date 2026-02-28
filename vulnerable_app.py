@@ -397,16 +397,13 @@ def insecure_deserialization():
 # PING ENDPOINT
 # ============================================================================
 
+@app.route('/ping')
+@app.route('/ping')
 def command_injection():
     # --------------------------------------------
     host = request.args.get('host', 'localhost')
     
     # --------------------------------------------
-    # Validate host input - only allow alphanumeric, dots, and hyphens for hostnames/IPs
-    import re
-    if not re.match(r'^[a-zA-Z0-9.\-]+$', host):
-        return "Invalid host parameter", 400
-    
     if os.name == 'nt':  # Windows
         command = ['ping', '-n', '2', host]
     else:  # Linux/Mac
@@ -492,7 +489,21 @@ if __name__ == '__main__':
     print("=" * 70)
     print("STARTING WEB APPLICATION")
     print("=" * 70)
-    print("Flask web server starting...")
+    if __name__ == '__main__':
+        print("=" * 70)
+        print("STARTING WEB APPLICATION")
+        print("=" * 70)
+        print("Flask web server starting...")
+        print("=" * 70)
+    
+        # --------------------------------------------
+        init_database()
+        print("\n[+] Database initialized with sample data")
+        print("[+] Starting Flask server on http://127.0.0.1:3000")
+        print("[+] Press Ctrl+C to stop\n")
+    
+        # --------------------------------------------
+        app.run(debug=False, host='127.0.0.1', port=3000)
     print("=" * 70)
     
     # --------------------------------------------
@@ -502,4 +513,4 @@ if __name__ == '__main__':
     print("[+] Press Ctrl+C to stop\n")
     
     # --------------------------------------------
-    app.run(debug=True, host='127.0.0.1', port=3000)
+    app.run(debug=False, host='127.0.0.1', port=3000)
