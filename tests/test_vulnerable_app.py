@@ -4,6 +4,14 @@ import pickle
 import hashlib
 import os
 import tempfile
+from vulnerable_app import init_database
+from vulnerable_app import init_database
+from vulnerable_app import init_database
+from vulnerable_app import init_database
+from vulnerable_app import init_database
+import re
+import re
+from vulnerable_app import open_files
 
 
 # ============================================================================
@@ -32,7 +40,6 @@ def query_db(sql, params=()):
 
 def test_init_database_creates_tables():
     """After calling init_database(), both users and accounts tables exist."""
-    from vulnerable_app import init_database
     init_database()
     
     conn = sqlite3.connect('vulnerable_app.db')
@@ -51,7 +58,6 @@ def test_init_database_creates_tables():
 
 def test_init_database_seeds_users():
     """The users table contains exactly 3 rows: admin, alice, bob."""
-    from vulnerable_app import init_database
     init_database()
     
     rows = query_db("SELECT username FROM users ORDER BY id")
@@ -61,7 +67,6 @@ def test_init_database_seeds_users():
 
 def test_init_database_seeds_accounts():
     """The accounts table contains rows for alice and bob with correct balances."""
-    from vulnerable_app import init_database
     init_database()
     
     rows = query_db("SELECT username, balance FROM accounts ORDER BY id")
@@ -72,7 +77,6 @@ def test_init_database_seeds_accounts():
 
 def test_init_database_admin_password_is_md5():
     """The stored admin password is the MD5 hex digest, not plaintext."""
-    from vulnerable_app import init_database
     init_database()
     
     rows = query_db("SELECT password FROM users WHERE username='admin'")
@@ -83,7 +87,6 @@ def test_init_database_admin_password_is_md5():
 
 def test_init_database_idempotent():
     """Calling init_database() twice does not duplicate rows."""
-    from vulnerable_app import init_database
     init_database()
     init_database()
     
@@ -258,7 +261,7 @@ def test_frame_content_default_url(client):
     assert response.status_code == 200
     content = body(response)
     assert '<iframe' in content
-    assert 'example.com' in content
+    assert 'src="https://example.com"' in content
 
 
 def test_frame_content_custom_url(client):
@@ -314,7 +317,6 @@ def test_encrypt_returns_hex_string(client):
     response = client.get('/encrypt?data=hello')
     content = body(response)
     # Extract hex string from HTML
-    import re
     hex_match = re.search(r'[0-9a-f]+', content)
     assert hex_match is not None
 
@@ -336,7 +338,6 @@ def test_encrypt_output_length_multiple_of_8(client):
     """Encrypted output length is multiple of 8 bytes."""
     response = client.get('/encrypt?data=hello')
     content = body(response)
-    import re
     hex_match = re.search(r'>([0-9a-f]+)<', content)
     if hex_match:
         hex_str = hex_match.group(1)
@@ -549,7 +550,6 @@ def test_read_log_creates_file(client):
 
 def test_read_log_file_handle_tracked(client):
     """File handle is tracked in open_files (CWE-772)."""
-    from vulnerable_app import open_files
     initial_count = len(open_files)
     
     client.get('/read_log?log=test_temp4.log')
