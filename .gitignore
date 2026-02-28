@@ -4,3 +4,4 @@ vulnerable_app.db
 artifacts
 docs
 .env
+results

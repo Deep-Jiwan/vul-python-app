@@ -109,7 +109,7 @@ def main() -> None:
     )
     parser.add_argument(
         "--json-out",
-        default="tools/data/sast_stats_summary.json",
+        default="tools/results/sast_stats_summary.json",
         help="Output JSON summary path",
     )
     args = parser.parse_args()
@@ -152,6 +152,8 @@ def main() -> None:
         },
     }
 
+    # Ensure the output directory exists (write to tools/results by default)
+    json_out_path.parent.mkdir(parents=True, exist_ok=True)
     json_out_path.write_text(json.dumps(summary, indent=2), encoding="utf-8")
 
     print("SAST Coverage Summary")

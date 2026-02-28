@@ -4,7 +4,7 @@
     "dast_only": "tools\\data\\dast-only.json",
     "sast_and_dast": "tools\\data\\sast-and-dast.json"
   },
-  "mapping_rule": "ZAP alert name -> SN mapping defined in ALERT_TO_SN",
+  "mapping_rule": "Conservative mapping by alert name + endpoint URI defined in MAPPING_RULES",
   "detected_alert_names": [
     "Application Error Disclosure",
     "Authentication Request Identified",
@@ -54,7 +54,7 @@
     "Cross-Origin-Resource-Policy Header Missing or Invalid",
     "Format String Error",
     "Full Path Disclosure",
-    "HTTP Only Site",
+    "Information Disclosure - Sensitive Information in URL",
     "Information Disclosure - Suspicious Comments",
     "Integer Overflow Error",
     "Modern Web Application",
@@ -65,7 +65,6 @@
     "Sec-Fetch-Site Header is Missing",
     "Sec-Fetch-User Header is Missing",
     "Server Leaks Version Information via \"Server\" HTTP Response Header Field",
-    "Storable and Cacheable Content",
     "User Agent Fuzzer",
     "User Controllable HTML Element Attribute (Potential XSS)",
     "X-Content-Type-Options Header Missing"
@@ -73,16 +72,103 @@
   "detected_sn_total": [
     "01",
     "02",
-    "03",
+    "04",
     "05",
     "07",
+    "08",
     "09",
-    "10",
+    "11",
     "15",
     "19",
-    "21",
     "22",
     "25"
+  ],
+  "match_evidence": [
+    {
+      "sn": "08",
+      "alert_name": "HTTP Only Site",
+      "uri": "http://localhost:3000/"
+    },
+    {
+      "sn": "11",
+      "alert_name": "Storable and Cacheable Content",
+      "uri": "http://localhost:3000/"
+    },
+    {
+      "sn": "01",
+      "alert_name": "SQL Injection - SQLite",
+      "uri": "http://localhost:3000/login"
+    },
+    {
+      "sn": "19",
+      "alert_name": "SQL Injection",
+      "uri": "http://localhost:3000/search?q=%27"
+    },
+    {
+      "sn": "02",
+      "alert_name": "Cross Site Scripting (Reflected)",
+      "uri": "http://localhost:3000/profile?name=%3C%2Fp%3E%3CscrIpt%3Ealert%281%29%3B%3C%2FscRipt%3E%3Cp%3E"
+    },
+    {
+      "sn": "02",
+      "alert_name": "Server Side Template Injection",
+      "uri": "http://localhost:3000/profile?name=zj%7B%7B8391*3505%7D%7Dzj"
+    },
+    {
+      "sn": "04",
+      "alert_name": "Cross Site Scripting (Reflected)",
+      "uri": "http://localhost:3000/frame_content?url=javascript%3Aalert%281%29%3B"
+    },
+    {
+      "sn": "04",
+      "alert_name": "Server Side Template Injection",
+      "uri": "http://localhost:3000/frame_content?url=zj%7B%7B7165*6136%7D%7Dzj"
+    },
+    {
+      "sn": "04",
+      "alert_name": "Source Code Disclosure - File Inclusion",
+      "uri": "http://localhost:3000/frame_content?url=https://example.com"
+    },
+    {
+      "sn": "05",
+      "alert_name": "External Redirect",
+      "uri": "http://localhost:3000/redirect?url=https%3A%2F%2F4880283899519155966.owasp.org"
+    },
+    {
+      "sn": "05",
+      "alert_name": "Off-site Redirect",
+      "uri": "http://localhost:3000/redirect?url=https://example.com"
+    },
+    {
+      "sn": "07",
+      "alert_name": "GET for POST",
+      "uri": "http://localhost:3000/login"
+    },
+    {
+      "sn": "09",
+      "alert_name": "Missing Anti-clickjacking Header",
+      "uri": "http://localhost:3000/"
+    },
+    {
+      "sn": "15",
+      "alert_name": "Path Traversal",
+      "uri": "http://localhost:3000/download?file=%2Fetc%2Fpasswd"
+    },
+    {
+      "sn": "15",
+      "alert_name": "Source Code Disclosure - File Inclusion",
+      "uri": "http://localhost:3000/download?file=readme.txt"
+    },
+    {
+      "sn": "22",
+      "alert_name": "Server Side Request Forgery",
+      "uri": "http://localhost:3000/fetch_url?url=http://localhost:5000"
+    },
+    {
+      "sn": "25",
+      "alert_name": "Remote OS Command Injection",
+      "uri": "http://localhost:3000/ping?host=127.0.0.1%26cat+%2Fetc%2Fpasswd%26"
+    }
   ],
   "groups": {
     "dast_only": {
@@ -90,13 +176,13 @@
       "total": 6,
       "percentage": 33.33,
       "covered_sn": [
-        "10",
-        "21"
+        "08",
+        "11"
       ],
       "not_covered_sn": [
-        "08",
-        "11",
+        "10",
         "16",
+        "21",
         "23"
       ]
     },
@@ -107,7 +193,7 @@
       "covered_sn": [
         "01",
         "02",
-        "03",
+        "04",
         "05",
         "07",
         "09",
@@ -117,7 +203,7 @@
         "25"
       ],
       "not_covered_sn": [
-        "04",
+        "03",
         "13",
         "24"
       ]

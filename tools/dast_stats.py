@@ -1,26 +1,44 @@
 import argparse
 import json
 from pathlib import Path
-from typing import Dict, List, Set
+from typing import Dict, List, Set, Any
 
 
-ALERT_TO_SN: Dict[str, List[str]] = {
-    "Cross Site Scripting (Reflected)": ["02"],
-    "Server Side Template Injection": ["02"],
-    "External Redirect": ["05"],
-    "Off-site Redirect": ["05"],
-    "Path Traversal": ["15"],
-    "Remote OS Command Injection": ["25"],
-    "SQL Injection": ["01", "19"],
-    "SQL Injection - SQLite": ["01", "19"],
-    "Server Side Request Forgery": ["22"],
-    "Missing Anti-clickjacking Header": ["09"],
-    "GET for POST": ["07"],
-    "Information Disclosure - Sensitive Information in URL": ["07", "10", "21"],
-    "Application Error Disclosure": ["03"],
-    "Source Code Disclosure - File Inclusion": ["15"],
-    "Source Code Disclosure - SQL": ["01", "19"],
-}
+MAPPING_RULES: List[Dict[str, Any]] = [
+    # Global/header-level signals
+    {"sn": "08", "alert_name": "HTTP Only Site"},
+    {"sn": "11", "alert_name": "Storable and Cacheable Content"},
+    # SQL injection split by endpoint
+    {"sn": "01", "alert_name": "SQL Injection", "uri_contains": ["/login"]},
+    {"sn": "01", "alert_name": "SQL Injection - SQLite", "uri_contains": ["/login"]},
+    {"sn": "01", "alert_name": "Source Code Disclosure - SQL", "uri_contains": ["/login"]},
+    {"sn": "19", "alert_name": "SQL Injection", "uri_contains": ["/search"]},
+    {"sn": "19", "alert_name": "SQL Injection - SQLite", "uri_contains": ["/search"]},
+    {"sn": "19", "alert_name": "Source Code Disclosure - SQL", "uri_contains": ["/search"]},
+    # XSS/SSTI (conservative: profile only for SN02)
+    {"sn": "02", "alert_name": "Cross Site Scripting (Reflected)", "uri_contains": ["/profile"]},
+    {"sn": "02", "alert_name": "Server Side Template Injection", "uri_contains": ["/profile"]},
+    # Frame injection (/frame_content) evidenced via multiple alert types on vulnerable endpoint
+    {"sn": "04", "alert_name": "Cross Site Scripting (Reflected)", "uri_contains": ["/frame_content"]},
+    {"sn": "04", "alert_name": "Server Side Template Injection", "uri_contains": ["/frame_content"]},
+    {"sn": "04", "alert_name": "Source Code Disclosure - File Inclusion", "uri_contains": ["/frame_content"]},
+    # Info leakage
+    {"sn": "03", "alert_name": "Application Error Disclosure", "uri_contains": ["/login"]},
+    # Open redirect
+    {"sn": "05", "alert_name": "External Redirect", "uri_contains": ["/redirect"]},
+    {"sn": "05", "alert_name": "Off-site Redirect", "uri_contains": ["/redirect"]},
+    # GET vs POST misuse
+    {"sn": "07", "alert_name": "GET for POST", "uri_contains": ["/login"]},
+    # Clickjacking
+    {"sn": "09", "alert_name": "Missing Anti-clickjacking Header"},
+    # Path traversal
+    {"sn": "15", "alert_name": "Path Traversal", "uri_contains": ["/download"]},
+    {"sn": "15", "alert_name": "Source Code Disclosure - File Inclusion", "uri_contains": ["/download"]},
+    # SSRF
+    {"sn": "22", "alert_name": "Server Side Request Forgery", "uri_contains": ["/fetch_url"]},
+    # Command injection
+    {"sn": "25", "alert_name": "Remote OS Command Injection", "uri_contains": ["/ping"]},
+]
 
 
 def load_json(path: Path) -> dict:
@@ -57,15 +75,59 @@ def extract_alert_names_from_zap(zap: dict) -> Set[str]:
     return alert_names
 
 
-def map_detected_sns(alert_names: Set[str]) -> Set[str]:
+def extract_alert_instances(zap: dict) -> List[Dict[str, str]]:
+    sites = zap.get("site", [])
+    if isinstance(sites, dict):
+        sites = [sites]
+
+    records: List[Dict[str, str]] = []
+    for site in sites:
+        for alert in site.get("alerts", []):
+            name = alert.get("name", "")
+            instances = alert.get("instances", [])
+            if instances:
+                for inst in instances:
+                    records.append({"name": name, "uri": inst.get("uri", "")})
+            else:
+                records.append({"name": name, "uri": ""})
+    return records
+
+
+def rule_matches_instance(rule: Dict[str, Any], instance: Dict[str, str]) -> bool:
+    if instance.get("name") != rule.get("alert_name"):
+        return False
+
+    uri_filters = rule.get("uri_contains")
+    if not uri_filters:
+        return True
+
+    uri = instance.get("uri", "")
+    return any(token in uri for token in uri_filters)
+
+
+def map_detected_sns(instances: List[Dict[str, str]]) -> (Set[str], List[Dict[str, str]]):
     detected: Set[str] = set()
-    for alert_name in alert_names:
-        detected.update(ALERT_TO_SN.get(alert_name, []))
-    return detected
+    evidence: List[Dict[str, str]] = []
+
+    for rule in MAPPING_RULES:
+        for inst in instances:
+            if rule_matches_instance(rule, inst):
+                detected.add(rule["sn"])
+                evidence.append(
+                    {
+                        "sn": rule["sn"],
+                        "alert_name": rule["alert_name"],
+                        "uri": inst.get("uri", ""),
+                    }
+                )
+                break
+
+    return detected, evidence
 
 
 def find_unmapped_alert_names(alert_names: Set[str]) -> List[str]:
-    return sorted([alert_name for alert_name in alert_names if alert_name not in ALERT_TO_SN])
+    mapped_alert_names = {rule["alert_name"] for rule in MAPPING_RULES}
+    return sorted([alert_name for alert_name in alert_names if alert_name not in mapped_alert_names])
 
 
 def pct(numerator: int, denominator: int) -> float:
@@ -127,7 +189,8 @@ def main() -> None:
     sast_and_dast_sn = read_sn_set(sast_and_dast_data)
 
     alert_names = extract_alert_names_from_zap(zap_data)
-    detected_sn = map_detected_sns(alert_names)
+    alert_instances = extract_alert_instances(zap_data)
+    detected_sn, match_evidence = map_detected_sns(alert_instances)
     unmapped_alert_names = find_unmapped_alert_names(alert_names)
 
     dast_only_stats = compute_group_stats(dast_only_sn, detected_sn)
@@ -139,10 +202,11 @@ def main() -> None:
             "dast_only": str(dast_only_path),
             "sast_and_dast": str(sast_and_dast_path),
         },
-        "mapping_rule": "ZAP alert name -> SN mapping defined in ALERT_TO_SN",
+        "mapping_rule": "Conservative mapping by alert name + endpoint URI defined in MAPPING_RULES",
         "detected_alert_names": sorted(alert_names),
         "unmapped_detected_alert_names": unmapped_alert_names,
         "detected_sn_total": sorted(detected_sn),
+        "match_evidence": match_evidence,
         "groups": {
             "dast_only": dast_only_stats,
             "sast_and_dast": sast_and_dast_stats,
