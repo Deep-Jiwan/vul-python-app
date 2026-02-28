@@ -11,3 +11,8 @@ dependencies = [
     "pip>=26.0.1",
     "pycryptodome==3.18.0",
 ]
+
+[tool.uv.workspace]
+members = [
+    "remediator",
+]
