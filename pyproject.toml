@@ -1,0 +1,12 @@
+[project]
+name = "code"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "defusedxml==0.7.1",
+    "flask==2.3.0",
+    "pip>=26.0.1",
+    "pycryptodome==3.18.0",
+]
