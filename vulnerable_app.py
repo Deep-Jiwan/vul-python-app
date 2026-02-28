@@ -397,28 +397,26 @@ def insecure_deserialization():
 # PING ENDPOINT
 # ============================================================================
 
-@app.route('/ping')
 def command_injection():
     # --------------------------------------------
     host = request.args.get('host', 'localhost')
     
     # --------------------------------------------
+    # Validate host input - only allow alphanumeric, dots, and hyphens for hostnames/IPs
+    import re
+    if not re.match(r'^[a-zA-Z0-9.\-]+$', host):
+        return "Invalid host parameter", 400
+    
     if os.name == 'nt':  # Windows
-        command = f'ping -n 2 {host}'
+        command = ['ping', '-n', '2', host]
     else:  # Linux/Mac
-        command = f'ping -c 2 {host}'
+        command = ['ping', '-c', '2', host]
     
     try:
-        result = subprocess.check_output(command, shell=True, stderr=subprocess.STDOUT, timeout=5)
-        return f"<h2>Ping Results:</h2><pre>{result.decode()}</pre>"
+        result = subprocess.run(command, capture_output=True, text=True, timeout=5)
+        return f"<h2>Ping Results:</h2><pre>{result.stdout}</pre>"
     except Exception as e:
         return f"Error executing command: {str(e)}"
-
-
-# ============================================================================
-# XML PARSER ENDPOINT
-# ============================================================================
-
 @app.route('/parse_xml', methods=['POST'])
 def xxe_vulnerability():
     # --------------------------------------------
