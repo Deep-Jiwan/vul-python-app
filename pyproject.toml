@@ -10,6 +10,8 @@ dependencies = [
     "matplotlib>=3.10.8",
     "pip>=26.0.1",
     "pycryptodome==3.18.0",
+    "pylint>=4.0.5",
+    "pytest>=9.0.2",
 ]
 
 [tool.uv.workspace]

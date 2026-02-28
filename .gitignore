@@ -9,3 +9,9 @@ __pycache__
 /pytest_cache
 *.log
 remediator
+
+# Coverage
+coverage.json
+.coverage
+htmlcov/
+.pytest_cache/
