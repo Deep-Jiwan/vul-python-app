@@ -100,8 +100,8 @@ def login():
         cursor = conn.cursor()
         
         # --------------------------------------------
-        query = "SELECT * FROM users WHERE username = ? AND password = ?"
-        cursor.execute(query, (username, password))
+        query = f"SELECT * FROM users WHERE username = '{username}' AND password = '{password}'"
+        cursor.execute(query)
         user = cursor.fetchone()
         conn.close()
         
@@ -113,9 +113,9 @@ def login():
             # --------------------------------------------
             return f"<h2>Login failed for user: {username}</h2><p>Invalid credentials provided</p>"
     
-    except Exception as e:
+    except Exception:
         # --------------------------------------------
-        return f"<h2>Database Error</h2><pre>{str(e)}</pre>"
+        return f"<h2>Database Error</h2><p>An internal error occurred. Please try again later.</p>"
 @app.route('/profile')
 def profile():
     # --------------------------------------------
