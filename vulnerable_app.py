@@ -220,7 +220,6 @@ def crlf_injection():
 # ============================================================================
 # DATA PROCESSING ENDPOINT
 # ============================================================================
-return f"<h2>Processing: {html.escape(combined_data)}</h2>"
 @app.route('/process_data')
 def trust_boundary():
     # --------------------------------------------
@@ -388,7 +387,6 @@ def idor_vulnerability(account_id):
     else:
         return "Account not found"
 
-return f"<h2>Deserialized Object:</h2><pre>{html.escape(str(obj))}</pre>"
 # ============================================================================
 # OBJECT LOADER ENDPOINT
 # ============================================================================
