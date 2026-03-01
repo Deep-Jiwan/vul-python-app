@@ -98,8 +98,7 @@ def login():
         cursor = conn.cursor()
         
         # --------------------------------------------
-        query = f"SELECT * FROM users WHERE username = '{username}' AND password = '{password}'"
-        cursor.execute(query)
+        cursor.execute("SELECT * FROM users WHERE username = ? AND password = ?", (username, password))
         user = cursor.fetchone()
         conn.close()
         
@@ -109,7 +108,9 @@ def login():
             return f"<h2>Login successful! Welcome {user[1]}</h2><br><a href='/profile'>View Profile</a>"
         else:
             # --------------------------------------------
-            return f"<h2>Login failed for user: {username}</h2><p>Invalid credentials provided</p>"
+            import html
+            escaped_username = html.escape(username, quote=True)
+            return f"<h2>Login failed for user: {escaped_username}</h2><p>Invalid credentials provided</p>"
     
     except Exception as e:
         # --------------------------------------------
