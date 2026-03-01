@@ -129,14 +129,14 @@ def profile():
     # --------------------------------------------
     html_content = f'''
         <h1>User Profile</h1>
-        <p>Welcome, {username}!</p>
-        <p>Your comment: {request.args.get('comment', 'No comment')}</p>
+        <p>Welcome, {html.escape(username)}!</p>
+        <p>Your comment: {html.escape(request.args.get('comment', 'No comment'))}</p>
     '''
     
     # --------------------------------------------
     if username == 'admin':
         html_content += f'<p style="color:red;">Password Hint: {ADMIN_PASSWORD}</p>'
-    
+
     return render_template_string(html_content)
 
 
