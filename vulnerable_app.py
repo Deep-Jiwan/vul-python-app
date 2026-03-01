@@ -166,7 +166,10 @@ def open_redirect():
     # --------------------------------------------
     target_url = request.args.get('url', '/')
     
-    # --------------------------------------------
+    # Security fix: Only allow relative URLs to prevent open redirect
+    if target_url.startswith(('http://', 'https://', '//')):
+        target_url = '/'
+    
     return redirect(target_url)
 
 
