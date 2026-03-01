@@ -130,9 +130,8 @@ def profile():
     username = request.args.get('name', session.get('username', 'Guest'))
     
     # --------------------------------------------
-    import html
-    safe_username = html.escape(username, quote=True)
-    safe_comment = html.escape(request.args.get('comment', 'No comment'), quote=True)
+    safe_username = html.escape(username)
+    safe_comment = html.escape(request.args.get('comment', 'No comment'))
     
     html_content = f'''
         <h1>User Profile</h1>
