@@ -409,10 +409,11 @@ def command_injection():
         command = f'ping -c 2 {host}'
     
     try:
-        result = subprocess.check_output(command, shell=True, stderr=subprocess.STDOUT, timeout=5)
+        import shlex
+        result = subprocess.check_output(shlex.split(command), shell=False, stderr=subprocess.STDOUT, timeout=5)
         return f"<h2>Ping Results:</h2><pre>{result.decode()}</pre>"
-    except Exception as e:
-        return f"Error executing command: {str(e)}"
+    except Exception:
+        return "Error executing command"
 
 
 # ============================================================================
