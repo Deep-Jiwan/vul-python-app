@@ -101,8 +101,8 @@ def login():
         cursor = conn.cursor()
         
         # --------------------------------------------
-        query = f"SELECT * FROM users WHERE username = '{username}' AND password = '{password}'"
-        cursor.execute(query)
+        query = "SELECT * FROM users WHERE username = ? AND password = ?"
+        cursor.execute(query, (username, password))
         user = cursor.fetchone()
         conn.close()
         
@@ -116,13 +116,7 @@ def login():
     
     except Exception as e:
         # --------------------------------------------
-        return f"<h2>Database Error</h2><pre>{str(e)}</pre>"
-
-
-# ============================================================================
-# PROFILE ENDPOINT
-# ============================================================================
-
+        return f"<h2>Database Error</h2><p>An error occurred while processing your request.</p>"
 @app.route('/profile')
 def profile():
     # --------------------------------------------
