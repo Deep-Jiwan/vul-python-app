@@ -243,11 +243,13 @@ def directory_traversal():
     
     try:
         # --------------------------------------------
+        if os.path.basename(filename) != filename:
+            return "Error: Invalid file path"
         with open(filename, 'r') as f:
             content = f.read()
         return f"<pre>{content}</pre>"
     except Exception as e:
-        return f"Error reading file: {str(e)}"
+        return "Error reading file"
 
 
 # ============================================================================
