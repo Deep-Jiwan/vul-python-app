@@ -272,18 +272,12 @@ def sql_injection_orm():
     cursor = conn.cursor()
     
     # --------------------------------------------
-    query = f"SELECT username, email FROM users WHERE username LIKE '%{search_term}%'"
-    cursor.execute(query)
+    query = "SELECT username, email FROM users WHERE username LIKE ?"
+    cursor.execute(query, ('%' + search_term + '%',))
     results = cursor.fetchall()
     conn.close()
     
     return f"<h2>Search Results:</h2><pre>{results}</pre>"
-
-
-# ============================================================================
-# LOG READING ENDPOINT
-# ============================================================================
-
 @app.route('/read_log')
 def resource_leak():
     # --------------------------------------------
