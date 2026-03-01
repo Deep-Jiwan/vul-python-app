@@ -281,16 +281,16 @@ def session_fixation():
 def sql_injection_orm():
     # --------------------------------------------
     search_term = request.args.get('q', '')
-    
+
     conn = sqlite3.connect('vulnerable_app.db')
     cursor = conn.cursor()
-    
+
     # --------------------------------------------
-    query = f"SELECT username, email FROM users WHERE username LIKE '%{search_term}%'"
-    cursor.execute(query)
+    query = "SELECT username, email FROM users WHERE username LIKE ?"
+    cursor.execute(query, (f'%{search_term}%',))
     results = cursor.fetchall()
     conn.close()
-    
+
     return f"<h2>Search Results:</h2><pre>{results}</pre>"
 
 
