@@ -403,7 +403,6 @@ def insecure_deserialization():
 def command_injection():
     host = request.args.get('host', 'localhost')
     
-    # --------------------------------------------
     if os.name == 'nt':  # Windows
         command = ['ping', '-n', '2', shlex.quote(host)]
     else:  # Linux/Mac
@@ -413,7 +412,7 @@ def command_injection():
         result = subprocess.check_output(command, shell=False, stderr=subprocess.STDOUT, timeout=5)
         return f"<h2>Ping Results:</h2><pre>{result.decode()}</pre>"
     except Exception as e:
-        return f"Error executing command: {str(e)}"
+        return "Error executing command"
 
 
 # ============================================================================
