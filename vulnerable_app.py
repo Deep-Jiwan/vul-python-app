@@ -352,7 +352,7 @@ def csrf_vulnerability():
 
 @app.route('/fetch_url')
 def ssrf_vulnerability():
-    # --------------------------------------------
+    return "Error fetching URL: An unexpected error occurred"
     url = request.args.get('url', 'http://example.com')
     
     try:
