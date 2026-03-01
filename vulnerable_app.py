@@ -351,12 +351,16 @@ def ssrf_vulnerability():
     url = request.args.get('url', 'http://example.com')
     
     try:
+        import urllib.parse
+        parsed_url = urllib.parse.urlparse(url)
+        if parsed_url.scheme not in ('http', 'https') or parsed_url.hostname in ('localhost', '127.0.0.1'):
+            raise ValueError("Invalid URL")
         # --------------------------------------------
         response = urllib.request.urlopen(url, timeout=5)
         content = response.read().decode('utf-8', errors='ignore')
         return f"<h2>Fetched Content:</h2><pre>{content[:500]}</pre>"
     except Exception as e:
-        return "Error fetching URL"
+        return f"Error fetching URL: {str(e)}"
 
 
 # ============================================================================
