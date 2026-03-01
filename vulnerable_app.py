@@ -16,6 +16,7 @@ import urllib.request
 import xml.etree.ElementTree as ET
 from Crypto.Cipher import DES
 import html
+import shlex
 
 # --------------------------------------------
 ADMIN_USERNAME = "admin"
@@ -400,7 +401,7 @@ def insecure_deserialization():
 @app.route('/ping')
 def command_injection():
     # --------------------------------------------
-    host = request.args.get('host', 'localhost')
+    host = shlex.quote(request.args.get('host', 'localhost'))
     
     # --------------------------------------------
     if os.name == 'nt':  # Windows
@@ -412,7 +413,7 @@ def command_injection():
         result = subprocess.check_output(command, shell=True, stderr=subprocess.STDOUT, timeout=5)
         return f"<h2>Ping Results:</h2><pre>{result.decode()}</pre>"
     except Exception as e:
-        return f"Error executing command: {str(e)}"
+        return "Error executing command: Ping failed"
 
 
 # ============================================================================
