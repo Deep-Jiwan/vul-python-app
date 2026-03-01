@@ -17,6 +17,8 @@ import xml.etree.ElementTree as ET
 from Crypto.Cipher import DES
 import html
 import shlex
+from Crypto.Cipher import AES
+from Crypto.Util.Padding import pad
 
 # --------------------------------------------
 ADMIN_USERNAME = "admin"
@@ -186,14 +188,20 @@ def encrypt_data():
     data = request.args.get('data', 'secret message')
     
     # --------------------------------------------
-    key = b'8bytekey'
-    cipher = DES.new(key, DES.MODE_ECB)
+    # Use AES with CBC mode instead of DES with ECB
+    import os
+    
+    # Generate a secure random key and IV
+    key = os.urandom(32)  # 256-bit key for AES-256
+    iv = os.urandom(16)   # 128-bit IV for AES CBC
+    
+    cipher = AES.new(key, AES.MODE_CBC, iv)
     
     # --------------------------------------------
-    padded_data = data + ' ' * (8 - len(data) % 8)
-    encrypted = cipher.encrypt(padded_data.encode())
+    padded_data = pad(data.encode(), AES.block_size)
+    encrypted = cipher.encrypt(padded_data)
     
-    return f"<h2>Encrypted Data:</h2><p>{encrypted.hex()}</p>"
+    return f"<h2>Encrypted Data:</h2><p>Key: {key.hex()}<br>IV: {iv.hex()}<br>Ciphertext: {encrypted.hex()}</p>"
 
 
 # ============================================================================
