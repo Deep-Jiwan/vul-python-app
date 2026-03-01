@@ -354,10 +354,27 @@ def csrf_vulnerability():
 
 @app.route('/fetch_url')
 def ssrf_vulnerability():
-    return "Error fetching URL: An unexpected error occurred"
+    # --------------------------------------------
     url = request.args.get('url', 'http://example.com')
     
     try:
+        from urllib.parse import urlparse
+        import socket
+        import ipaddress
+        
+        parsed = urlparse(url)
+        if parsed.scheme not in ['http', 'https']:
+            raise ValueError("Only HTTP/HTTPS allowed")
+        
+        hostname = parsed.hostname
+        if not hostname:
+            raise ValueError("Invalid URL")
+        
+        for addr_info in socket.getaddrinfo(hostname, None):
+            ip = addr_info[4][0]
+            if ipaddress.ip_address(ip).is_private or ipaddress.ip_address(ip).is_loopback:
+                raise ValueError("Private addresses not allowed")
+        
         # --------------------------------------------
         response = urllib.request.urlopen(url, timeout=5)
         content = response.read().decode('utf-8', errors='ignore')
