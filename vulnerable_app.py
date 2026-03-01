@@ -246,11 +246,14 @@ def directory_traversal():
     
     try:
         # --------------------------------------------
+        if '..' in filename or '/' in filename or '\\' in filename:
+            return "Error: Invalid filename"
+        
         with open(filename, 'r') as f:
             content = f.read()
         return f"<pre>{content}</pre>"
-    except Exception:
-        return "Error reading file"
+    except Exception as e:
+        return f"Error reading file: {str(e)}"
 
 
 # ============================================================================
