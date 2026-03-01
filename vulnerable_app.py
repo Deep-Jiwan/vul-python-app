@@ -394,7 +394,7 @@ def insecure_deserialization():
         obj = pickle.loads(data)
         return f"<h2>Deserialized Object:</h2><pre>{obj}</pre>"
     except Exception:
-        return "Error deserializing: Invalid data format"
+        return f"Error deserializing: Invalid data format"
 
 
 # ============================================================================
