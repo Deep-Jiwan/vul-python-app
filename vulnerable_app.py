@@ -166,6 +166,14 @@ def open_redirect():
     target_url = request.args.get('url', '/')
     
     # --------------------------------------------
+    # Validate redirect URL to prevent open redirect attacks
+    if not target_url.startswith('/'):
+        from urllib.parse import urlparse
+        parsed = urlparse(target_url)
+        # Only allow relative URLs or same-origin redirects
+        if parsed.netloc and parsed.netloc not in ['', 'localhost', '127.0.0.1']:
+            target_url = '/'
+    
     return redirect(target_url)
 
 
