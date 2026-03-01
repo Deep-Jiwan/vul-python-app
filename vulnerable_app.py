@@ -126,13 +126,14 @@ def login():
 @app.route('/profile')
 def profile():
     # --------------------------------------------
-    username = html.escape(request.args.get('name', session.get('username', 'Guest')), quote=True)
+    username = request.args.get('name', session.get('username', 'Guest'))
+    comment = request.args.get('comment', 'No comment')
     
     # --------------------------------------------
     html_content = f'''
         <h1>User Profile</h1>
-        <p>Welcome, {username}!</p>
-        <p>Your comment: {html.escape(request.args.get('comment', 'No comment'), quote=True)}</p>
+        <p>Welcome, {html.escape(username, quote=True)}!</p>
+        <p>Your comment: {html.escape(comment, quote=True)}</p>
     '''
     
     # --------------------------------------------
