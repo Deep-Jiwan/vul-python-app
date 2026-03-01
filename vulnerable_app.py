@@ -116,7 +116,7 @@ def login():
     
     except Exception as e:
         # --------------------------------------------
-        return "<h2>Database Error</h2><p>An internal error occurred. Please try again later.</p>"
+        return f"<h2>Database Error</h2><pre>{str(e)}</pre>"
 
 
 # ============================================================================
