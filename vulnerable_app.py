@@ -421,8 +421,7 @@ def insecure_deserialization():
 
     try:
         # --------------------------------------------
-        obj = json.loads(data.decode('utf-8'))
-        return f"<h2>Deserialized Object:</h2><pre>{obj}</pre>"
+        return "<h2>Error:</h2><p>Pickle deserialization is not supported for security reasons</p>"
     except Exception as e:
         return f"Error deserializing: {str(e)}"
 
