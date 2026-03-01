@@ -320,7 +320,7 @@ def resource_leak():
 def csrf_vulnerability():
     # --------------------------------------------
     if request.method == 'POST' or request.method == 'GET':
-        from_account = request.values.get('from')
+        cursor.execute("UPDATE accounts SET balance = balance + ? WHERE username = ?", (amount, to_account))
         to_account = request.values.get('to')
         amount = request.values.get('amount')
         
