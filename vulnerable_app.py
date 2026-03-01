@@ -16,6 +16,9 @@ import urllib.request
 import xml.etree.ElementTree as ET
 from Crypto.Cipher import DES
 import html
+from Crypto.Cipher import AES
+import defusedxml.ElementTree as DefusedET
+import json
 
 # --------------------------------------------
 ADMIN_USERNAME = "admin"
@@ -109,7 +112,7 @@ def login():
             return f"<h2>Login successful! Welcome {user[1]}</h2><br><a href='/profile'>View Profile</a>"
         else:
             # --------------------------------------------
-            return f"<h2>Login failed for user: {username}</h2><p>Invalid credentials provided</p>"
+            return f"<h2>Login failed for user: {html.escape(username, quote=True)}</h2><p>Invalid credentials provided</p>"
     
     except Exception as e:
         # --------------------------------------------
@@ -124,12 +127,13 @@ def login():
 def profile():
     # --------------------------------------------
     username = request.args.get('name', session.get('username', 'Guest'))
+    comment = request.args.get('comment', 'No comment')
     
     # --------------------------------------------
     html_content = f'''
         <h1>User Profile</h1>
-        <p>Welcome, {username}!</p>
-        <p>Your comment: {request.args.get('comment', 'No comment')}</p>
+        <p>Welcome, {html.escape(username, quote=True)}!</p>
+        <p>Your comment: {html.escape(comment, quote=True)}</p>
     '''
     
     # --------------------------------------------
@@ -146,7 +150,7 @@ def profile():
 @app.route('/frame_content')
 def frame_content():
     # --------------------------------------------
-    frame_url = request.args.get('url', 'https://example.com')
+    frame_url = html.escape(request.args.get('url', 'https://example.com'), quote=True)
     
     # --------------------------------------------
     html_content = f'''
@@ -166,6 +170,8 @@ def open_redirect():
     target_url = request.args.get('url', '/')
     
     # --------------------------------------------
+    if not target_url.startswith(('/', 'https://trusted.com')):
+        raise ValueError("Invalid redirect URL")
     return redirect(target_url)
 
 
@@ -179,12 +185,13 @@ def encrypt_data():
     data = request.args.get('data', 'secret message')
     
     # --------------------------------------------
-    key = b'8bytekey'
-    cipher = DES.new(key, DES.MODE_ECB)
+    key = b'16bytekeyforaes'
+    iv = os.urandom(16)
+    cipher = AES.new(key, AES.MODE_CBC, iv)
     
     # --------------------------------------------
-    padded_data = data + ' ' * (8 - len(data) % 8)
-    encrypted = cipher.encrypt(padded_data.encode())
+    padded_data = data + ' ' * (16 - len(data) % 16)
+    encrypted = iv + cipher.encrypt(padded_data.encode())
     
     return f"<h2>Encrypted Data:</h2><p>{encrypted.hex()}</p>"
 
@@ -220,7 +227,7 @@ def trust_boundary():
     combined_data = user_input + ':' + trusted_role
     
     # --------------------------------------------
-    return f"<h2>Processing: {combined_data}</h2>"
+    return f"<h2>Processing: {html.escape(combined_data, quote=True)}</h2>"
 
 
 # ============================================================================
@@ -234,7 +241,11 @@ def directory_traversal():
     
     try:
         # --------------------------------------------
-        with open(filename, 'r') as f:
+        safe_dir = os.path.abspath('.')
+        requested_path = os.path.abspath(filename)
+        if not requested_path.startswith(safe_dir + os.sep):
+            raise ValueError("Invalid file path")
+        with open(requested_path, 'r') as f:
             content = f.read()
         return f"<pre>{content}</pre>"
     except Exception as e:
@@ -256,7 +267,7 @@ def session_fixation():
         # --------------------------------------------
         if session_id:
             user_sessions[session_id] = username
-            return f"Logged in with session: {session_id}"
+            return f"Logged in with session: {html.escape(session_id, quote=True)}"
         else:
             new_session = secrets.token_hex(16)
             user_sessions[new_session] = username
@@ -278,8 +289,8 @@ def sql_injection_orm():
     cursor = conn.cursor()
     
     # --------------------------------------------
-    query = f"SELECT username, email FROM users WHERE username LIKE '%{search_term}%'"
-    cursor.execute(query)
+    query = "SELECT username, email FROM users WHERE username LIKE ?"
+    cursor.execute(query, (f"%{search_term}%",))
     results = cursor.fetchall()
     conn.close()
     
@@ -296,7 +307,11 @@ def resource_leak():
     log_file = request.args.get('log', 'app.log')
     
     # --------------------------------------------
-    f = open(log_file, 'w')
+    safe_dir = os.path.abspath('.')
+    log_path = os.path.abspath(log_file)
+    if not log_path.startswith(safe_dir + os.sep):
+        raise ValueError("Invalid log file path")
+    f = open(log_path, 'w')
     f.write('Log entry: ' + str(time.time()))
     # --------------------------------------------
     open_files.append(f)
@@ -324,7 +339,7 @@ def csrf_vulnerability():
         conn.commit()
         conn.close()
         
-        return f"<h2>Transferred ${amount} from {from_account} to {to_account}</h2>"
+        return f"<h2>Transferred ${html.escape(amount, quote=True)} from {html.escape(from_account, quote=True)} to {html.escape(to_account, quote=True)}</h2>"
     
     return '''
         <h2>Transfer Funds</h2>
@@ -347,6 +362,10 @@ def ssrf_vulnerability():
     url = request.args.get('url', 'http://example.com')
     
     try:
+        import urllib.parse
+        parsed_url = urllib.parse.urlparse(url)
+        if parsed_url.scheme not in ('http', 'https') or parsed_url.hostname in ('localhost', '127.0.0.1'):
+            raise ValueError("Invalid URL")
         # --------------------------------------------
         response = urllib.request.urlopen(url, timeout=5)
         content = response.read().decode('utf-8', errors='ignore')
@@ -366,7 +385,7 @@ def idor_vulnerability(account_id):
     cursor = conn.cursor()
     
     # --------------------------------------------
-    cursor.execute(f"SELECT * FROM accounts WHERE id = {account_id}")
+    cursor.execute("SELECT * FROM accounts WHERE id = ?", (account_id,))
     account = cursor.fetchone()
     conn.close()
     
@@ -388,7 +407,7 @@ def insecure_deserialization():
     try:
         # --------------------------------------------
         obj = pickle.loads(data)
-        return f"<h2>Deserialized Object:</h2><pre>{obj}</pre>"
+        return f"<h2>Deserialized Object:</h2><pre>{html.escape(str(obj), quote=True)}</pre>"
     except Exception as e:
         return f"Error deserializing: {str(e)}"
 
@@ -399,20 +418,18 @@ def insecure_deserialization():
 
 @app.route('/ping')
 def command_injection():
-    # --------------------------------------------
     host = request.args.get('host', 'localhost')
     
-    # --------------------------------------------
     if os.name == 'nt':  # Windows
-        command = f'ping -n 2 {host}'
+        command = ['ping', '-n', '2', shlex.quote(host)]
     else:  # Linux/Mac
-        command = f'ping -c 2 {host}'
+        command = ['ping', '-c', '2', shlex.quote(host)]
     
     try:
-        result = subprocess.check_output(command, shell=True, stderr=subprocess.STDOUT, timeout=5)
+        result = subprocess.check_output(command, shell=False, stderr=subprocess.STDOUT, timeout=5)
         return f"<h2>Ping Results:</h2><pre>{result.decode()}</pre>"
     except Exception as e:
-        return f"Error executing command: {str(e)}"
+        return "Error executing command"
 
 
 # ============================================================================
@@ -426,7 +443,7 @@ def xxe_vulnerability():
     
     try:
         # --------------------------------------------
-        root = ET.fromstring(xml_data)
+        root = DefusedET.fromstring(xml_data)
         result = [(child.tag, child.text) for child in root]
         return f"<h2>Parsed XML:</h2><pre>{result}</pre>"
     except Exception as e:
@@ -505,7 +522,7 @@ def main():
     print("[+] Press Ctrl+C to stop\n")
     
     # --------------------------------------------
-    app.run(debug=True, host='127.0.0.1', port=3000)
+    app.run(debug=False, host='127.0.0.1', port=3000)
 
 
 if __name__ == '__main__':
