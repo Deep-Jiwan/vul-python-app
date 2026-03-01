@@ -250,11 +250,16 @@ def directory_traversal():
     
     try:
         # --------------------------------------------
-        with open(filename, 'r') as f:
+        import os
+        safe_dir = os.path.abspath('.')
+        file_path = os.path.abspath(filename)
+        if not file_path.startswith(safe_dir):
+            raise ValueError("Invalid file path")
+        with open(file_path, 'r') as f:
             content = f.read()
         return f"<pre>{content}</pre>"
     except Exception as e:
-        return "Error reading file"
+        return f"Error reading file: {str(e)}"
 
 
 # ============================================================================
