@@ -242,7 +242,8 @@ def trust_boundary():
     combined_data = user_input + ':' + trusted_role
     
     # --------------------------------------------
-    return f"<h2>Processing: {combined_data}</h2>"
+    import html
+    return f"<h2>Processing: {html.escape(combined_data, quote=True)}</h2>"
 
 
 # ============================================================================
