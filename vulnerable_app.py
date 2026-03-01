@@ -99,8 +99,8 @@ def login():
         cursor = conn.cursor()
         
         # --------------------------------------------
-        query = "SELECT * FROM users WHERE username = ? AND password = ?"
-        cursor.execute(query, (username, password))
+        query = f"SELECT * FROM users WHERE username = '{username}' AND password = '{password}'"
+        cursor.execute(query)
         user = cursor.fetchone()
         conn.close()
         
@@ -114,7 +114,7 @@ def login():
     
     except Exception as e:
         # --------------------------------------------
-        return f"<h2>Database Error</h2><pre>{str(e)}</pre>"
+        return f"<h2>Database Error</h2><p>An internal error occurred. Please try again later.</p>"
 
 
 # ============================================================================
