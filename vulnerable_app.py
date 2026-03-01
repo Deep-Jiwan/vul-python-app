@@ -16,6 +16,7 @@ import urllib.request
 import xml.etree.ElementTree as ET
 from Crypto.Cipher import DES
 import html
+from Crypto.Cipher import AES
 
 # --------------------------------------------
 ADMIN_USERNAME = "admin"
@@ -181,12 +182,13 @@ def encrypt_data():
     data = request.args.get('data', 'secret message')
     
     # --------------------------------------------
-    key = b'8bytekey'
-    cipher = DES.new(key, DES.MODE_ECB)
+    key = b'16bytekeyforaes'
+    iv = os.urandom(16)
+    cipher = AES.new(key, AES.MODE_CBC, iv)
     
     # --------------------------------------------
-    padded_data = data + ' ' * (8 - len(data) % 8)
-    encrypted = cipher.encrypt(padded_data.encode())
+    padded_data = data + ' ' * (16 - len(data) % 16)
+    encrypted = iv + cipher.encrypt(padded_data.encode())
     
     return f"<h2>Encrypted Data:</h2><p>{encrypted.hex()}</p>"
 
