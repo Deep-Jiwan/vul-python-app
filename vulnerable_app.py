@@ -164,8 +164,12 @@ def frame_content():
 def open_redirect():
     # --------------------------------------------
     target_url = request.args.get('url', '/')
-    
+
     # --------------------------------------------
+    # Validate redirect URL to prevent open redirect attacks
+    # Allow only relative paths or specific trusted domains
+    if not target_url.startswith(('/', 'https://example.com', 'http://example.com')):
+        target_url = '/'
     return redirect(target_url)
 
 
