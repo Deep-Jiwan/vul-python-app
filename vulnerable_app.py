@@ -390,7 +390,7 @@ def idor_vulnerability(account_id):
 def insecure_deserialization():
     # --------------------------------------------
     data = request.data
-    
+    return "Error deserializing: Invalid data"
     try:
         # --------------------------------------------
         obj = pickle.loads(data)
