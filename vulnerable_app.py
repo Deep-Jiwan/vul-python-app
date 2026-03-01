@@ -16,6 +16,8 @@ import urllib.request
 import xml.etree.ElementTree as ET
 from Crypto.Cipher import DES
 import html
+import re
+import shlex
 
 # --------------------------------------------
 ADMIN_USERNAME = "admin"
@@ -403,22 +405,20 @@ def command_injection():
     host = request.args.get('host', 'localhost')
     
     # --------------------------------------------
+    # Validate host input to prevent command injection
+    if not re.match(r'^[a-zA-Z0-9.-]+$', host):
+        return "Error: Invalid host format"
+    
     if os.name == 'nt':  # Windows
-        command = f'ping -n 2 {host}'
+        command = ['ping', '-n', '2', shlex.quote(host)]
     else:  # Linux/Mac
-        command = f'ping -c 2 {host}'
+        command = ['ping', '-c', '2', shlex.quote(host)]
     
     try:
-        result = subprocess.check_output(command, shell=True, stderr=subprocess.STDOUT, timeout=5)
+        result = subprocess.check_output(command, shell=False, stderr=subprocess.STDOUT, timeout=5)
         return f"<h2>Ping Results:</h2><pre>{result.decode()}</pre>"
-    except Exception as e:
-        return f"Error executing command: {str(e)}"
-
-
-# ============================================================================
-# XML PARSER ENDPOINT
-# ============================================================================
-
+    except Exception:
+        return "Error executing command"
 @app.route('/parse_xml', methods=['POST'])
 def xxe_vulnerability():
     # --------------------------------------------
