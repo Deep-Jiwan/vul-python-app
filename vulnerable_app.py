@@ -245,11 +245,14 @@ def directory_traversal():
     
     try:
         # --------------------------------------------
+        import os
+        if os.path.isabs(filename) or '..' in filename:
+            return "Error reading file: Invalid file path"
         with open(filename, 'r') as f:
             content = f.read()
         return f"<pre>{content}</pre>"
-    except Exception:
-        return "Error reading file"
+    except Exception as e:
+        return f"Error reading file: {str(e)}"
 
 
 # ============================================================================
