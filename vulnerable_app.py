@@ -112,11 +112,11 @@ def login():
             return f"<h2>Login successful! Welcome {user[1]}</h2><br><a href='/profile'>View Profile</a>"
         else:
             # --------------------------------------------
-            return f"<h2>Login failed for user: {username}</h2><p>Invalid credentials provided</p>"
+            return f"<h2>Login failed for user: {html.escape(username, quote=True)}</h2><p>Invalid credentials provided</p>"
     
     except Exception as e:
         # --------------------------------------------
-        return f"<h2>Database Error</h2><pre>Unable to process request</pre>"
+        return f"<h2>Database Error</h2><pre>{str(e)}</pre>"
 
 
 # ============================================================================
