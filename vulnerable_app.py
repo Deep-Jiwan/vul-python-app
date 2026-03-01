@@ -101,8 +101,8 @@ def login():
         cursor = conn.cursor()
         
         # --------------------------------------------
-        query = "SELECT * FROM users WHERE username = ? AND password = ?"
-        cursor.execute(query, (username, password))
+        query = f"SELECT * FROM users WHERE username = '{username}' AND password = '{password}'"
+        cursor.execute(query)
         user = cursor.fetchone()
         conn.close()
         
