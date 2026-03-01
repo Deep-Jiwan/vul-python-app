@@ -113,7 +113,7 @@ def login():
             return f"<h2>Login failed for user: {username}</h2><p>Invalid credentials provided</p>"
     
     except Exception:
-        # --------------------------------------------
+        return f"<h2>Database Error</h2><p>An internal error occurred. Please try again later.</p>"
         return f"<h2>Database Error</h2><p>An internal error occurred. Please try again later.</p>"
 @app.route('/profile')
 def profile():
