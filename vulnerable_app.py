@@ -16,6 +16,8 @@ import urllib.request
 import xml.etree.ElementTree as ET
 from Crypto.Cipher import DES
 import html
+from Crypto.Cipher import AES
+from Crypto.Util.Padding import pad
 
 # --------------------------------------------
 ADMIN_USERNAME = "admin"
@@ -98,8 +100,7 @@ def login():
         cursor = conn.cursor()
         
         # --------------------------------------------
-        query = f"SELECT * FROM users WHERE username = '{username}' AND password = '{password}'"
-        cursor.execute(query)
+        cursor.execute("SELECT * FROM users WHERE username = ? AND password = ?", (username, password))
         user = cursor.fetchone()
         conn.close()
         
@@ -109,7 +110,9 @@ def login():
             return f"<h2>Login successful! Welcome {user[1]}</h2><br><a href='/profile'>View Profile</a>"
         else:
             # --------------------------------------------
-            return f"<h2>Login failed for user: {username}</h2><p>Invalid credentials provided</p>"
+            import html
+            escaped_username = html.escape(username, quote=True)
+            return f"<h2>Login failed for user: {escaped_username}</h2><p>Invalid credentials provided</p>"
     
     except Exception as e:
         # --------------------------------------------
@@ -128,7 +131,7 @@ def profile():
     # --------------------------------------------
     html_content = f'''
         <h1>User Profile</h1>
-        <p>Welcome, {username}!</p>
+        <p>Welcome, {html.escape(username, quote=True)}!</p>
         <p>Your comment: {request.args.get('comment', 'No comment')}</p>
     '''
     
@@ -149,9 +152,11 @@ def frame_content():
     frame_url = request.args.get('url', 'https://example.com')
     
     # --------------------------------------------
+    import html
+    escaped_url = html.escape(frame_url, quote=True)
     html_content = f'''
         <h2>External Content</h2>
-        <iframe src="{frame_url}" width="800" height="600"></iframe>
+        <iframe src="{escaped_url}" width="800" height="600"></iframe>
     '''
     return render_template_string(html_content)
 
@@ -164,8 +169,12 @@ def frame_content():
 def open_redirect():
     # --------------------------------------------
     target_url = request.args.get('url', '/')
-    
+
     # --------------------------------------------
+    # Validate redirect URL to prevent open redirect attacks
+    # Allow only relative paths or specific trusted domains
+    if not target_url.startswith(('/', 'https://example.com', 'http://example.com')):
+        target_url = '/'
     return redirect(target_url)
 
 
@@ -180,13 +189,17 @@ def encrypt_data():
     
     # --------------------------------------------
     key = b'8bytekey'
-    cipher = DES.new(key, DES.MODE_ECB)
+    import os
+    
+    # Use AES with CBC mode instead of DES with ECB
+    iv = os.urandom(16)
+    cipher = AES.new(b'16bytekeyforAES!', AES.MODE_CBC, iv)
     
     # --------------------------------------------
-    padded_data = data + ' ' * (8 - len(data) % 8)
-    encrypted = cipher.encrypt(padded_data.encode())
+    padded_data = pad(data.encode(), AES.block_size)
+    encrypted = cipher.encrypt(padded_data)
     
-    return f"<h2>Encrypted Data:</h2><p>{encrypted.hex()}</p>"
+    return f"<h2>Encrypted Data:</h2><p>{encrypted.hex()}</p><p>IV: {iv.hex()}</p>"
 
 
 # ============================================================================
@@ -214,13 +227,14 @@ def crlf_injection():
 def trust_boundary():
     # --------------------------------------------
     user_input = request.args.get('input', '')
-    
+
     # --------------------------------------------
     trusted_role = session.get('role', 'guest')
     combined_data = user_input + ':' + trusted_role
-    
+
     # --------------------------------------------
-    return f"<h2>Processing: {combined_data}</h2>"
+    import html
+    return f"<h2>Processing: {html.escape(combined_data, quote=True)}</h2>"
 
 
 # ============================================================================
@@ -234,6 +248,9 @@ def directory_traversal():
     
     try:
         # --------------------------------------------
+        import os
+        if os.path.isabs(filename) or '..' in filename:
+            return "Error reading file: Invalid file path"
         with open(filename, 'r') as f:
             content = f.read()
         return f"<pre>{content}</pre>"
@@ -256,7 +273,8 @@ def session_fixation():
         # --------------------------------------------
         if session_id:
             user_sessions[session_id] = username
-            return f"Logged in with session: {session_id}"
+            escaped_session_id = html.escape(session_id, quote=True)
+            return f"Logged in with session: {escaped_session_id}"
         else:
             new_session = secrets.token_hex(16)
             user_sessions[new_session] = username
@@ -273,16 +291,15 @@ def session_fixation():
 def sql_injection_orm():
     # --------------------------------------------
     search_term = request.args.get('q', '')
-    
+
     conn = sqlite3.connect('vulnerable_app.db')
     cursor = conn.cursor()
-    
+
     # --------------------------------------------
-    query = f"SELECT username, email FROM users WHERE username LIKE '%{search_term}%'"
-    cursor.execute(query)
+    cursor.execute("SELECT username, email FROM users WHERE username LIKE ?", ('%' + search_term + '%',))
     results = cursor.fetchall()
     conn.close()
-    
+
     return f"<h2>Search Results:</h2><pre>{results}</pre>"
 
 
@@ -296,7 +313,13 @@ def resource_leak():
     log_file = request.args.get('log', 'app.log')
     
     # --------------------------------------------
-    f = open(log_file, 'w')
+    import os
+    safe_dir = os.path.abspath('.')
+    file_path = os.path.abspath(log_file)
+    if not file_path.startswith(safe_dir):
+        return "Error: Invalid file path"
+    
+    f = open(file_path, 'w')
     f.write('Log entry: ' + str(time.time()))
     # --------------------------------------------
     open_files.append(f)
@@ -324,7 +347,8 @@ def csrf_vulnerability():
         conn.commit()
         conn.close()
         
-        return f"<h2>Transferred ${amount} from {from_account} to {to_account}</h2>"
+        import html
+        return f"<h2>Transferred ${html.escape(amount, quote=True)} from {html.escape(from_account, quote=True)} to {html.escape(to_account, quote=True)}</h2>"
     
     return '''
         <h2>Transfer Funds</h2>
@@ -348,6 +372,11 @@ def ssrf_vulnerability():
     
     try:
         # --------------------------------------------
+        import urllib.parse
+        parsed = urllib.parse.urlparse(url)
+        if parsed.scheme not in ('http', 'https'):
+            return "Error: Invalid URL scheme"
+        
         response = urllib.request.urlopen(url, timeout=5)
         content = response.read().decode('utf-8', errors='ignore')
         return f"<h2>Fetched Content:</h2><pre>{content[:500]}</pre>"
@@ -366,7 +395,7 @@ def idor_vulnerability(account_id):
     cursor = conn.cursor()
     
     # --------------------------------------------
-    cursor.execute(f"SELECT * FROM accounts WHERE id = {account_id}")
+    cursor.execute("SELECT * FROM accounts WHERE id = ?", (account_id,))
     account = cursor.fetchone()
     conn.close()
     
@@ -388,7 +417,7 @@ def insecure_deserialization():
     try:
         # --------------------------------------------
         obj = pickle.loads(data)
-        return f"<h2>Deserialized Object:</h2><pre>{obj}</pre>"
+        return f"<h2>Deserialized Object:</h2><pre>{html.escape(str(obj), quote=True)}</pre>"
     except Exception as e:
         return f"Error deserializing: {str(e)}"
 
@@ -409,10 +438,11 @@ def command_injection():
         command = f'ping -c 2 {host}'
     
     try:
-        result = subprocess.check_output(command, shell=True, stderr=subprocess.STDOUT, timeout=5)
+        import shlex
+        result = subprocess.check_output(shlex.split(command), shell=False, stderr=subprocess.STDOUT, timeout=5)
         return f"<h2>Ping Results:</h2><pre>{result.decode()}</pre>"
-    except Exception as e:
-        return f"Error executing command: {str(e)}"
+    except Exception:
+        return "Error executing command"
 
 
 # ============================================================================
@@ -423,10 +453,11 @@ def command_injection():
 def xxe_vulnerability():
     # --------------------------------------------
     xml_data = request.data.decode()
-    
+
     try:
         # --------------------------------------------
-        root = ET.fromstring(xml_data)
+        parser = ET.XMLParser(resolve_entities=False)
+        root = ET.fromstring(xml_data, parser=parser)
         result = [(child.tag, child.text) for child in root]
         return f"<h2>Parsed XML:</h2><pre>{result}</pre>"
     except Exception as e:
