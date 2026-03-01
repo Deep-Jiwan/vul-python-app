@@ -16,6 +16,7 @@ import urllib.request
 import xml.etree.ElementTree as ET
 from Crypto.Cipher import DES
 import html
+import urllib.parse
 
 # --------------------------------------------
 ADMIN_USERNAME = "admin"
@@ -356,12 +357,13 @@ def ssrf_vulnerability():
     # --------------------------------------------
     url = request.args.get('url', 'http://example.com')
     
+    # Minimal SSRF protection - validate URL before fetching
+    parsed = urllib.parse.urlparse(url)
+    if parsed.scheme not in ('http', 'https') or (parsed.hostname and parsed.hostname.lower() in ('localhost', '127.0.0.1', '0.0.0.0', '::1')):
+        return "Error: Invalid URL"
+    
     try:
         # --------------------------------------------
-        import urllib.parse
-        parsed = urllib.parse.urlparse(url)
-        if parsed.scheme not in ('http', 'https'):
-            return "Error: Only HTTP and HTTPS URLs are allowed"
         response = urllib.request.urlopen(url, timeout=5)
         content = response.read().decode('utf-8', errors='ignore')
         return f"<h2>Fetched Content:</h2><pre>{content[:500]}</pre>"
