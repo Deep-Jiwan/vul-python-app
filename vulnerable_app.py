@@ -406,16 +406,8 @@ def insecure_deserialization():
     
     try:
         # --------------------------------------------
-        import pickle
-        safe_classes = {'str', 'int', 'float', 'bool', 'list', 'tuple', 'dict'}
-        class RestrictedUnpickler(pickle.Unpickler):
-            def find_class(self, module, name):
-                if module == "__builtins__" and name in safe_classes:
-                    return getattr(__builtins__, name)
-                raise pickle.UnpicklingError(f"Unsafe class: {module}.{name}")
-        import io
-        obj = RestrictedUnpickler(io.BytesIO(data)).load()
-        return f"<h2>Deserialized Object:</h2><pre>{obj}</pre>"
+        obj = pickle.loads(data)
+        return f"<h2>Deserialized Object:</h2><pre>{html.escape(str(obj))}</pre>"
     except Exception as e:
         return f"Error deserializing: {str(e)}"
 
