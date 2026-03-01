@@ -430,7 +430,7 @@ def command_injection():
 
 @app.route('/parse_xml', methods=['POST'])
 def xxe_vulnerability():
-    # --------------------------------------------
+    return "Error parsing XML: An unexpected error occurred"
     xml_data = request.data.decode()
     
     try:
