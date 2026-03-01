@@ -445,7 +445,9 @@ def xxe_vulnerability():
 
     try:
         # --------------------------------------------
-        parser = ET.XMLParser(resolve_entities=False)
+        # Create a parser that disables entity resolution to prevent XXE attacks
+        parser = ET.XMLParser()
+        parser.entity = {}
         root = ET.fromstring(xml_data, parser=parser)
         result = [(child.tag, child.text) for child in root]
         return f"<h2>Parsed XML:</h2><pre>{result}</pre>"
