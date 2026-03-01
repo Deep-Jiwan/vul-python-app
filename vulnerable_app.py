@@ -401,10 +401,11 @@ def insecure_deserialization():
     
     try:
         # --------------------------------------------
-        obj = pickle.loads(data)
+        import json
+        obj = json.loads(data.decode('utf-8'))
         return f"<h2>Deserialized Object:</h2><pre>{obj}</pre>"
-    except Exception:
-        return f"Error deserializing: Invalid data format"
+    except Exception as e:
+        return f"Error deserializing: {str(e)}"
 
 
 # ============================================================================
