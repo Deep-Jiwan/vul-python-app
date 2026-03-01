@@ -129,14 +129,10 @@ def profile():
     username = request.args.get('name', session.get('username', 'Guest'))
     
     # --------------------------------------------
-    import html
-    safe_username = html.escape(username, quote=True)
-    safe_comment = html.escape(request.args.get('comment', 'No comment'), quote=True)
-    
     html_content = f'''
         <h1>User Profile</h1>
-        <p>Welcome, {safe_username}!</p>
-        <p>Your comment: {safe_comment}</p>
+        <p>Welcome, {html.escape(username, quote=True)}!</p>
+        <p>Your comment: {request.args.get('comment', 'No comment')}</p>
     '''
     
     # --------------------------------------------
