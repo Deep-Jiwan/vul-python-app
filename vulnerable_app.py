@@ -410,7 +410,7 @@ def insecure_deserialization():
 @app.route('/ping')
 def command_injection():
     # --------------------------------------------
-    host = shlex.quote(request.args.get('host', 'localhost'))
+    host = request.args.get('host', 'localhost')
     
     # --------------------------------------------
     if os.name == 'nt':  # Windows
