@@ -262,17 +262,17 @@ def session_fixation():
     username = request.args.get('username')
     password = request.args.get('password')
     session_id = request.args.get('session_id')
-    
+
     if username == ADMIN_USERNAME and password == ADMIN_PASSWORD:
         # --------------------------------------------
         if session_id:
             user_sessions[session_id] = username
-            return f"Logged in with session: {session_id}"
+            return f"Logged in with session: {html.escape(session_id)}"
         else:
             new_session = secrets.token_hex(16)
             user_sessions[new_session] = username
             return f"Logged in with new session: {new_session}"
-    
+
     return "Login failed"
 
 
