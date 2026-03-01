@@ -220,7 +220,7 @@ def crlf_injection():
 # ============================================================================
 # DATA PROCESSING ENDPOINT
 # ============================================================================
-
+return f"<h2>Processing: {html.escape(combined_data)}</h2>"
 @app.route('/process_data')
 def trust_boundary():
     # --------------------------------------------
