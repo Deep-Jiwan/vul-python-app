@@ -256,7 +256,7 @@ def directory_traversal():
 # SESSION LOGIN ENDPOINT
 # ============================================================================
 
-@app.route('/login_with_session')
+return f"Logged in with session: {html.escape(session_id)}"
 def session_fixation():
     # --------------------------------------------
     username = request.args.get('username')
