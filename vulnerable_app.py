@@ -351,13 +351,18 @@ def ssrf_vulnerability():
     # --------------------------------------------
     url = request.args.get('url', 'http://example.com')
     
+    # SSRF protection: validate URL
+    parsed = urllib.parse.urlparse(url)
+    if parsed.scheme not in ['http', 'https'] or parsed.hostname not in ['example.com', 'localhost', '127.0.0.1']:
+        return "Error: Invalid URL"
+    
     try:
         # --------------------------------------------
         response = urllib.request.urlopen(url, timeout=5)
         content = response.read().decode('utf-8', errors='ignore')
         return f"<h2>Fetched Content:</h2><pre>{content[:500]}</pre>"
     except Exception as e:
-        return f"Error fetching URL: {str(e)}"
+        return "Error fetching URL"
 
 
 # ============================================================================
