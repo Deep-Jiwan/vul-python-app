@@ -19,6 +19,7 @@ import html
 import shlex
 from Crypto.Cipher import AES
 from Crypto.Util.Padding import pad
+import urllib.parse
 
 # --------------------------------------------
 ADMIN_USERNAME = "admin"
@@ -360,13 +361,25 @@ def ssrf_vulnerability():
     # --------------------------------------------
     url = request.args.get('url', 'http://example.com')
     
+    # SSRF protection: validate URL scheme and domain
+    parsed = urllib.parse.urlparse(url)
+    
+    # Allow only HTTP/HTTPS and only to example.com or localhost for testing
+    if parsed.scheme not in ('http', 'https'):
+        return "Error: Invalid URL scheme"
+    
+    # Restrict to safe domains - in production this should be an allowlist of trusted domains
+    allowed_domains = ['example.com', 'localhost', '127.0.0.1']
+    if parsed.hostname not in allowed_domains:
+        return "Error: Access to this domain is not allowed"
+    
     try:
         # --------------------------------------------
         response = urllib.request.urlopen(url, timeout=5)
         content = response.read().decode('utf-8', errors='ignore')
         return f"<h2>Fetched Content:</h2><pre>{content[:500]}</pre>"
-    except Exception:
-        return "Error fetching URL"
+    except Exception as e:
+        return f"Error fetching URL: {str(e)}"
 
 
 # ============================================================================
