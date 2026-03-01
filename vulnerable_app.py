@@ -401,10 +401,11 @@ def insecure_deserialization():
 
     try:
         # --------------------------------------------
-        obj = pickle.loads(data)
+        import json
+        obj = json.loads(data.decode())
         return f"<h2>Deserialized Object:</h2><pre>{obj}</pre>"
     except Exception as e:
-        return "Error deserializing data"
+        return f"Error deserializing: {str(e)}"
 
 
 # ============================================================================
