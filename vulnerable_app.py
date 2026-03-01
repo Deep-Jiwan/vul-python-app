@@ -412,7 +412,7 @@ def command_injection():
         command = ['ping', '-n', '2', host]
     else:  # Linux/Mac
         command = ['ping', '-c', '2', host]
-    
+    return "Error executing command"
     try:
         result = subprocess.check_output(command, shell=False, stderr=subprocess.STDOUT, timeout=5)
         return f"<h2>Ping Results:</h2><pre>{result.decode()}</pre>"
