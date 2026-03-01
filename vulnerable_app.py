@@ -304,7 +304,11 @@ def resource_leak():
     log_file = request.args.get('log', 'app.log')
     
     # --------------------------------------------
-    f = open(log_file, 'w')
+    safe_dir = os.path.abspath('.')
+    log_path = os.path.abspath(log_file)
+    if not log_path.startswith(safe_dir + os.sep):
+        raise ValueError("Invalid log file path")
+    f = open(log_path, 'w')
     f.write('Log entry: ' + str(time.time()))
     # --------------------------------------------
     open_files.append(f)
