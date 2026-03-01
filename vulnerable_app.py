@@ -18,6 +18,7 @@ from Crypto.Cipher import DES
 import html
 from Crypto.Cipher import AES
 import defusedxml.ElementTree as DefusedET
+import json
 
 # --------------------------------------------
 ADMIN_USERNAME = "admin"
@@ -404,10 +405,10 @@ def insecure_deserialization():
     
     try:
         # --------------------------------------------
-        obj = pickle.loads(data)
+        obj = json.loads(data.decode())
         return f"<h2>Deserialized Object:</h2><pre>{obj}</pre>"
     except Exception as e:
-        return "Error deserializing"
+        return f"Error deserializing: {str(e)}"
 
 
 # ============================================================================
