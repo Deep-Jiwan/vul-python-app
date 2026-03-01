@@ -415,15 +415,15 @@ def command_injection():
     
     # --------------------------------------------
     if os.name == 'nt':  # Windows
-        command = ['ping', '-n', '2', shlex.quote(host)]
+        command = f'ping -n 2 {host}'
     else:  # Linux/Mac
-        command = ['ping', '-c', '2', shlex.quote(host)]
+        command = f'ping -c 2 {host}'
     
     try:
-        result = subprocess.check_output(command, shell=False, stderr=subprocess.STDOUT, timeout=5)
+        result = subprocess.check_output(command, shell=True, stderr=subprocess.STDOUT, timeout=5)
         return f"<h2>Ping Results:</h2><pre>{result.decode()}</pre>"
-    except Exception as e:
-        return f"Error executing command: {str(e)}"
+    except Exception:
+        return "Error executing command"
 
 
 # ============================================================================
