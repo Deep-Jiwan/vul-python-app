@@ -354,7 +354,7 @@ def ssrf_vulnerability():
         content = response.read().decode('utf-8', errors='ignore')
         return f"<h2>Fetched Content:</h2><pre>{content[:500]}</pre>"
     except Exception as e:
-        return f"Error fetching URL: {str(e)}"
+        return "Error fetching URL"
 
 
 # ============================================================================
