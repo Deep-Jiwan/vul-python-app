@@ -166,6 +166,8 @@ def open_redirect():
     target_url = request.args.get('url', '/')
     
     # --------------------------------------------
+    if not target_url.startswith(('/', 'https://trusted.com')):
+        raise ValueError("Invalid redirect URL")
     return redirect(target_url)
 
 
