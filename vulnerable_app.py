@@ -184,7 +184,7 @@ def encrypt_data():
     data = request.args.get('data', 'secret message')
     
     # --------------------------------------------
-    key = b'8bytekey'
+
     cipher = DES.new(key, DES.MODE_ECB)
     
     # --------------------------------------------
