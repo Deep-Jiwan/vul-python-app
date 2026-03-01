@@ -404,7 +404,7 @@ def insecure_deserialization():
         # --------------------------------------------
         return "<h2>Error:</h2><p>Pickle deserialization is not supported for security reasons</p>"
     except Exception as e:
-        return "Error deserializing"
+        return f"Error deserializing: {str(e)}"
 
 
 # ============================================================================
