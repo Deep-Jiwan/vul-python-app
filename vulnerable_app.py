@@ -243,8 +243,8 @@ def directory_traversal():
         with open(filename, 'r') as f:
             content = f.read()
         return f"<pre>{content}</pre>"
-    except Exception as e:
-        return f"Error reading file: {str(e)}"
+    except Exception:
+        return "Error reading file"
 
 
 # ============================================================================
