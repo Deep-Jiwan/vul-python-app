@@ -132,8 +132,8 @@ def profile():
     # --------------------------------------------
     html_content = f'''
         <h1>User Profile</h1>
-        <p>Welcome, {username}!</p>
-        <p>Your comment: {request.args.get('comment', 'No comment')}</p>
+        <p>Welcome, {html.escape(username)}!</p>
+        <p>Your comment: {html.escape(request.args.get('comment', 'No comment'))}</p>
     '''
     
     # --------------------------------------------
