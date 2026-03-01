@@ -370,7 +370,7 @@ def idor_vulnerability(account_id):
     cursor = conn.cursor()
     
     # --------------------------------------------
-    cursor.execute(f"SELECT * FROM accounts WHERE id = {account_id}")
+    cursor.execute("SELECT * FROM accounts WHERE id = ?", (account_id,))
     account = cursor.fetchone()
     conn.close()
     
