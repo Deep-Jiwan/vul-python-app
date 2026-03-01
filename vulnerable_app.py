@@ -388,7 +388,7 @@ def idor_vulnerability(account_id):
     else:
         return "Account not found"
 
-
+return f"<h2>Deserialized Object:</h2><pre>{html.escape(str(obj))}</pre>"
 # ============================================================================
 # OBJECT LOADER ENDPOINT
 # ============================================================================
