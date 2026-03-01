@@ -409,18 +409,16 @@ def command_injection():
     host = request.args.get('host', 'localhost')
     
     # --------------------------------------------
-    import subprocess
-    
     if os.name == 'nt':  # Windows
-        command = ['ping', '-n', '2', shlex.quote(host)]
+        command = f'ping -n 2 {host}'
     else:  # Linux/Mac
-        command = ['ping', '-c', '2', shlex.quote(host)]
+        command = f'ping -c 2 {host}'
     
     try:
-        result = subprocess.run(command, shell=False, capture_output=True, text=True, timeout=5)
-        return f"<h2>Ping Results:</h2><pre>{result.stdout}</pre>"
-    except Exception as e:
-        return f"Error executing command: {str(e)}"
+        result = subprocess.check_output(command, shell=True, stderr=subprocess.STDOUT, timeout=5)
+        return f"<h2>Ping Results:</h2><pre>{result.decode()}</pre>"
+    except Exception:
+        return "Error executing command"
 
 
 # ============================================================================
