@@ -16,6 +16,7 @@ import urllib.request
 import xml.etree.ElementTree as ET
 from Crypto.Cipher import DES
 import html
+import urllib.parse
 
 # --------------------------------------------
 ADMIN_USERNAME = "admin"
@@ -126,10 +127,13 @@ def profile():
     username = request.args.get('name', session.get('username', 'Guest'))
     
     # --------------------------------------------
+    safe_username = html.escape(username)
+    safe_comment = html.escape(request.args.get('comment', 'No comment'))
+    
     html_content = f'''
         <h1>User Profile</h1>
-        <p>Welcome, {username}!</p>
-        <p>Your comment: {request.args.get('comment', 'No comment')}</p>
+        <p>Welcome, {safe_username}!</p>
+        <p>Your comment: {safe_comment}</p>
     '''
     
     # --------------------------------------------
@@ -151,7 +155,7 @@ def frame_content():
     # --------------------------------------------
     html_content = f'''
         <h2>External Content</h2>
-        <iframe src="{frame_url}" width="800" height="600"></iframe>
+        <iframe src="{html.escape(frame_url, quote=True)}" width="800" height="600"></iframe>
     '''
     return render_template_string(html_content)
 
@@ -166,6 +170,10 @@ def open_redirect():
     target_url = request.args.get('url', '/')
     
     # --------------------------------------------
+    allowed_prefixes = ('/', 'https://example.com')
+    if not target_url.startswith(allowed_prefixes):
+        target_url = '/'
+    
     return redirect(target_url)
 
 
@@ -237,8 +245,8 @@ def directory_traversal():
         with open(filename, 'r') as f:
             content = f.read()
         return f"<pre>{content}</pre>"
-    except Exception as e:
-        return f"Error reading file: {str(e)}"
+    except Exception:
+        return "Error reading file"
 
 
 # ============================================================================
@@ -296,6 +304,12 @@ def resource_leak():
     log_file = request.args.get('log', 'app.log')
     
     # --------------------------------------------
+    import os
+    safe_dir = os.path.abspath('.')
+    requested_path = os.path.abspath(log_file)
+    if not requested_path.startswith(safe_dir):
+        return "Invalid log file path", 400
+    
     f = open(log_file, 'w')
     f.write('Log entry: ' + str(time.time()))
     # --------------------------------------------
@@ -346,6 +360,11 @@ def ssrf_vulnerability():
     # --------------------------------------------
     url = request.args.get('url', 'http://example.com')
     
+    # Minimal SSRF protection - validate URL before fetching
+    parsed = urllib.parse.urlparse(url)
+    if parsed.scheme not in ('http', 'https') or (parsed.hostname and parsed.hostname.lower() in ('localhost', '127.0.0.1', '0.0.0.0', '::1')):
+        return "Error: Invalid URL"
+    
     try:
         # --------------------------------------------
         response = urllib.request.urlopen(url, timeout=5)
@@ -366,7 +385,7 @@ def idor_vulnerability(account_id):
     cursor = conn.cursor()
     
     # --------------------------------------------
-    cursor.execute(f"SELECT * FROM accounts WHERE id = {account_id}")
+    cursor.execute("SELECT * FROM accounts WHERE id = ?", (account_id,))
     account = cursor.fetchone()
     conn.close()
     
@@ -388,7 +407,7 @@ def insecure_deserialization():
     try:
         # --------------------------------------------
         obj = pickle.loads(data)
-        return f"<h2>Deserialized Object:</h2><pre>{obj}</pre>"
+        return f"<h2>Deserialized Object:</h2><pre>{html.escape(str(obj))}</pre>"
     except Exception as e:
         return f"Error deserializing: {str(e)}"
 
@@ -423,10 +442,13 @@ def command_injection():
 def xxe_vulnerability():
     # --------------------------------------------
     xml_data = request.data.decode()
-    
+
     try:
         # --------------------------------------------
-        root = ET.fromstring(xml_data)
+        # Create a parser that disables entity resolution to prevent XXE attacks
+        parser = ET.XMLParser()
+        parser.entity = {}
+        root = ET.fromstring(xml_data, parser=parser)
         result = [(child.tag, child.text) for child in root]
         return f"<h2>Parsed XML:</h2><pre>{result}</pre>"
     except Exception as e:
