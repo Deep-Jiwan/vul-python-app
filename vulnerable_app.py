@@ -490,7 +490,8 @@ def after_request(response):
 # MAIN
 # ============================================================================
 
-if __name__ == '__main__':
+def main():
+    """Main entry point for the application"""
     print("=" * 70)
     print("STARTING WEB APPLICATION")
     print("=" * 70)
@@ -505,3 +506,7 @@ if __name__ == '__main__':
     
     # --------------------------------------------
     app.run(debug=True, host='127.0.0.1', port=3000)
+
+
+if __name__ == '__main__':
+    main()
