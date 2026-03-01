@@ -18,6 +18,7 @@ from Crypto.Cipher import DES
 import html
 import re
 import shlex
+import urllib.parse
 
 # --------------------------------------------
 ADMIN_USERNAME = "admin"
@@ -168,13 +169,32 @@ def open_redirect():
     target_url = request.args.get('url', '/')
     
     # --------------------------------------------
+    # Validate redirect URL to prevent open redirect attacks
+    # Allow only relative paths or trusted external domains
+    trusted_domains = ['https://example.com', 'https://trusted-site.com']
+    
+    # Parse the URL to properly validate the domain
+    parsed_url = urllib.parse.urlparse(target_url)
+    
+    # Allow relative paths (no scheme, no netloc)
+    if not parsed_url.scheme and not parsed_url.netloc:
+        # Ensure it's a relative path starting with '/'
+        if not target_url.startswith('/'):
+            target_url = '/'
+    else:
+        # For absolute URLs, check against trusted domains
+        is_trusted = False
+        for trusted_domain in trusted_domains:
+            trusted_parsed = urllib.parse.urlparse(trusted_domain)
+            if (parsed_url.scheme == trusted_parsed.scheme and 
+                parsed_url.netloc == trusted_parsed.netloc):
+                is_trusted = True
+                break
+        
+        if not is_trusted:
+            target_url = '/'  # Default to home page if URL is not trusted
+    
     return redirect(target_url)
-
-
-# ============================================================================
-# ENCRYPTION ENDPOINT
-# ============================================================================
-
 @app.route('/encrypt')
 def encrypt_data():
     # --------------------------------------------
