@@ -240,15 +240,15 @@ def trust_boundary():
 @app.route('/download')
 def directory_traversal():
     # --------------------------------------------
-    filename = request.args.get('file', 'readme.txt')
-
+    filename = os.path.basename(request.args.get('file', 'readme.txt'))
+    
     try:
         # --------------------------------------------
         with open(filename, 'r') as f:
             content = f.read()
         return f"<pre>{content}</pre>"
     except Exception as e:
-        return "Error reading file"
+        return f"Error reading file: {str(e)}"
 
 
 # ============================================================================
