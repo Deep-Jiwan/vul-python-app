@@ -461,14 +461,17 @@ def command_injection():
 def xxe_vulnerability():
     # --------------------------------------------
     xml_data = request.data.decode()
-
+    
     try:
         # --------------------------------------------
-        root = ET.fromstring(xml_data)
+        # Create a parser that disables external entity expansion
+        parser = ET.XMLParser()
+        parser.entity = {}
+        root = ET.fromstring(xml_data, parser=parser)
         result = [(child.tag, child.text) for child in root]
         return f"<h2>Parsed XML:</h2><pre>{result}</pre>"
-    except Exception:
-        return "Error parsing XML"
+    except Exception as e:
+        return f"Error parsing XML: {str(e)}"
 
 
 # ============================================================================
