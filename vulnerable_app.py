@@ -17,6 +17,7 @@ import xml.etree.ElementTree as ET
 from Crypto.Cipher import DES
 import html
 import shlex
+from Crypto.Cipher import AES
 
 # --------------------------------------------
 ADMIN_USERNAME = "admin"
@@ -185,13 +186,18 @@ def encrypt_data():
     
     # --------------------------------------------
     key = b'8bytekey'
-    cipher = DES.new(key, DES.MODE_ECB)
+    import os
+    
+    # Use AES with CBC mode instead of DES with ECB
+    aes_key = key.ljust(16, b'\0')[:16]
+    iv = os.urandom(16)
+    cipher = AES.new(aes_key, AES.MODE_CBC, iv)
     
     # --------------------------------------------
-    padded_data = data + ' ' * (8 - len(data) % 8)
-    encrypted = cipher.encrypt(padded_data.encode())
+    padded_data = data.encode() + b' ' * (16 - len(data.encode()) % 16)
+    encrypted = cipher.encrypt(padded_data)
     
-    return f"<h2>Encrypted Data:</h2><p>{encrypted.hex()}</p>"
+    return f"<h2>Encrypted Data:</h2><p>{encrypted.hex()}:{iv.hex()}</p>"
 
 
 # ============================================================================
