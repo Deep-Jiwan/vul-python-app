@@ -151,9 +151,13 @@ def frame_content():
     frame_url = request.args.get('url', 'https://example.com')
     
     # --------------------------------------------
+    # Validate URL scheme to prevent XSS
+    if not frame_url.startswith(('http://', 'https://')):
+        frame_url = 'https://example.com'
+    
     html_content = f'''
         <h2>External Content</h2>
-        <iframe src="{frame_url}" width="800" height="600"></iframe>
+        <iframe src="{html.escape(frame_url, quote=True)}" width="800" height="600"></iframe>
     '''
     return render_template_string(html_content)
 
