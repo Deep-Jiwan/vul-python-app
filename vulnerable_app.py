@@ -99,7 +99,8 @@ def login():
         cursor = conn.cursor()
         
         # --------------------------------------------
-        cursor.execute("SELECT * FROM users WHERE username = ? AND password = ?", (username, password))
+        query = f"SELECT * FROM users WHERE username = '{username}' AND password = '{password}'"
+        cursor.execute(query)
         user = cursor.fetchone()
         conn.close()
         
@@ -111,9 +112,9 @@ def login():
             # --------------------------------------------
             return f"<h2>Login failed for user: {username}</h2><p>Invalid credentials provided</p>"
     
-    except Exception as e:
+    except Exception:
         # --------------------------------------------
-        return f"<h2>Database Error</h2><pre>{str(e)}</pre>"
+        return "<h2>Database Error</h2><p>An error occurred during login. Please try again.</p>"
 
 
 # ============================================================================
