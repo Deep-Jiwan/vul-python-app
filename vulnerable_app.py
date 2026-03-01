@@ -153,10 +153,10 @@ def frame_content():
     
     # --------------------------------------------
     import html
-    escaped_frame_url = html.escape(frame_url, quote=True)
+    escaped_url = html.escape(frame_url, quote=True)
     html_content = f'''
         <h2>External Content</h2>
-        <iframe src="{escaped_frame_url}" width="800" height="600"></iframe>
+        <iframe src="{escaped_url}" width="800" height="600"></iframe>
     '''
     return render_template_string(html_content)
 
