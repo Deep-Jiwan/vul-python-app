@@ -152,7 +152,7 @@ def frame_content():
     # --------------------------------------------
     html_content = f'''
         <h2>External Content</h2>
-        <iframe src="{frame_url}" width="800" height="600"></iframe>
+        <iframe src="{html.escape(frame_url, quote=True)}" width="800" height="600"></iframe>
     '''
     return render_template_string(html_content)
 
