@@ -128,17 +128,20 @@ def profile():
     username = request.args.get('name', session.get('username', 'Guest'))
     
     # --------------------------------------------
+    safe_username = html.escape(username)
+    safe_comment = html.escape(request.args.get('comment', 'No comment'))
+    
     html_content = f'''
         <h1>User Profile</h1>
-        <p>Welcome, {username}!</p>
-        <p>Your comment: {request.args.get('comment', 'No comment')}</p>
+        <p>Welcome, {safe_username}!</p>
+        <p>Your comment: {safe_comment}</p>
     '''
     
     # --------------------------------------------
     if username == 'admin':
         html_content += f'<p style="color:red;">Password Hint: {ADMIN_PASSWORD}</p>'
     
-    return render_template_string(html_content)
+    return html_content
 
 
 # ============================================================================
