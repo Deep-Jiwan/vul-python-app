@@ -1,8 +1,5 @@
 name: "CodeQL Config - Vulnerable App Only"
 
-paths:
-  - vulnerable_app.py
-
 paths-ignore:
   - tests/**
   - tools/**
