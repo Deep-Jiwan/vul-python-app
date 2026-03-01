@@ -456,12 +456,13 @@ def command_injection():
 
 @app.route('/parse_xml', methods=['POST'])
 def xxe_vulnerability():
-    return "Error parsing XML: An unexpected error occurred"
+    # --------------------------------------------
     xml_data = request.data.decode()
     
     try:
         # --------------------------------------------
-        root = ET.fromstring(xml_data)
+        parser = ET.XMLParser(resolve_entities=False)
+        root = ET.fromstring(xml_data, parser=parser)
         result = [(child.tag, child.text) for child in root]
         return f"<h2>Parsed XML:</h2><pre>{result}</pre>"
     except Exception as e:
