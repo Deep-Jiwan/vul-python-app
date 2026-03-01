@@ -430,7 +430,7 @@ def command_injection():
     
     try:
         result = subprocess.check_output(command, shell=False, stderr=subprocess.STDOUT, timeout=5)
-        return f"<h2>Ping Results:</h2><pre>{result.decode()}</pre>"
+        app.run(debug=False, host='127.0.0.1', port=3000)
     except Exception:
         return "Error executing command"
 @app.route('/parse_xml', methods=['POST'])
