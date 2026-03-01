@@ -166,14 +166,20 @@ def open_redirect():
     # --------------------------------------------
     target_url = request.args.get('url', '/')
     
+    # Validate redirect URL to prevent open redirect attacks
+    # Only allow relative URLs or specific trusted domains
+    parsed_url = urllib.parse.urlparse(target_url)
+    
+    # Allow relative URLs (no scheme, no netloc) or specific trusted domains
+    if parsed_url.scheme and parsed_url.netloc:
+        # Check if domain is in our allowlist
+        allowed_domains = ['example.com', 'trusted-site.com']
+        if parsed_url.netloc not in allowed_domains:
+            # Default to safe redirect
+            target_url = '/'
+    
     # --------------------------------------------
     return redirect(target_url)
-
-
-# ============================================================================
-# ENCRYPTION ENDPOINT
-# ============================================================================
-
 @app.route('/encrypt')
 def encrypt_data():
     # --------------------------------------------
