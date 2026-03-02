@@ -17,6 +17,7 @@ import xml.etree.ElementTree as ET
 from Crypto.Cipher import DES
 import html
 import shlex
+import json
 
 # --------------------------------------------
 ADMIN_USERNAME = "admin"
@@ -383,14 +384,12 @@ def idor_vulnerability(account_id):
 
 @app.route('/load_object', methods=['POST'])
 def insecure_deserialization():
-    import html
-    # --------------------------------------------
     data = request.data
     
     try:
         # --------------------------------------------
-        obj = pickle.loads(data)
-        return f"<h2>Deserialized Object:</h2><pre>{html.escape(str(obj), quote=True)}</pre>"
+        obj = json.loads(data)
+        return f"<h2>Deserialized Object:</h2><pre>{obj}</pre>"
     except Exception as e:
         return f"Error deserializing: {str(e)}"
 
