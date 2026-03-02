@@ -315,12 +315,12 @@ def csrf_vulnerability():
         from_account = request.values.get('from')
         to_account = request.values.get('to')
         amount = request.values.get('amount')
-        
+
         # --------------------------------------------
         conn = sqlite3.connect('vulnerable_app.db')
         cursor = conn.cursor()
-        cursor.execute(f"UPDATE accounts SET balance = balance - {amount} WHERE username = '{from_account}'")
-        cursor.execute(f"UPDATE accounts SET balance = balance + {amount} WHERE username = '{to_account}'")
+        cursor.execute("UPDATE accounts SET balance = balance - ? WHERE username = ?", (amount, from_account))
+        cursor.execute("UPDATE accounts SET balance = balance + ? WHERE username = ?", (amount, to_account))
         conn.commit()
         conn.close()
         
