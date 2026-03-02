@@ -10,7 +10,7 @@ jobs:
     name: Run DAST Analysis with ZAP
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
       security-events: write
       actions: read
     
@@ -151,6 +151,28 @@ jobs:
           docker rm -f zap-scan 2>/dev/null || true
           docker volume rm dast-reports-vol 2>/dev/null || true
       
+      - name: Copy DAST results to results_files
+        run: |
+          mkdir -p results_files/dasts
+          BRANCH_NAME="${{ github.ref_name }}"
+          # Remove existing DAST file if it exists
+          rm -f results_files/dasts/${BRANCH_NAME}_dast.json
+          # Copy the DAST JSON report
+          if [ -f dast-reports/full-scan-report.json ]; then
+            cp dast-reports/full-scan-report.json results_files/dasts/${BRANCH_NAME}_dast.json
+            echo "DAST results copied to results_files/dasts/${BRANCH_NAME}_dast.json"
+          else
+            echo "Warning: full-scan-report.json not found"
+          fi
+      
+      - name: Commit DAST results to branch
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add results_files/
+          git commit -m "Add DAST results for ${{ github.ref_name }} [skip ci]" || echo "No changes to commit"
+          git push || echo "Nothing to push"
+      
       - name: Stop Flask application
         if: always()
         run: |
@@ -259,9 +281,12 @@ jobs:
           echo "- SSTI Detection: Enabled" >> $GITHUB_STEP_SUMMARY
           echo "- Cookie Testing: All cookies" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Results committed to branch:**" >> $GITHUB_STEP_SUMMARY
+          echo "- results_files/dasts/${{ github.ref_name }}_dast.json" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
           echo "**Artifacts uploaded:**" >> $GITHUB_STEP_SUMMARY
           echo "- full-scan-report.json (Machine-readable)" >> $GITHUB_STEP_SUMMARY
           echo "- full-scan-report.html (Human-readable)" >> $GITHUB_STEP_SUMMARY
           echo "- scan-summary.txt (Scan metadata)" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Next step:** Download artifacts using the agent for automated fix generation" >> $GITHUB_STEP_SUMMARY
+          echo "**Branch:** ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY

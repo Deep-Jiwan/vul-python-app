@@ -10,7 +10,7 @@ jobs:
     name: Run SAST Analysis
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
       security-events: write
       actions: read
     
@@ -38,22 +38,57 @@ jobs:
       
       - name: Locate and rename SARIF file
         run: |
-          mkdir -p sarif-output
-          find sarif-results -name "*.sarif" -exec cp {} sarif-output/python-results.sarif \;
-          ls -la sarif-output/
+          mkdir -p results_files/sasts
+          BRANCH_NAME="${{ github.ref_name }}"
+          # Remove existing SARIF file if it exists
+          rm -f results_files/sasts/${BRANCH_NAME}.sarif
+          find sarif-results -name "*.sarif" -exec cp {} results_files/sasts/${BRANCH_NAME}.sarif \;
+          ls -la results_files/sasts/
       
-      - name: Upload SARIF artifacts
-        uses: actions/upload-artifact@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
-          name: sast-results
-          path: sarif-output/python-results.sarif
-          retention-days: 30
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pylint pytest pytest-json-report
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+      
+      - name: Run Pylint
+        continue-on-error: true
+        run: |
+          mkdir -p results_files/pylint
+          BRANCH_NAME="${{ github.ref_name }}"
+          # Remove existing pylint file if it exists
+          rm -f results_files/pylint/${BRANCH_NAME}_lint.json
+          pylint vulnerable_app.py --output-format=json > results_files/pylint/${BRANCH_NAME}_lint.json || true
+          echo "Pylint analysis complete"
+      
+      - name: Run Pytest
+        continue-on-error: true
+        run: |
+          mkdir -p results_files/pytest
+          BRANCH_NAME="${{ github.ref_name }}"
+          # Remove existing pytest file if it exists
+          rm -f results_files/pytest/${BRANCH_NAME}_pytest.json
+          pytest --json-report --json-report-file=results_files/pytest/${BRANCH_NAME}_pytest.json || true
+          echo "Pytest analysis complete"
+      
+      - name: Commit results to branch
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add results_files/
+          git commit -m "Add SAST, Pylint, and Pytest results [skip ci]" || echo "No changes to commit"
+          git push || echo "Nothing to push"
       
       - name: Upload SARIF to GitHub Security
         uses: github/codeql-action/upload-sarif@v3
         continue-on-error: true
         with:
-          sarif_file: sarif-output/python-results.sarif
+          sarif_file: results_files/sasts/${{ github.ref_name }}.sarif
           category: codeql
       
       - name: Create scan summary
@@ -62,7 +97,9 @@ jobs:
           echo "## SAST Scan Complete 🔍" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**Tool:** CodeQL (Python security analysis)" >> $GITHUB_STEP_SUMMARY
-          echo "**Artifacts uploaded:**" >> $GITHUB_STEP_SUMMARY
-          echo "- python-results.sarif" >> $GITHUB_STEP_SUMMARY
+          echo "**Results committed to branch:**" >> $GITHUB_STEP_SUMMARY
+          echo "- results_files/sasts/${{ github.ref_name }}.sarif" >> $GITHUB_STEP_SUMMARY
+          echo "- results_files/pylint/${{ github.ref_name }}_lint.json" >> $GITHUB_STEP_SUMMARY
+          echo "- results_files/pytest/${{ github.ref_name }}_pytest.json" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Next step:** Download artifacts using the agent" >> $GITHUB_STEP_SUMMARY
+          echo "**Branch:** ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
