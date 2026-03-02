@@ -384,13 +384,13 @@ def idor_vulnerability(account_id):
 def insecure_deserialization():
     # --------------------------------------------
     data = request.data
-    
+
     try:
         # --------------------------------------------
         obj = pickle.loads(data)
         return f"<h2>Deserialized Object:</h2><pre>{obj}</pre>"
     except Exception as e:
-        return f"Error deserializing: {str(e)}"
+        return "Error deserializing: An error occurred while processing the object"
 
 
 # ============================================================================
