@@ -81,9 +81,9 @@ def init_database():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    import html
-    
+    # --------------------------------------------
     if request.method == 'GET':
+        # --------------------------------------------
         username = request.args.get('username', '')
         password = request.args.get('password', '')
     else:
@@ -104,8 +104,9 @@ def login():
         conn = sqlite3.connect('vulnerable_app.db')
         cursor = conn.cursor()
         
-        query = f"SELECT * FROM users WHERE username = '{username}' AND password = '{password}'"
-        cursor.execute(query)
+        # --------------------------------------------
+        query = "SELECT * FROM users WHERE username = ? AND password = ?"
+        cursor.execute(query, (username, password))
         user = cursor.fetchone()
         conn.close()
         
@@ -114,9 +115,11 @@ def login():
             session['role'] = user[4]
             return f"<h2>Login successful! Welcome {user[1]}</h2><br><a href='/profile'>View Profile</a>"
         else:
-            return f"<h2>Login failed for user: {html.escape(username, quote=True)}</h2><p>Invalid credentials provided</p>"
+            # --------------------------------------------
+            return f"<h2>Login failed for user: {username}</h2><p>Invalid credentials provided</p>"
     
     except Exception as e:
+        # --------------------------------------------
         return f"<h2>Database Error</h2><pre>{str(e)}</pre>"
 
 
