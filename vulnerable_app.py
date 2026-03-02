@@ -234,11 +234,16 @@ def directory_traversal():
     
     try:
         # --------------------------------------------
-        with open(filename, 'r') as f:
+        import os
+        abs_path = os.path.abspath(filename)
+        safe_dir = os.path.abspath('.')
+        if not abs_path.startswith(safe_dir):
+            return "Error: Access denied"
+        with open(abs_path, 'r') as f:
             content = f.read()
         return f"<pre>{content}</pre>"
     except Exception as e:
-        return "Error reading file"
+        return f"Error reading file: {str(e)}"
 
 
 # ============================================================================
