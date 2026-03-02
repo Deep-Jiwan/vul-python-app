@@ -19,6 +19,7 @@ import html
 import shlex
 import json
 import AES
+from markupsafe import escape
 
 # --------------------------------------------
 ADMIN_USERNAME = "admin"
@@ -131,8 +132,8 @@ def profile():
     # --------------------------------------------
     html_content = f'''
         <h1>User Profile</h1>
-        <p>Welcome, {username}!</p>
-        <p>Your comment: {request.args.get('comment', 'No comment')}</p>
+        <p>Welcome, {escape(username)}!</p>
+        <p>Your comment: {escape(request.args.get('comment', 'No comment'))}</p>
     '''
     
     # --------------------------------------------
