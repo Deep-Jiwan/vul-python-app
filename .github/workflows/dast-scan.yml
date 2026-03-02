@@ -160,6 +160,8 @@ jobs:
           # Copy the DAST JSON report
           if [ -f dast-reports/full-scan-report.json ]; then
             cp dast-reports/full-scan-report.json results_files/dasts/${BRANCH_NAME}_dast.json
+            # Also rename for artifact upload
+            cp dast-reports/full-scan-report.json dast-reports/${BRANCH_NAME}.json
             echo "DAST results copied to results_files/dasts/${BRANCH_NAME}_dast.json"
           else
             echo "Warning: full-scan-report.json not found"
@@ -241,10 +243,10 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: dast-results-${{ github.run_number }}
+          name: dast-results
           path: |
+            dast-reports/${{ github.ref_name }}.json
             dast-reports/full-scan-report.html
-            dast-reports/full-scan-report.json
             dast-reports/scan-summary.txt
           retention-days: 30
       
