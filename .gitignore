@@ -15,3 +15,5 @@ coverage.json
 .coverage
 htmlcov/
 .pytest_cache/
+scripts 
+tools
