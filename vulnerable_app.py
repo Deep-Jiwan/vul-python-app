@@ -348,7 +348,7 @@ def csrf_vulnerability():
 def ssrf_vulnerability():
     # --------------------------------------------
     url = request.args.get('url', 'http://example.com')
-    
+
     try:
         # --------------------------------------------
         response = urllib.request.urlopen(url, timeout=5)
