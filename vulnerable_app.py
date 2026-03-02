@@ -400,6 +400,7 @@ def insecure_deserialization():
 
 @app.route('/ping')
 def command_injection():
+    import shlex
     # --------------------------------------------
     host = request.args.get('host', 'localhost')
     
