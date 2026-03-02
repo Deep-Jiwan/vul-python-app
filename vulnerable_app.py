@@ -151,6 +151,10 @@ def frame_content():
     # --------------------------------------------
     frame_url = request.args.get('url', 'https://example.com')
     
+    # Validate URL scheme to prevent javascript: and other dangerous protocols
+    if not frame_url.startswith(('http://', 'https://')):
+        frame_url = 'https://example.com'
+    
     # --------------------------------------------
     html_content = f'''
         <h2>External Content</h2>
