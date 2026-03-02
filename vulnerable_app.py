@@ -504,7 +504,7 @@ def main():
     print("[+] Starting Flask server on http://127.0.0.1:3000")
     print("[+] Press Ctrl+C to stop\n")
     
-    # --------------------------------------------
+    app.run(debug=False, host='127.0.0.1', port=3000)
     app.run(debug=True, host='127.0.0.1', port=3000)
 
 
