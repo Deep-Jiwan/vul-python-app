@@ -130,17 +130,17 @@ def profile():
     username = request.args.get('name', session.get('username', 'Guest'))
     
     # --------------------------------------------
-    html_content = f'''
+    html_content = '''
         <h1>User Profile</h1>
-        <p>Welcome, {username}!</p>
-        <p>Your comment: {request.args.get('comment', 'No comment')}</p>
+        <p>Welcome, {{ username }}!</p>
+        <p>Your comment: {{ comment }}</p>
     '''
     
     # --------------------------------------------
     if username == 'admin':
-        html_content += f'<p style="color:red;">Password Hint: {ADMIN_PASSWORD}</p>'
+        html_content += '<p style="color:red;">Password Hint: {{ admin_password }}</p>'
     
-    return render_template_string(html_content)
+    return render_template_string(html_content, username=username, comment=request.args.get('comment', 'No comment'), admin_password=ADMIN_PASSWORD if username == 'admin' else '')
 
 
 # ============================================================================
