@@ -428,8 +428,8 @@ def xxe_vulnerability():
         root = ET.fromstring(xml_data, parser=parser)
         result = [(child.tag, child.text) for child in root]
         return f"<h2>Parsed XML:</h2><pre>{result}</pre>"
-    except Exception:
-        return "Error parsing XML"
+    except Exception as e:
+        return f"Error parsing XML: {str(e)}"
 
 
 # ============================================================================
