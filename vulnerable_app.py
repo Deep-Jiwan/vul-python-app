@@ -152,10 +152,17 @@ def profile():
 
 @app.route('/frame_content')
 def frame_content():
-    # --------------------------------------------
+    import re
     frame_url = request.args.get('url', 'https://example.com')
     
-    # --------------------------------------------
+    # Validate URL against whitelist of allowed domains
+    allowed_domains = ['example.com', 'trusted-site.org']
+    url_pattern = re.compile(r'^https?://([^/]+)')
+    match = url_pattern.match(frame_url)
+    
+    if not match or match.group(1) not in allowed_domains:
+        frame_url = 'https://example.com'
+    
     html_content = f'''
         <h2>External Content</h2>
         <iframe src="{frame_url}" width="800" height="600"></iframe>
