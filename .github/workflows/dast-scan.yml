@@ -171,6 +171,8 @@ jobs:
           git config --local user.name "github-actions[bot]"
           git add results_files/
           git commit -m "Add DAST results for ${{ github.ref_name }} [skip ci]" || echo "No changes to commit"
+          # Pull remote changes if any, then push
+          git pull --rebase origin ${{ github.ref_name }} || echo "No remote changes to pull"
           git push || echo "Nothing to push"
       
       - name: Stop Flask application

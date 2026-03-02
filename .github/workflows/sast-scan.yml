@@ -89,6 +89,8 @@ jobs:
           git config --local user.name "github-actions[bot]"
           git add results_files/
           git commit -m "Add SAST, Pylint, and Pytest results [skip ci]" || echo "No changes to commit"
+          # Pull remote changes if any, then push
+          git pull --rebase origin ${{ github.ref_name }} || echo "No remote changes to pull"
           git push || echo "Nothing to push"
       
       - name: Upload SARIF to GitHub Security
