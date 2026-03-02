@@ -350,11 +350,25 @@ def ssrf_vulnerability():
     
     try:
         # --------------------------------------------
+        parsed = urllib.parse.urlparse(url)
+        allowed = ['example.com', 'trusted-site.com']
+        if parsed.netloc not in allowed:
+            return "Error: URL not in allowlist"
+        
+        # Block private IPs
+        try:
+            ip = socket.gethostbyname(parsed.netloc)
+            private_prefixes = ('127.', '10.', '192.168.', '172.16.', '172.17.', '172.18.', '172.19.', '172.2', '172.30.', '172.31.')
+            if ip.startswith(private_prefixes) or ip == 'localhost':
+                return "Error: Private IP blocked"
+        except socket.gaierror:
+            return "Error: Invalid hostname"
+        
         response = urllib.request.urlopen(url, timeout=5)
         content = response.read().decode('utf-8', errors='ignore')
         return f"<h2>Fetched Content:</h2><pre>{content[:500]}</pre>"
     except Exception as e:
-        return "Error fetching URL. Please check the URL and try again."
+        return f"Error fetching URL: {str(e)}"
 
 
 # ============================================================================
