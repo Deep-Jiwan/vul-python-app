@@ -314,7 +314,6 @@ def resource_leak():
 
 @app.route('/transfer_funds', methods=['GET', 'POST'])
 def csrf_vulnerability():
-    import html
     # --------------------------------------------
     if request.method == 'POST' or request.method == 'GET':
         from_account = request.values.get('from')
@@ -324,12 +323,12 @@ def csrf_vulnerability():
         # --------------------------------------------
         conn = sqlite3.connect('vulnerable_app.db')
         cursor = conn.cursor()
-        cursor.execute(f"UPDATE accounts SET balance = balance - {amount} WHERE username = '{from_account}'")
-        cursor.execute(f"UPDATE accounts SET balance = balance + {amount} WHERE username = '{to_account}'")
+        cursor.execute("UPDATE accounts SET balance = balance - ? WHERE username = ?", (amount, from_account))
+        cursor.execute("UPDATE accounts SET balance = balance + ? WHERE username = ?", (amount, to_account))
         conn.commit()
         conn.close()
         
-        return f"<h2>Transferred ${html.escape(str(amount), quote=True)} from {html.escape(str(from_account), quote=True)} to {html.escape(str(to_account), quote=True)}</h2>"
+        return f"<h2>Transferred ${amount} from {from_account} to {to_account}</h2>"
     
     return '''
         <h2>Transfer Funds</h2>
