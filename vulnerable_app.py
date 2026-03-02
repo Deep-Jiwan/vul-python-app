@@ -221,7 +221,9 @@ def trust_boundary():
     
     # --------------------------------------------
     trusted_role = session.get('role', 'guest')
-    combined_data = user_input + ':' + trusted_role
+    import html
+    escaped_input = html.escape(user_input, quote=True)
+    combined_data = escaped_input + ':' + trusted_role
     
     # --------------------------------------------
     return f"<h2>Processing: {combined_data}</h2>"
