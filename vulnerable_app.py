@@ -319,6 +319,7 @@ def csrf_vulnerability():
         amount = request.values.get('amount')
         
         # --------------------------------------------
+        import html
         conn = sqlite3.connect('vulnerable_app.db')
         cursor = conn.cursor()
         cursor.execute(f"UPDATE accounts SET balance = balance - {amount} WHERE username = '{from_account}'")
@@ -326,7 +327,7 @@ def csrf_vulnerability():
         conn.commit()
         conn.close()
         
-        return f"<h2>Transferred ${amount} from {from_account} to {to_account}</h2>"
+        return f"<h2>Transferred ${amount} from {html.escape(from_account)} to {html.escape(to_account)}</h2>"
     
     return '''
         <h2>Transfer Funds</h2>
