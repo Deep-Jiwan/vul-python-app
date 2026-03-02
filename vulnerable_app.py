@@ -16,6 +16,7 @@ import urllib.request
 import xml.etree.ElementTree as ET
 from Crypto.Cipher import DES
 import html
+import defusedxml.ElementTree as ET
 
 # --------------------------------------------
 ADMIN_USERNAME = "admin"
@@ -430,7 +431,7 @@ def xxe_vulnerability():
         result = [(child.tag, child.text) for child in root]
         return f"<h2>Parsed XML:</h2><pre>{result}</pre>"
     except Exception as e:
-        return "Error parsing XML"
+        return f"Error parsing XML: {str(e)}"
 
 
 # ============================================================================
