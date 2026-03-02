@@ -18,6 +18,7 @@ from Crypto.Cipher import DES
 import html
 import shlex
 import json
+import AES
 
 # --------------------------------------------
 ADMIN_USERNAME = "admin"
@@ -181,12 +182,12 @@ def encrypt_data():
     data = request.args.get('data', 'secret message')
     
     # --------------------------------------------
-    key = b'8bytekey'
-    cipher = DES.new(key, DES.MODE_ECB)
+    key = b'32bytekeyforAES256encryption'
+    cipher = AES.new(key, AES.MODE_GCM)
     
     # --------------------------------------------
-    padded_data = data + ' ' * (8 - len(data) % 8)
-    encrypted = cipher.encrypt(padded_data.encode())
+    padded_data = data + ' ' * (16 - len(data) % 16)
+    encrypted, tag = cipher.encrypt_and_digest(padded_data.encode())
     
     return f"<h2>Encrypted Data:</h2><p>{encrypted.hex()}</p>"
 
