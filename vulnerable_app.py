@@ -20,6 +20,8 @@ import shlex
 import json
 import urllib.parse
 import ipaddress
+from Crypto.Cipher import AES
+from Crypto.Util.Padding import pad
 
 # --------------------------------------------
 ADMIN_USERNAME = "admin"
@@ -179,16 +181,16 @@ def open_redirect():
 
 @app.route('/encrypt')
 def encrypt_data():
-    # --------------------------------------------
+    import os
+    
     data = request.args.get('data', 'secret message')
     
     # --------------------------------------------
-    key = b'8bytekey'
-    cipher = DES.new(key, DES.MODE_ECB)
+    key = os.urandom(32)  # 256-bit key for AES-256
+    cipher = AES.new(key, AES.MODE_GCM)
     
     # --------------------------------------------
-    padded_data = data + ' ' * (8 - len(data) % 8)
-    encrypted = cipher.encrypt(padded_data.encode())
+    encrypted, tag = cipher.encrypt_and_digest(pad(data.encode(), AES.block_size))
     
     return f"<h2>Encrypted Data:</h2><p>{encrypted.hex()}</p>"
 
