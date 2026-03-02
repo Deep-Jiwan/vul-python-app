@@ -233,16 +233,21 @@ def trust_boundary():
 
 @app.route('/download')
 def directory_traversal():
+    import os
     # --------------------------------------------
     filename = request.args.get('file', 'readme.txt')
     
     try:
         # --------------------------------------------
-        with open(filename, 'r') as f:
+        safe_dir = os.path.abspath('.')
+        abs_path = os.path.abspath(filename)
+        if not abs_path.startswith(safe_dir):
+            return "Error: Access denied"
+        with open(abs_path, 'r') as f:
             content = f.read()
         return f"<pre>{content}</pre>"
     except Exception as e:
-        return "Error reading file"
+        return f"Error reading file: {str(e)}"
 
 
 # ============================================================================
