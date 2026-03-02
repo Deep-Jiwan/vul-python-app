@@ -251,6 +251,7 @@ def directory_traversal():
 
 @app.route('/login_with_session')
 def session_fixation():
+    import html
     # --------------------------------------------
     username = request.args.get('username')
     password = request.args.get('password')
