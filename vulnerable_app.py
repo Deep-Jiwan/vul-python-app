@@ -22,6 +22,7 @@ import urllib.parse
 import ipaddress
 from Crypto.Cipher import AES
 from Crypto.Util.Padding import pad
+import re
 
 # --------------------------------------------
 ADMIN_USERNAME = "admin"
@@ -168,10 +169,15 @@ def frame_content():
 
 @app.route('/redirect')
 def open_redirect():
-    # --------------------------------------------
     target_url = request.args.get('url', '/')
     
-    # --------------------------------------------
+    # Validate URL to prevent open redirect
+    trusted_domains = ['trusted.com', 'example.com']
+    url_pattern = re.compile(r'^/(?![/])|^https?://(?:' + '|'.join(re.escape(d) for d in trusted_domains) + r')(?:/|$)')
+    
+    if not url_pattern.match(target_url):
+        target_url = '/'
+    
     return redirect(target_url)
 
 
