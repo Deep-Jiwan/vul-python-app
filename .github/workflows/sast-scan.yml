@@ -93,6 +93,13 @@ jobs:
           git pull --rebase origin ${{ github.ref_name }} || echo "No remote changes to pull"
           git push || echo "Nothing to push"
       
+      - name: Upload SARIF artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: sast-results
+          path: results_files/sasts/${{ github.ref_name }}.sarif
+          retention-days: 30
+      
       - name: Upload SARIF to GitHub Security
         uses: github/codeql-action/upload-sarif@v3
         continue-on-error: true
