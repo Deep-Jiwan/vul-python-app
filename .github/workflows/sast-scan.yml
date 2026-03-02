@@ -53,7 +53,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install pylint pytest pytest-json-report
+          pip install pylint pytest
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
       
       - name: Run Pylint
@@ -63,8 +63,11 @@ jobs:
           BRANCH_NAME="${{ github.ref_name }}"
           # Remove existing pylint file if it exists
           rm -f results_files/pylint/${BRANCH_NAME}_lint.json
-          pylint vulnerable_app.py --output-format=json > results_files/pylint/${BRANCH_NAME}_lint.json || true
-          echo "Pylint analysis complete"
+          # Run pylint and extract just the score
+          pylint vulnerable_app.py > pylint_output.txt 2>&1 || true
+          SCORE=$(grep -oP 'rated at \K[0-9.]+(?=/10)' pylint_output.txt || echo "N/A")
+          echo "{\"score\": \"$SCORE/10\"}" > results_files/pylint/${BRANCH_NAME}_lint.json
+          echo "Pylint analysis complete - Score: $SCORE/10"
       
       - name: Run Pytest
         continue-on-error: true
@@ -73,8 +76,12 @@ jobs:
           BRANCH_NAME="${{ github.ref_name }}"
           # Remove existing pytest file if it exists
           rm -f results_files/pytest/${BRANCH_NAME}_pytest.json
-          pytest --json-report --json-report-file=results_files/pytest/${BRANCH_NAME}_pytest.json || true
-          echo "Pytest analysis complete"
+          # Run pytest and capture summary
+          pytest -v > pytest_output.txt 2>&1 || true
+          PASSED=$(grep -oP '\K[0-9]+(?= passed)' pytest_output.txt || echo "0")
+          FAILED=$(grep -oP '\K[0-9]+(?= failed)' pytest_output.txt || echo "0")
+          echo "{\"passed\": $PASSED, \"failed\": $FAILED}" > results_files/pytest/${BRANCH_NAME}_pytest.json
+          echo "Pytest analysis complete - Passed: $PASSED, Failed: $FAILED"
       
       - name: Commit results to branch
         run: |
