@@ -348,11 +348,28 @@ def ssrf_vulnerability():
     
     try:
         # --------------------------------------------
+        import urllib.parse
+        import socket
+        import ipaddress
+        
+        parsed = urllib.parse.urlparse(url)
+        allowed_domains = ['example.com', 'google.com']
+        if parsed.netloc not in allowed_domains:
+            return "Error: Domain not allowed"
+        
+        try:
+            ip = socket.gethostbyname(parsed.netloc)
+            ip_obj = ipaddress.ip_address(ip)
+            if ip_obj.is_private or ip_obj.is_loopback or ip_obj.is_link_local:
+                return "Error: Private IP addresses not allowed"
+        except:
+            pass
+        
         response = urllib.request.urlopen(url, timeout=5)
         content = response.read().decode('utf-8', errors='ignore')
         return f"<h2>Fetched Content:</h2><pre>{content[:500]}</pre>"
     except Exception as e:
-        return "Error fetching URL: An unexpected error occurred"
+        return f"Error fetching URL: {str(e)}"
 
 
 # ============================================================================
