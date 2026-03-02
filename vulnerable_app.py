@@ -18,6 +18,8 @@ from Crypto.Cipher import DES
 import html
 import shlex
 import json
+import urllib.parse
+import ipaddress
 
 # --------------------------------------------
 ADMIN_USERNAME = "admin"
@@ -345,16 +347,29 @@ def csrf_vulnerability():
 
 @app.route('/fetch_url')
 def ssrf_vulnerability():
-    # --------------------------------------------
+    
     url = request.args.get('url', 'http://example.com')
     
     try:
-        # --------------------------------------------
+        parsed = urllib.parse.urlparse(url)
+        allowed = ['example.com']
+        
+        if parsed.netloc not in allowed:
+            return "Error: Domain not allowed", 400
+        
+        hostname = parsed.netloc.split(':')[0]
+        try:
+            ip = ipaddress.ip_address(hostname)
+            if ip.is_private or ip.is_loopback:
+                return "Error: Private/Loopback IP not allowed", 400
+        except ValueError:
+            pass
+        
         response = urllib.request.urlopen(url, timeout=5)
         content = response.read().decode('utf-8', errors='ignore')
         return f"<h2>Fetched Content:</h2><pre>{content[:500]}</pre>"
     except Exception as e:
-        return "Error fetching URL: An error occurred"
+        return f"Error fetching URL: {str(e)}"
 
 
 # ============================================================================
