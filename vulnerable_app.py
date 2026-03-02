@@ -16,6 +16,7 @@ import urllib.request
 import xml.etree.ElementTree as ET
 from Crypto.Cipher import DES
 import html
+import shlex
 
 # --------------------------------------------
 ADMIN_USERNAME = "admin"
@@ -399,14 +400,13 @@ def insecure_deserialization():
 
 @app.route('/ping')
 def command_injection():
-    # --------------------------------------------
     host = request.args.get('host', 'localhost')
     
     # --------------------------------------------
     if os.name == 'nt':  # Windows
-        command = f'ping -n 2 {host}'
+        command = f'ping -n 2 {shlex.quote(host)}'
     else:  # Linux/Mac
-        command = f'ping -c 2 {host}'
+        command = f'ping -c 2 {shlex.quote(host)}'
     
     try:
         result = subprocess.check_output(command, shell=True, stderr=subprocess.STDOUT, timeout=5)
