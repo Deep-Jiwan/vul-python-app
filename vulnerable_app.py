@@ -401,6 +401,7 @@ def insecure_deserialization():
 
 @app.route('/ping')
 def command_injection():
+    import logging
     # --------------------------------------------
     host = request.args.get('host', 'localhost')
     
@@ -414,7 +415,8 @@ def command_injection():
         result = subprocess.check_output(command, shell=True, stderr=subprocess.STDOUT, timeout=5)
         return f"<h2>Ping Results:</h2><pre>{result.decode()}</pre>"
     except Exception as e:
-        return f"Error executing command: {str(e)}"
+        logging.error(f"Error executing command: {e}")
+        return "Error executing command: An internal error occurred"
 
 
 # ============================================================================
