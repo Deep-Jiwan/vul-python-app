@@ -296,7 +296,7 @@ def resource_leak():
     # --------------------------------------------
     log_file = request.args.get('log', 'app.log')
     
-    # --------------------------------------------
+
     f = open(log_file, 'w')
     f.write('Log entry: ' + str(time.time()))
     # --------------------------------------------
