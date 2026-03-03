@@ -184,7 +184,7 @@ def encrypt_data():
     cipher = DES.new(key, DES.MODE_ECB)
     
     # --------------------------------------------
-    padded_data = data + ' ' * (8 - len(data) % 8)
+
     encrypted = cipher.encrypt(padded_data.encode())
     
     return f"<h2>Encrypted Data:</h2><p>{encrypted.hex()}</p>"
