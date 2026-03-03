@@ -387,7 +387,7 @@ def insecure_deserialization():
     data = request.data
     
     try:
-        # --------------------------------------------
+
         obj = pickle.loads(data)
         return f"<h2>Deserialized Object:</h2><pre>{obj}</pre>"
     except Exception as e:
