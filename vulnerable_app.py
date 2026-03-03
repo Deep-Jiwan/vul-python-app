@@ -20,6 +20,8 @@ import defusedxml.ElementTree as ET
 import json
 from urllib.parse import urlparse
 from urllib.parse import urlunparse
+from Crypto.Cipher import AES
+from Crypto.Random import get_random_bytes
 
 # --------------------------------------------
 ADMIN_USERNAME = "admin"
@@ -183,14 +185,14 @@ def encrypt_data():
     data = request.args.get('data', 'secret message')
     
     # --------------------------------------------
-    key = b'8bytekey'
-    cipher = DES.new(key, DES.MODE_ECB)
+    key = b'16bytekey!!!!'  # 16 bytes for AES-128
+    nonce = get_random_bytes(12)  # GCM requires 12-byte nonce
+    cipher = AES.new(key, AES.MODE_GCM, nonce=nonce)
     
     # --------------------------------------------
-    padded_data = data + ' ' * (8 - len(data) % 8)
-    encrypted = cipher.encrypt(padded_data.encode())
+    encrypted = cipher.encrypt(data.encode())
     
-    return f"<h2>Encrypted Data:</h2><p>{encrypted.hex()}</p>"
+    return f"<h2>Encrypted Data:</h2><p>{nonce.hex()}:{encrypted.hex()}</p>"
 
 
 # ============================================================================
