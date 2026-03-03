@@ -315,7 +315,7 @@ def resource_leak():
 def csrf_vulnerability():
     import html
     # --------------------------------------------
-    if request.method == 'POST' or request.method == 'GET':
+    if request.method == 'POST':
         from_account = request.values.get('from')
         to_account = request.values.get('to')
         amount = request.values.get('amount')
