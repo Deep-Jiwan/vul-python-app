@@ -151,14 +151,11 @@ def frame_content():
     frame_url = request.args.get('url', 'https://example.com')
     
     # --------------------------------------------
-    # Validate URL to prevent injection
-    parsed = urlparse(frame_url)
-    if parsed.scheme not in ('http', 'https'):
-        frame_url = 'https://example.com'
-    
+    import html
+    escaped_url = html.escape(frame_url, quote=True)
     html_content = f'''
         <h2>External Content</h2>
-        <iframe src="{frame_url}" width="800" height="600"></iframe>
+        <iframe src="{escaped_url}" width="800" height="600"></iframe>
     '''
     return render_template_string(html_content)
 
