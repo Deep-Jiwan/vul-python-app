@@ -349,6 +349,10 @@ def ssrf_vulnerability():
     
     try:
         # --------------------------------------------
+        # Validate URL to prevent SSRF
+        parsed = urllib.parse.urlparse(url)
+        if parsed.netloc in ['localhost', '127.0.0.1', '0.0.0.0']:
+            return "Error: Access to internal addresses is not allowed"
         response = urllib.request.urlopen(url, timeout=5)
         content = response.read().decode('utf-8', errors='ignore')
         return f"<h2>Fetched Content:</h2><pre>{content[:500]}</pre>"
