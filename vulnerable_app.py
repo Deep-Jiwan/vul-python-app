@@ -154,11 +154,11 @@ def frame_content():
     # --------------------------------------------
     import html
     escaped_url = html.escape(frame_url, quote=True)
-    template = '''
+    html_content = f'''
         <h2>External Content</h2>
-        <iframe src="{{ url }}" width="800" height="600"></iframe>
+        <iframe src="{escaped_url}" width="800" height="600"></iframe>
     '''
-    return render_template_string(template, url=escaped_url)
+    return render_template_string(html_content)
 
 
 # ============================================================================
