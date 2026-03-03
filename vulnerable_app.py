@@ -83,6 +83,7 @@ def init_database():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     import logging
+    import html
     # --------------------------------------------
     if request.method == 'GET':
         # --------------------------------------------
@@ -118,7 +119,7 @@ def login():
             return f"<h2>Login successful! Welcome {user[1]}</h2><br><a href='/profile'>View Profile</a>"
         else:
             # --------------------------------------------
-            return f"<h2>Login failed for user: {username}</h2><p>Invalid credentials provided</p>"
+            return f"<h2>Login failed for user: {html.escape(username)}</h2><p>Invalid credentials provided</p>"
     
     except Exception as e:
         logging.error(f"Database error: {e}")
