@@ -17,6 +17,7 @@ import xml.etree.ElementTree as ET
 from Crypto.Cipher import DES
 import html
 import shlex
+from urllib.parse import urlparse
 
 # --------------------------------------------
 ADMIN_USERNAME = "admin"
@@ -344,11 +345,14 @@ def csrf_vulnerability():
 
 @app.route('/fetch_url')
 def ssrf_vulnerability():
-    # --------------------------------------------
     url = request.args.get('url', 'http://example.com')
     
+    parsed = urlparse(url)
+    ALLOWED_HOSTS = {'example.com'}
+    if parsed.scheme not in ('http', 'https') or parsed.netloc not in ALLOWED_HOSTS:
+        return "Error: URL not permitted", 400
+    
     try:
-        # --------------------------------------------
         response = urllib.request.urlopen(url, timeout=5)
         content = response.read().decode('utf-8', errors='ignore')
         return f"<h2>Fetched Content:</h2><pre>{content[:500]}</pre>"
