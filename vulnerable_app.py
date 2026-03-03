@@ -18,6 +18,7 @@ from Crypto.Cipher import DES
 import html
 import logging
 import shlex
+from urllib.parse import urlparse
 
 # --------------------------------------------
 ADMIN_USERNAME = "admin"
@@ -168,6 +169,9 @@ def open_redirect():
     target_url = request.args.get('url', '/')
     
     # --------------------------------------------
+    parsed = urlparse(target_url)
+    if parsed.netloc or parsed.scheme:
+        target_url = '/'
     return redirect(target_url)
 
 
