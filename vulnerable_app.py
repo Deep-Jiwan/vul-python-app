@@ -19,6 +19,7 @@ import html
 import logging
 import defusedxml.ElementTree as ET
 import json
+from werkzeug.utils import secure_filename
 
 # --------------------------------------------
 ADMIN_USERNAME = "admin"
@@ -296,10 +297,13 @@ def sql_injection_orm():
 @app.route('/read_log')
 def resource_leak():
     # --------------------------------------------
+    import os
+    
     log_file = request.args.get('log', 'app.log')
+    safe_log_file = secure_filename(log_file)
     
     # --------------------------------------------
-    f = open(log_file, 'w')
+    f = open(safe_log_file, 'w')
     f.write('Log entry: ' + str(time.time()))
     # --------------------------------------------
     open_files.append(f)
