@@ -22,6 +22,7 @@ import json
 from urllib.parse import urlparse
 from urllib.parse import urlunparse
 from Cryptodome.Cipher import AES
+from jinja2 import escape
 
 # --------------------------------------------
 ADMIN_USERNAME = "admin"
@@ -157,7 +158,7 @@ def frame_content():
     # --------------------------------------------
     html_content = f'''
         <h2>External Content</h2>
-        <iframe src="{frame_url}" width="800" height="600"></iframe>
+        <iframe src="{escape(frame_url)}" width="800" height="600"></iframe>
     '''
     return render_template_string(html_content)
 
