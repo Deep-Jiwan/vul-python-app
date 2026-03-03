@@ -406,13 +406,18 @@ def command_injection():
     host = request.args.get('host', 'localhost')
     
     # --------------------------------------------
+    ALLOWED_HOSTS = {'localhost', '127.0.0.1'}
+    if host not in ALLOWED_HOSTS:
+        return "Invalid host", 400
+    safe_host = next(h for h in ALLOWED_HOSTS if h == host)
+    
     if os.name == 'nt':  # Windows
-        command = f'ping -n 2 {host}'
+        command = ['ping', '-n', '2', safe_host]
     else:  # Linux/Mac
-        command = f'ping -c 2 {host}'
+        command = ['ping', '-c', '2', safe_host]
     
     try:
-        result = subprocess.check_output(command, shell=True, stderr=subprocess.STDOUT, timeout=5)
+        result = subprocess.check_output(command, shell=False, stderr=subprocess.STDOUT, timeout=5)
         return f"<h2>Ping Results:</h2><pre>{result.decode()}</pre>"
     except Exception as e:
         logging.error(f"Error executing command: {str(e)}")
