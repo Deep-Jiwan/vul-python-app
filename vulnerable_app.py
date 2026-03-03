@@ -366,7 +366,7 @@ def idor_vulnerability(account_id):
     conn = sqlite3.connect('vulnerable_app.db')
     cursor = conn.cursor()
     
-    # --------------------------------------------
+
     cursor.execute(f"SELECT * FROM accounts WHERE id = {account_id}")
     account = cursor.fetchone()
     conn.close()
