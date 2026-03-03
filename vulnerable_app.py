@@ -166,7 +166,7 @@ def open_redirect():
     # --------------------------------------------
     target_url = request.args.get('url', '/')
     
-    # --------------------------------------------
+
     return redirect(target_url)
 
 
