@@ -168,11 +168,15 @@ def frame_content():
 
 @app.route('/redirect')
 def open_redirect():
-    # --------------------------------------------
-    target_url = request.args.get('url', '/')
+    from urllib.parse import urlparse
     
-    # --------------------------------------------
-    return redirect(target_url)
+    target_url = request.args.get('url', '/')
+    parsed = urlparse(target_url)
+    ALLOWED_PATHS = ['/', '/home', '/profile', '/settings']
+    if parsed.path in ALLOWED_PATHS and not parsed.netloc and not parsed.scheme:
+        safe_path = next(p for p in ALLOWED_PATHS if p == parsed.path)
+        return redirect(safe_path)
+    return redirect('/')
 
 
 # ============================================================================
