@@ -17,6 +17,7 @@ import xml.etree.ElementTree as ET
 from Crypto.Cipher import DES
 import html
 import re
+from urllib.parse import urlparse
 
 # --------------------------------------------
 ADMIN_USERNAME = "admin"
@@ -163,11 +164,13 @@ def frame_content():
 
 @app.route('/redirect')
 def open_redirect():
-    # --------------------------------------------
     target_url = request.args.get('url', '/')
     
-    # --------------------------------------------
-    return redirect(target_url)
+    parsed = urlparse(target_url)
+    ALLOWED_PATHS = ['/', '/home', '/profile', '/settings']
+    if parsed.path in ALLOWED_PATHS and not parsed.netloc and not parsed.scheme:
+        return redirect(parsed.path)
+    return redirect('/')
 
 
 # ============================================================================
