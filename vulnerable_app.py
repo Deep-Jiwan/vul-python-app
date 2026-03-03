@@ -18,6 +18,7 @@ from Crypto.Cipher import DES
 import html
 import logging
 import defusedxml.ElementTree as ET
+import json
 
 # --------------------------------------------
 ADMIN_USERNAME = "admin"
@@ -391,7 +392,7 @@ def insecure_deserialization():
     
     try:
         # --------------------------------------------
-        obj = pickle.loads(data)
+        obj = json.loads(data.decode('utf-8'))
         escaped_obj = html.escape(str(obj), quote=True)
         return f"<h2>Deserialized Object:</h2><pre>{escaped_obj}</pre>"
     except Exception as e:
