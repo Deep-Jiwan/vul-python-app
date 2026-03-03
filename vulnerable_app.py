@@ -16,6 +16,7 @@ import urllib.request
 import xml.etree.ElementTree as ET
 from Crypto.Cipher import DES
 import html
+import defusedxml.ElementTree as ET
 
 # --------------------------------------------
 ADMIN_USERNAME = "admin"
@@ -423,7 +424,7 @@ def command_injection():
 def xxe_vulnerability():
     # --------------------------------------------
     xml_data = request.data.decode()
-    
+
     try:
         # --------------------------------------------
         root = ET.fromstring(xml_data)
