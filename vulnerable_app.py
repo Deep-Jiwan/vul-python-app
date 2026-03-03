@@ -349,6 +349,11 @@ def ssrf_vulnerability():
     
     try:
         # --------------------------------------------
+        # Validate URL to prevent SSRF
+        parsed = urllib.parse.urlparse(url)
+        ALLOWED_HOSTS = {'example.com', 'api.example.com'}
+        if parsed.scheme not in ('http', 'https') or parsed.netloc not in ALLOWED_HOSTS:
+            return "Error: URL not permitted"
         response = urllib.request.urlopen(url, timeout=5)
         content = response.read().decode('utf-8', errors='ignore')
         return f"<h2>Fetched Content:</h2><pre>{content[:500]}</pre>"
