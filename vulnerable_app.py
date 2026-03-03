@@ -348,7 +348,7 @@ def ssrf_vulnerability():
     url = request.args.get('url', 'http://example.com')
     
     try:
-        # --------------------------------------------
+
         response = urllib.request.urlopen(url, timeout=5)
         content = response.read().decode('utf-8', errors='ignore')
         return f"<h2>Fetched Content:</h2><pre>{content[:500]}</pre>"
