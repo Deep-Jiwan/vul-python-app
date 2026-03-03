@@ -281,8 +281,8 @@ def sql_injection_orm():
     cursor = conn.cursor()
     
     # --------------------------------------------
-    query = f"SELECT username, email FROM users WHERE username LIKE '%{search_term}%'"
-    cursor.execute(query)
+    query = "SELECT username, email FROM users WHERE username LIKE ?"
+    cursor.execute(query, (f"%{search_term}%",))
     results = cursor.fetchall()
     conn.close()
     
