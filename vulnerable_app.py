@@ -17,6 +17,7 @@ import xml.etree.ElementTree as ET
 from Crypto.Cipher import DES
 import html
 import logging
+import shlex
 
 # --------------------------------------------
 ADMIN_USERNAME = "admin"
@@ -414,8 +415,7 @@ def command_injection():
         result = subprocess.check_output(command, shell=False, stderr=subprocess.STDOUT, timeout=5)
         return f"<h2>Ping Results:</h2><pre>{result.decode()}</pre>"
     except Exception as e:
-        logging.error(f"Error executing command: {e}")
-        return "An internal error occurred", 500
+        return f"Error executing command: {str(e)}"
 
 
 # ============================================================================
