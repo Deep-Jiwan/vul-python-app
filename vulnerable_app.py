@@ -23,6 +23,7 @@ from urllib.parse import urlparse
 from urllib.parse import urlunparse
 from Cryptodome.Cipher import AES
 from jinja2 import escape
+import re
 
 # --------------------------------------------
 ADMIN_USERNAME = "admin"
@@ -154,6 +155,10 @@ def profile():
 def frame_content():
     # --------------------------------------------
     frame_url = request.args.get('url', 'https://example.com')
+    
+    # Validate URL scheme to prevent javascript:, data: etc.
+    if not re.match(r'^https?://', frame_url):
+        frame_url = 'https://example.com'
     
     # --------------------------------------------
     html_content = f'''
