@@ -383,6 +383,7 @@ def idor_vulnerability(account_id):
 
 @app.route('/load_object', methods=['POST'])
 def insecure_deserialization():
+    import logging
     # --------------------------------------------
     data = request.data
     
@@ -391,7 +392,8 @@ def insecure_deserialization():
         obj = pickle.loads(data)
         return f"<h2>Deserialized Object:</h2><pre>{obj}</pre>"
     except Exception as e:
-        return f"Error deserializing: {str(e)}"
+        logging.error(f"Error deserializing: {e}")
+        return "An internal error occurred", 500
 
 
 # ============================================================================
