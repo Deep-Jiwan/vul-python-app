@@ -321,6 +321,10 @@ def csrf_vulnerability():
         to_account = request.values.get('to')
         amount = request.values.get('amount')
         
+        # Validate required parameters
+        if not all([from_account, to_account, amount]):
+            return "<h2>Error: Missing required parameters</h2>"
+        
         # --------------------------------------------
         conn = sqlite3.connect('vulnerable_app.db')
         cursor = conn.cursor()
