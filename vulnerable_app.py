@@ -426,7 +426,9 @@ def insecure_deserialization():
     data = request.data
     
     try:
-        obj = json.loads(data)
+        import defusedxml.ElementTree as ET
+        xml_data = data
+        obj = ET.fromstring(xml_data)
         return f"<h2>Deserialized Object:</h2><pre>{obj}</pre>"
     except Exception as e:
         logging.error(f"Error deserializing: {e}")
