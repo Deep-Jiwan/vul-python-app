@@ -16,6 +16,9 @@ import urllib.request
 import xml.etree.ElementTree as ET
 from Crypto.Cipher import DES
 import html
+import socket
+import ipaddress
+from urllib.parse import urlparse
 
 # --------------------------------------------
 ADMIN_USERNAME = "admin"
@@ -345,6 +348,19 @@ def csrf_vulnerability():
 def ssrf_vulnerability():
     # --------------------------------------------
     url = request.args.get('url', 'http://example.com')
+    
+    # Validate URL to prevent SSRF
+    
+    parsed = urlparse(url)
+    hostname = parsed.hostname
+    if hostname:
+        try:
+            ip = socket.gethostbyname(hostname)
+            ip_obj = ipaddress.ip_address(ip)
+            if ip_obj.is_private or ip_obj.is_loopback or ip_obj.is_link_local:
+                return "Error: Access to internal/private addresses is not allowed"
+        except socket.gaierror:
+            return "Error: Invalid hostname"
     
     try:
         # --------------------------------------------
