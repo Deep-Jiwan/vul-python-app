@@ -142,7 +142,12 @@ def profile():
     if username == 'admin':
         html_content += f'<p style="color:red;">Password Hint: {ADMIN_PASSWORD}</p>'
     
-    return render_template_string(html_content)
+    return render_template_string('''
+        <h1>User Profile</h1>
+        <p>Welcome, {{ username }}!</p>
+        <p>Your comment: {{ comment }}</p>
+        {{ password_hint }}
+    ''', username=username, comment=request.args.get('comment', 'No comment'), password_hint=html_content if username == 'admin' else '')
 
 
 # ============================================================================
