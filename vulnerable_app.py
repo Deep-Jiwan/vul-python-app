@@ -18,6 +18,11 @@ from Crypto.Cipher import DES
 import html
 from urllib.parse import urlparse
 import socket
+from cryptography.hazmat.primitives.ciphers import Cipher
+from cryptography.hazmat.primitives.ciphers import algorithms
+from cryptography.hazmat.primitives.ciphers import modes
+from cryptography.hazmat.backends import default_backend
+from cryptography.hazmat.primitives import padding
 
 # --------------------------------------------
 ADMIN_USERNAME = "admin"
@@ -185,12 +190,13 @@ def encrypt_data():
     data = request.args.get('data', 'secret message')
     
     # --------------------------------------------
-    key = b'8bytekey'
-    cipher = DES.new(key, DES.MODE_ECB)
+    iv = b'1234567890123456'
+    cipher = Cipher(algorithms.AES(key), modes.CBC(iv), backend=default_backend())
     
     # --------------------------------------------
-    padded_data = data + ' ' * (8 - len(data) % 8)
-    encrypted = cipher.encrypt(padded_data.encode())
+    padder = padding.PKCS7(128).padder()
+    padded_data = padder.update(data.encode()) + padder.finalize()
+    encrypted = cipher.encryptor().update(padded_data)
     
     return f"<h2>Encrypted Data:</h2><p>{encrypted.hex()}</p>"
 
