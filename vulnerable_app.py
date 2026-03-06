@@ -18,6 +18,7 @@ from Crypto.Cipher import DES
 import html
 import json
 from urllib.parse import urlparse
+import logging
 
 # --------------------------------------------
 ADMIN_USERNAME = "admin"
@@ -416,7 +417,8 @@ def insecure_deserialization():
         obj = json.loads(data)
         return f"<h2>Deserialized Object:</h2><pre>{obj}</pre>"
     except Exception as e:
-        return f"Error deserializing: {str(e)}"
+        logging.error(f"Error deserializing: {e}")
+        return "An internal error occurred"
 
 
 # ============================================================================
