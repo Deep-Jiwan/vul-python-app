@@ -248,13 +248,14 @@ def directory_traversal():
     
     try:
         import os
+        import html
         base_dir = os.path.dirname(os.path.abspath(__file__))
         safe_path = os.path.normpath(os.path.join(base_dir, filename))
         if not safe_path.startswith(base_dir + os.sep):
             raise ValueError("Invalid path")
         with open(safe_path, 'r') as f:
             content = f.read()
-        return f"<pre>{content}</pre>"
+        return f"<pre>{html.escape(content)}</pre>"
     except Exception as e:
         import logging
         logging.error(f"Error reading file: {e}")
