@@ -418,16 +418,9 @@ def insecure_deserialization():
     
     try:
         # --------------------------------------------
-        import pickle
-        import io
+        import json
         
-        class RestrictedUnpickler(pickle.Unpickler):
-            def find_class(self, module, name):
-                if module == "builtins" and name in ("str", "int", "float", "list", "dict", "tuple", "set"):
-                    return getattr(__builtins__, name)
-                raise pickle.UnpicklingError(f"Global '{module}.{name}' is forbidden")
-        
-        obj = RestrictedUnpickler(io.BytesIO(data)).load()
+        obj = json.loads(data)
         return f"<h2>Deserialized Object:</h2><pre>{obj}</pre>"
     except Exception as e:
         return "Error deserializing: An unexpected error occurred"
