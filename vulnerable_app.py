@@ -223,7 +223,8 @@ def crlf_injection():
     response = Response("Welcome!")
     
     # --------------------------------------------
-    response.headers['X-Username'] = username
+    import html
+    response.headers['X-Username'] = html.escape(username)
     
     return response
 
