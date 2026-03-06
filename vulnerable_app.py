@@ -17,6 +17,7 @@ import xml.etree.ElementTree as ET
 from Crypto.Cipher import DES
 import html
 from urllib.parse import urlparse
+import urllib.parse
 
 # --------------------------------------------
 ADMIN_USERNAME = "admin"
@@ -348,6 +349,13 @@ def csrf_vulnerability():
 def ssrf_vulnerability():
     # --------------------------------------------
     url = request.args.get('url', 'http://example.com')
+    
+    # Validate URL scheme and hostname
+    parsed = urllib.parse.urlparse(url)
+    if parsed.scheme not in ['http', 'https']:
+        return "Error: Only HTTP/HTTPS URLs allowed"
+    if parsed.hostname and parsed.hostname.startswith(('127.', '10.', '192.168.')):
+        return "Error: Access to internal addresses is not allowed"
     
     try:
         # --------------------------------------------
