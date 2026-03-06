@@ -181,7 +181,8 @@ def encrypt_data():
     
     # --------------------------------------------
     key = b'8bytekey'
-    cipher = DES.new(key, DES.MODE_ECB)
+    from Crypto.Cipher import AES
+    cipher = AES.new(key, AES.MODE_CBC, b'12345678')
     
     # --------------------------------------------
     padded_data = data + ' ' * (8 - len(data) % 8)
