@@ -363,18 +363,19 @@ def ssrf_vulnerability():
 @app.route('/account/<account_id>')
 def idor_vulnerability(account_id):
     import logging
+    import html
     try:
         # --------------------------------------------
         conn = sqlite3.connect('vulnerable_app.db')
         cursor = conn.cursor()
         
         # --------------------------------------------
-        cursor.execute(f"SELECT * FROM accounts WHERE id = {account_id}")
+        cursor.execute("SELECT * FROM accounts WHERE id = ?", (account_id,))
         account = cursor.fetchone()
         conn.close()
         
         if account:
-            return f"<h2>Account Details</h2><p>Username: {account[1]}<br>Balance: ${account[2]}<br>Account: {account[3]}</p>"
+            return f"<h2>Account Details</h2><p>Username: {html.escape(str(account[1]))}<br>Balance: ${html.escape(str(account[2]))}<br>Account: {html.escape(str(account[3]))}</p>"
         else:
             return "Account not found"
     except Exception as e:
