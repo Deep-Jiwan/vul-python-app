@@ -1,0 +1,99 @@
+name: Cleanup Branches and PRs
+
+on:
+  push:
+    branches:
+      - copilot/delete-extra-branches-prs
+  workflow_dispatch:
+
+jobs:
+  cleanup:
+    name: Delete extra branches and close open PRs
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Close all open PRs except those on the current branch
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          CURRENT_BRANCH: ${{ github.ref_name }}
+        run: |
+          echo "Fetching all open pull requests..."
+          FAILED_PRS=""
+          CLOSED_PRS=""
+
+          # List all open PRs with their head branch
+          OPEN_PRS=$(gh pr list --repo "$REPO" --state open --json number,headRefName --jq '.[] | "\(.number) \(.headRefName)"')
+          echo "Open PRs: $OPEN_PRS"
+
+          while IFS=' ' read -r PR_NUM PR_BRANCH; do
+            [ -z "$PR_NUM" ] && continue
+            # Skip any PR whose head branch matches the current working branch
+            if [ "$PR_BRANCH" = "$CURRENT_BRANCH" ]; then
+              echo "Skipping PR #$PR_NUM (head branch: $PR_BRANCH — current working branch)"
+              continue
+            fi
+            echo "Closing PR #$PR_NUM (head branch: $PR_BRANCH)..."
+            if gh pr close "$PR_NUM" --repo "$REPO" --comment "Closed as part of repository cleanup - removing all PRs except the main cleanup PR."; then
+              CLOSED_PRS="$CLOSED_PRS #$PR_NUM"
+            else
+              echo "ERROR: Failed to close PR #$PR_NUM"
+              FAILED_PRS="$FAILED_PRS #$PR_NUM"
+            fi
+          done <<< "$OPEN_PRS"
+
+          echo "Closed PRs:$CLOSED_PRS"
+          if [ -n "$FAILED_PRS" ]; then
+            echo "Failed to close PRs:$FAILED_PRS"
+            exit 1
+          fi
+          echo "All open PRs (except those on $CURRENT_BRANCH) have been closed."
+
+      - name: Delete all branches except main and current working branch
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          CURRENT_BRANCH: ${{ github.ref_name }}
+        run: |
+          echo "Fetching all remote branches..."
+          FAILED_BRANCHES=""
+          DELETED_BRANCHES=""
+
+          ALL_BRANCHES=$(gh api "repos/$REPO/branches" --paginate --jq '.[].name')
+          echo "All branches: $ALL_BRANCHES"
+
+          while IFS= read -r BRANCH; do
+            [ -z "$BRANCH" ] && continue
+            # Keep main and the current working branch
+            if [ "$BRANCH" = "main" ] || [ "$BRANCH" = "$CURRENT_BRANCH" ]; then
+              echo "Keeping branch: $BRANCH"
+              continue
+            fi
+            echo "Deleting branch: $BRANCH..."
+            if gh api --method DELETE "repos/$REPO/git/refs/heads/$BRANCH"; then
+              DELETED_BRANCHES="$DELETED_BRANCHES $BRANCH"
+            else
+              echo "ERROR: Failed to delete branch: $BRANCH"
+              FAILED_BRANCHES="$FAILED_BRANCHES $BRANCH"
+            fi
+          done <<< "$ALL_BRANCHES"
+
+          echo "Deleted branches:$DELETED_BRANCHES"
+          if [ -n "$FAILED_BRANCHES" ]; then
+            echo "Failed to delete branches:$FAILED_BRANCHES"
+            exit 1
+          fi
+          echo "All extra branches have been deleted."
+
+      - name: Summary
+        if: always()
+        env:
+          CURRENT_BRANCH: ${{ github.ref_name }}
+        run: |
+          echo "## Repository Cleanup ✅" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- All open pull requests (except those targeting \`$CURRENT_BRANCH\`) have been closed." >> $GITHUB_STEP_SUMMARY
+          echo "- All branches except \`main\` and \`$CURRENT_BRANCH\` have been deleted." >> $GITHUB_STEP_SUMMARY
