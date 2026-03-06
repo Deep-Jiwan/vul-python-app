@@ -171,6 +171,9 @@ def open_redirect():
     target_url = request.args.get('url', '/')
     
     # --------------------------------------------
+    if not target_url.startswith('/'):
+        target_url = '/'
+    
     return redirect(target_url)
 
 
