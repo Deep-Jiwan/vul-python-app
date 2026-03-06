@@ -1,0 +1,65 @@
+name: Cleanup Branches and PRs
+
+on:
+  push:
+    branches:
+      - copilot/delete-extra-branches-prs
+  workflow_dispatch:
+
+jobs:
+  cleanup:
+    name: Delete extra branches and close open PRs
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Close all open PRs except current cleanup PR
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+        run: |
+          echo "Fetching all open pull requests..."
+          OPEN_PRS=$(gh pr list --repo "$REPO" --state open --json number --jq '.[].number')
+          echo "Open PRs: $OPEN_PRS"
+
+          for PR_NUM in $OPEN_PRS; do
+            # Skip PR #55 (the current cleanup PR)
+            if [ "$PR_NUM" = "55" ]; then
+              echo "Skipping PR #55 (current cleanup PR)"
+              continue
+            fi
+            echo "Closing PR #$PR_NUM..."
+            gh pr close "$PR_NUM" --repo "$REPO" --comment "Closed as part of repository cleanup - removing all PRs except the main cleanup PR." || echo "Failed to close PR #$PR_NUM"
+          done
+
+          echo "All open PRs (except #55) have been closed."
+
+      - name: Delete all branches except main and current working branch
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+        run: |
+          echo "Fetching all remote branches..."
+          ALL_BRANCHES=$(gh api "repos/$REPO/branches" --paginate --jq '.[].name')
+          echo "All branches: $ALL_BRANCHES"
+
+          for BRANCH in $ALL_BRANCHES; do
+            # Keep main and the current cleanup branch
+            if [ "$BRANCH" = "main" ] || [ "$BRANCH" = "copilot/delete-extra-branches-prs" ]; then
+              echo "Keeping branch: $BRANCH"
+              continue
+            fi
+            echo "Deleting branch: $BRANCH..."
+            gh api --method DELETE "repos/$REPO/git/refs/heads/$BRANCH" || echo "Failed to delete branch: $BRANCH"
+          done
+
+          echo "All extra branches have been deleted."
+
+      - name: Summary
+        run: |
+          echo "## Repository Cleanup Complete ✅" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- All open pull requests (except #55) have been closed." >> $GITHUB_STEP_SUMMARY
+          echo "- All branches except \`main\` and \`copilot/delete-extra-branches-prs\` have been deleted." >> $GITHUB_STEP_SUMMARY
