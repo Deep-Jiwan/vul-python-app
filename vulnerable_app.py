@@ -110,14 +110,15 @@ def login():
         if user:
             session['username'] = user[1]
             session['role'] = user[4]
-            return f"<h2>Login successful! Welcome {user[1]}</h2><br><a href='/profile'>View Profile</a>"
+            return f"<h2>Login successful! Welcome {html.escape(user[1])}</h2><br><a href='/profile'>View Profile</a>"
         else:
             # --------------------------------------------
-            return f"<h2>Login failed for user: {username}</h2><p>Invalid credentials provided</p>"
+            return f"<h2>Login failed for user: {html.escape(username)}</h2><p>Invalid credentials provided</p>"
     
     except Exception as e:
         # --------------------------------------------
         import logging
+        import html
         logging.error(f"Database error: {e}")
         return "<h2>Database Error</h2><p>An internal error occurred. Please try again later.</p>"
 
