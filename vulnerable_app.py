@@ -366,18 +366,20 @@ def ssrf_vulnerability():
     # Check for private/internal IP addresses
     try:
         ip = socket.gethostbyname(parsed.netloc.split(':')[0])
+        if ip in ('127.0.0.1', '0.0.0.0', 'localhost'):
+            return "Error: Access to internal addresses is not allowed"
         if ip.startswith(('127.', '10.', '172.16.', '172.17.', '172.18.', '172.19.', '172.20.', '172.21.', '172.22.', '172.23.', '172.24.', '172.25.', '172.26.', '172.27.', '172.28.', '172.29.', '172.30.', '172.31.', '192.168.')):
             return "Error: Access to internal addresses is not allowed"
     except socket.gaierror:
         return "Error: Invalid hostname"
     
+    # Make the request only after validation passes
+    import urllib.request
     try:
-        # --------------------------------------------
-        response = urllib.request.urlopen(url, timeout=5)
-        content = response.read().decode('utf-8', errors='ignore')
-        return f"<h2>Fetched Content:</h2><pre>{content[:500]}</pre>"
+        response = urllib.request.urlopen(url, timeout=10)
+        return response.read().decode('utf-8', errors='ignore')
     except Exception as e:
-        return "Error fetching URL: An unexpected error occurred"
+        return f"Error fetching URL: {str(e)}"
 
 
 # ============================================================================
