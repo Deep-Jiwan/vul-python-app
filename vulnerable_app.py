@@ -231,11 +231,20 @@ def trust_boundary():
 @app.route('/download')
 def directory_traversal():
     # --------------------------------------------
+    import os
     filename = request.args.get('file', 'readme.txt')
+    
+    # Define base directory for allowed files
+    base_dir = os.path.dirname(os.path.abspath(__file__))
     
     try:
         # --------------------------------------------
-        with open(filename, 'r') as f:
+        # Normalize and validate path to prevent traversal
+        abs_path = os.path.normpath(os.path.join(base_dir, filename))
+        if not abs_path.startswith(base_dir + os.sep):
+            raise ValueError("Invalid path")
+        
+        with open(abs_path, 'r') as f:
             content = f.read()
         return f"<pre>{content}</pre>"
     except Exception as e:
