@@ -338,6 +338,7 @@ def resource_leak():
 
 @app.route('/transfer_funds', methods=['GET', 'POST'])
 def csrf_vulnerability():
+    import html
     # --------------------------------------------
     if request.method == 'POST' or request.method == 'GET':
         from_account = request.values.get('from')
