@@ -17,6 +17,10 @@ import xml.etree.ElementTree as ET
 from Crypto.Cipher import DES
 import html
 import logging
+from cryptography.hazmat.primitives.ciphers import Cipher
+from cryptography.hazmat.primitives.ciphers import algorithms
+from cryptography.hazmat.primitives.ciphers import modes
+from cryptography.hazmat.backends import default_backend
 
 # --------------------------------------------
 ADMIN_USERNAME = "admin"
@@ -180,12 +184,13 @@ def encrypt_data():
     data = request.args.get('data', 'secret message')
     
     # --------------------------------------------
-    key = b'8bytekey'
-    cipher = DES.new(key, DES.MODE_ECB)
+    iv = os.urandom(16)
+    cipher = Cipher(algorithms.AES(key), modes.GCM(iv), backend=default_backend())
+    encryptor = cipher.encryptor()
     
     # --------------------------------------------
-    padded_data = data + ' ' * (8 - len(data) % 8)
-    encrypted = cipher.encrypt(padded_data.encode())
+    padded_data = data + ' ' * (16 - len(data) % 16)
+    encrypted = encryptor.update(padded_data.encode()) + encryptor.finalize()
     
     return f"<h2>Encrypted Data:</h2><p>{encrypted.hex()}</p>"
 
