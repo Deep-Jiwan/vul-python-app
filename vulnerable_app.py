@@ -356,8 +356,22 @@ def ssrf_vulnerability():
     parsed = urllib.parse.urlparse(url)
     if parsed.scheme not in ['http', 'https']:
         return "Error: Only HTTP/HTTPS URLs allowed"
-    if parsed.hostname and parsed.hostname.startswith(('127.', '10.', '192.168.')):
-        return "Error: Access to internal addresses is not allowed"
+    
+    # Resolve hostname and check for internal IPs
+    if parsed.hostname:
+        import socket
+        try:
+            ip_addresses = socket.getaddrinfo(parsed.hostname, None)
+            for addr_info in ip_addresses:
+                ip = addr_info[4][0]
+                if ip in ('127.0.0.1', '::1', '0.0.0.0'):
+                    return "Error: Access to localhost is not allowed"
+                if ip.startswith(('10.', '172.16.', '172.17.', '172.18.', '172.19.', '172.20.', '172.21.', '172.22.', '172.23.', '172.24.', '172.25.', '172.26.', '172.27.', '172.28.', '172.29.', '172.30.', '172.31.', '192.168.')):
+                    return "Error: Access to internal addresses is not allowed"
+                if ip == '169.254.169.254':
+                    return "Error: Access to cloud metadata is not allowed"
+        except socket.gaierror:
+            return "Error: Invalid hostname"
     
     try:
         # --------------------------------------------
