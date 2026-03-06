@@ -297,6 +297,8 @@ def resource_leak():
     log_file = request.args.get('log', 'app.log')
     
     # --------------------------------------------
+    if '..' in log_file or log_file.startswith('/'):
+        return "Invalid file path", 400
     f = open(log_file, 'w')
     f.write('Log entry: ' + str(time.time()))
     # --------------------------------------------
