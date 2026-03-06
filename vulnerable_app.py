@@ -19,6 +19,8 @@ import html
 import socket
 import ipaddress
 from urllib.parse import urlparse
+from Crypto.Cipher import AES
+from Crypto.Util.Padding import pad
 
 # --------------------------------------------
 ADMIN_USERNAME = "admin"
@@ -182,14 +184,17 @@ def encrypt_data():
     data = request.args.get('data', 'secret message')
     
     # --------------------------------------------
-    key = b'8bytekey'
-    cipher = DES.new(key, DES.MODE_ECB)
+    import os
+    
+    key = os.urandom(16)
+    iv = os.urandom(16)
+    cipher = AES.new(key, AES.MODE_CBC, iv)
     
     # --------------------------------------------
-    padded_data = data + ' ' * (8 - len(data) % 8)
-    encrypted = cipher.encrypt(padded_data.encode())
+    padded_data = pad(data.encode(), AES.block_size)
+    encrypted = cipher.encrypt(padded_data)
     
-    return f"<h2>Encrypted Data:</h2><p>{encrypted.hex()}</p>"
+    return f"<h2>Encrypted Data:</h2><p>{iv.hex()}{encrypted.hex()}</p>"
 
 
 # ============================================================================
