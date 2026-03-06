@@ -411,6 +411,10 @@ def idor_vulnerability(account_id):
 # OBJECT LOADER ENDPOINT
 # ============================================================================
 
+# ============================================================================
+# OBJECT LOADER ENDPOINT
+# ============================================================================
+
 @app.route('/load_object', methods=['POST'])
 def insecure_deserialization():
     # --------------------------------------------
@@ -423,6 +427,47 @@ def insecure_deserialization():
         return f"<h2>Deserialized Object:</h2><pre>{obj}</pre>"
     except Exception as e:
         return "Error deserializing: An unexpected error occurred"
+
+
+# ============================================================================
+# PING ENDPOINT
+# ============================================================================
+
+@app.route('/ping')
+def command_injection():
+    # --------------------------------------------
+    host = request.args.get('host', 'localhost')
+    
+    # --------------------------------------------
+    if os.name == 'nt':  # Windows
+        command = f'ping -n 2 {host}'
+    else:  # Linux/Mac
+        command = f'ping -c 2 {host}'
+    
+    try:
+        result = subprocess.check_output(command, shell=True, stderr=subprocess.STDOUT, timeout=5)
+        return f"<h2>Ping Results:</h2><pre>{result.decode()}</pre>"
+    except Exception as e:
+        return "Error executing command"
+
+
+# ============================================================================
+# XML PARSING ENDPOINT (FIXED)
+# ============================================================================
+
+@app.route('/parse_xml', methods=['POST'])
+def parse_xml():
+    # --------------------------------------------
+    xml_data = request.data
+    
+    try:
+        # --------------------------------------------
+        import xml.etree.ElementTree as ET
+        parser = ET.XMLParser(resolve_entities=False)
+        root = ET.fromstring(xml_data, parser=parser)
+        return f"<h2>XML Parsed Successfully</h2><pre>{ET.tostring(root)}</pre>"
+    except Exception as e:
+        return "Error parsing XML"
 
 
 # ============================================================================
