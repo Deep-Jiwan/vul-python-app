@@ -240,7 +240,9 @@ def directory_traversal():
     
     try:
         # --------------------------------------------
-        with open(filename, 'r') as f:
+        import os
+        safe_filename = os.path.basename(filename)
+        with open(safe_filename, 'r') as f:
             content = f.read()
         return f"<pre>{content}</pre>"
     except Exception as e:
