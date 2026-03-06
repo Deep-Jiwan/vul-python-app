@@ -20,6 +20,7 @@ import json
 from urllib.parse import urlparse
 import logging
 from Crypto.Cipher import AES
+from werkzeug.utils import secure_filename
 
 # --------------------------------------------
 ADMIN_USERNAME = "admin"
@@ -287,6 +288,8 @@ def session_fixation():
 def sql_injection_orm():
     # --------------------------------------------
     search_term = request.args.get('q', '')
+    
+    search_term = secure_filename(search_term)
     
     conn = sqlite3.connect('vulnerable_app.db')
     cursor = conn.cursor()
