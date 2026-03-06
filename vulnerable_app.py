@@ -157,6 +157,12 @@ def frame_content():
     # --------------------------------------------
     frame_url = request.args.get('url', 'https://example.com')
     
+    # Validate URL to prevent injection
+    from urllib.parse import urlparse
+    parsed = urlparse(frame_url)
+    if parsed.scheme not in ('http', 'https'):
+        frame_url = 'https://example.com'
+    
     # --------------------------------------------
     html_content = f'''
         <h2>External Content</h2>
