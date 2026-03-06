@@ -410,7 +410,7 @@ def insecure_deserialization():
         obj = RestrictedUnpickler(io.BytesIO(data)).load()
         return f"<h2>Deserialized Object:</h2><pre>{obj}</pre>"
     except Exception as e:
-        return f"Error deserializing: {str(e)}"
+        return "Error deserializing: An unexpected error occurred"
 
 
 # ============================================================================
