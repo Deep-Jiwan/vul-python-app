@@ -295,8 +295,10 @@ def sql_injection_orm():
 
 @app.route('/read_log')
 def resource_leak():
+    import os
     # --------------------------------------------
     log_file = request.args.get('log', 'app.log')
+    log_file = os.path.basename(log_file)
     
     # --------------------------------------------
     f = open(log_file, 'w')
