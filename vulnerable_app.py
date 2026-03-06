@@ -396,7 +396,9 @@ def insecure_deserialization():
         # --------------------------------------------
         import json
         obj = json.loads(data)
-        return f"<h2>Deserialized Object:</h2><pre>{obj}</pre>"
+        if not isinstance(obj, (dict, list)):
+            return "Invalid data format", 400
+        return f"<h2>Deserialized Object:</h2><pre>{html.escape(str(obj))}</pre>"
     except Exception as e:
         import logging
         logging.error(f"Error deserializing: {e}")
