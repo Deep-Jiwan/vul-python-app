@@ -373,16 +373,16 @@ def ssrf_vulnerability():
         if parsed.scheme not in ['http', 'https']:
             return "Error: Only HTTP/HTTPS URLs allowed"
         
-        ALLOWED_HOSTS = {'example.com'}
-        if parsed.netloc not in ALLOWED_HOSTS:
-            return "Error: URL not permitted"
-        
-        safe_url = urlunparse(parsed)
-        
         hostname = parsed.netloc.split(':')[0]
         ip = socket.gethostbyname(hostname)
         if ip.startswith(('127.', '10.', '172.16.', '172.17.', '172.18.', '172.19.', '172.20.', '172.21.', '172.22.', '172.23.', '172.24.', '172.25.', '172.26.', '172.27.', '172.28.', '172.29.', '172.30.', '172.31.', '192.168.')):
             return "Error: Internal IP addresses not allowed"
+        
+        ALLOWED_HOSTS = {'example.com'}
+        if hostname not in ALLOWED_HOSTS:
+            return "Error: URL not permitted"
+        
+        safe_url = urlunparse(parsed)
         
         import requests
         response = requests.get(safe_url, timeout=5)
