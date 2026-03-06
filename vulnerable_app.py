@@ -244,6 +244,10 @@ def directory_traversal():
     # --------------------------------------------
     filename = request.args.get('file', 'readme.txt')
     
+    # --------------------------------------------
+    import os
+    filename = os.path.basename(filename)
+    
     try:
         # --------------------------------------------
         with open(filename, 'r') as f:
