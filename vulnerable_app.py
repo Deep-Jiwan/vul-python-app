@@ -155,13 +155,14 @@ def frame_content():
     
     # --------------------------------------------
     from urllib.parse import urlparse
+    import html
     parsed = urlparse(frame_url)
     if parsed.scheme not in ('http', 'https') or parsed.netloc not in ('example.com', 'trusted-site.com'):
         frame_url = 'https://example.com'
     
     html_content = f'''
         <h2>External Content</h2>
-        <iframe src="{frame_url}" width="800" height="600"></iframe>
+        <iframe src="{html.escape(frame_url)}" width="800" height="600"></iframe>
     '''
     return render_template_string(html_content)
 
