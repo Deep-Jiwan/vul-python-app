@@ -236,7 +236,9 @@ def directory_traversal():
     
     try:
         # --------------------------------------------
-        with open(filename, 'r') as f:
+        from werkzeug.utils import secure_filename
+        safe_filename = secure_filename(filename)
+        with open(safe_filename, 'r') as f:
             content = f.read()
         return f"<pre>{content}</pre>"
     except Exception as e:
