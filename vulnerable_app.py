@@ -257,13 +257,14 @@ def directory_traversal():
     
     # --------------------------------------------
     import os
+    import html
     filename = os.path.basename(filename)
     
     try:
         # --------------------------------------------
         with open(filename, 'r') as f:
             content = f.read()
-        return f"<pre>{content}</pre>"
+        return f"<pre>{html.escape(content)}</pre>"
     except Exception as e:
         return "Error reading file"
 
