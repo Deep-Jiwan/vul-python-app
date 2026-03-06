@@ -426,7 +426,8 @@ def xxe_vulnerability():
     
     try:
         # --------------------------------------------
-        root = ET.fromstring(xml_data)
+        parser = ET.XMLParser(resolve_entities=False, no_network=True)
+        root = ET.fromstring(xml_data, parser=parser)
         result = [(child.tag, child.text) for child in root]
         return f"<h2>Parsed XML:</h2><pre>{result}</pre>"
     except Exception as e:
