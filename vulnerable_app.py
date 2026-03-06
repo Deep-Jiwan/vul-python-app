@@ -415,7 +415,8 @@ def idor_vulnerability(account_id):
         conn.close()
         
         if account:
-            return f"<h2>Account Details</h2><p>Username: {account[1]}<br>Balance: ${account[2]}<br>Account: {account[3]}</p>"
+            import html
+            return f"<h2>Account Details</h2><p>Username: {html.escape(str(account[1]))}<br>Balance: ${html.escape(str(account[2]))}<br>Account: {html.escape(str(account[3]))}</p>"
         else:
             return "Account not found"
     except Exception as e:
