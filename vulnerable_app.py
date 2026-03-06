@@ -347,6 +347,21 @@ def ssrf_vulnerability():
     # --------------------------------------------
     url = request.args.get('url', 'http://example.com')
     
+    # Validate URL to prevent SSRF
+    import urllib.parse, socket, ipaddress
+    parsed = urllib.parse.urlparse(url)
+    if parsed.scheme not in ['http', 'https']:
+        return "Error: Only HTTP/HTTPS URLs are allowed"
+    hostname = parsed.hostname
+    if not hostname:
+        return "Error: Invalid URL"
+    try:
+        ip = socket.gethostbyname(hostname)
+        if ipaddress.ip_address(ip).is_private or ipaddress.ip_address(ip).is_loopback:
+            return "Error: Access to internal addresses is not allowed"
+    except socket.gaierror:
+        return "Error: Invalid hostname"
+    
     try:
         # --------------------------------------------
         response = urllib.request.urlopen(url, timeout=5)
