@@ -154,9 +154,10 @@ def frame_content():
     if not (frame_url.startswith('http://') or frame_url.startswith('https://')):
         frame_url = 'https://example.com'
     
+    import html
     html_content = f'''
         <h2>External Content</h2>
-        <iframe src="{frame_url}" width="800" height="600"></iframe>
+        <iframe src="{html.escape(frame_url)}" width="800" height="600"></iframe>
     '''
     return render_template_string(html_content)
 
