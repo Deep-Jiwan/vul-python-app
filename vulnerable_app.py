@@ -129,6 +129,7 @@ def login():
 
 @app.route('/profile')
 def profile():
+    from markupsafe import escape
     # --------------------------------------------
     username = request.args.get('name', session.get('username', 'Guest'))
     
