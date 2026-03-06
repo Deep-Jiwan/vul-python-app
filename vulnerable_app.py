@@ -359,6 +359,7 @@ def ssrf_vulnerability():
         # --------------------------------------------
         from urllib.parse import urlparse
         import socket
+        import logging
         
         parsed = urlparse(url)
         if parsed.scheme not in ['http', 'https']:
@@ -373,7 +374,8 @@ def ssrf_vulnerability():
         content = response.read().decode('utf-8', errors='ignore')
         return f"<h2>Fetched Content:</h2><pre>{content[:500]}</pre>"
     except Exception as e:
-        return f"Error fetching URL: {str(e)}"
+        logging.error(f"Error fetching URL: {e}")
+        return "An internal error occurred"
 
 
 # ============================================================================
