@@ -304,6 +304,8 @@ def resource_leak():
     log_file = request.args.get('log', 'app.log')
     
     # --------------------------------------------
+    import os
+    log_file = os.path.basename(log_file)
     f = open(log_file, 'w')
     f.write('Log entry: ' + str(time.time()))
     # --------------------------------------------
