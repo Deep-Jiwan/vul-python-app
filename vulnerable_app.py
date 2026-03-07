@@ -21,6 +21,7 @@ import defusedxml.ElementTree as ET
 import json
 from urllib.parse import urlparse
 from urllib.parse import urlunparse
+from werkzeug.utils import secure_filename
 
 # --------------------------------------------
 ADMIN_USERNAME = "admin"
@@ -298,7 +299,7 @@ def sql_injection_orm():
 @app.route('/read_log')
 def resource_leak():
     # --------------------------------------------
-    log_file = request.args.get('log', 'app.log')
+    log_file = secure_filename(request.args.get('log', 'app.log'))
     
     # --------------------------------------------
     f = open(log_file, 'w')
