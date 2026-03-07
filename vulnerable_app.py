@@ -18,6 +18,7 @@ from Crypto.Cipher import DES
 import html
 from urllib.parse import urlparse
 from urllib.parse import urlunparse
+from Crypto.Cipher import AES
 
 # --------------------------------------------
 ADMIN_USERNAME = "admin"
@@ -181,14 +182,13 @@ def encrypt_data():
     data = request.args.get('data', 'secret message')
     
     # --------------------------------------------
-    key = b'8bytekey'
-    cipher = DES.new(key, DES.MODE_ECB)
+    key = b'32bytekeyforAES256!!'
+    cipher = AES.new(key, AES.MODE_GCM)
     
     # --------------------------------------------
-    padded_data = data + ' ' * (8 - len(data) % 8)
-    encrypted = cipher.encrypt(padded_data.encode())
+    encrypted, tag = cipher.encrypt_and_digest(data.encode())
     
-    return f"<h2>Encrypted Data:</h2><p>{encrypted.hex()}</p>"
+    return f"<h2>Encrypted Data:</h2><p>{encrypted.hex()}:{tag.hex()}</p>"
 
 
 # ============================================================================
