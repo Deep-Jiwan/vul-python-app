@@ -218,8 +218,10 @@ def crlf_injection():
 
 @app.route('/process_data')
 def trust_boundary():
+    import html
     # --------------------------------------------
     user_input = request.args.get('input', '')
+    user_input = html.escape(user_input, quote=True)
     
     # --------------------------------------------
     trusted_role = session.get('role', 'guest')
