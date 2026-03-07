@@ -17,6 +17,7 @@ import xml.etree.ElementTree as ET
 from Crypto.Cipher import DES
 import html
 from urllib.parse import urlparse
+import re
 
 # --------------------------------------------
 ADMIN_USERNAME = "admin"
@@ -150,6 +151,10 @@ def frame_content():
     frame_url = request.args.get('url', 'https://example.com')
     
     # --------------------------------------------
+    # Validate URL is safe (only http/https)
+    if not re.match(r'^https?://', frame_url):
+        frame_url = 'https://example.com'
+    
     html_content = f'''
         <h2>External Content</h2>
         <iframe src="{frame_url}" width="800" height="600"></iframe>
