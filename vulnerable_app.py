@@ -313,6 +313,7 @@ def resource_leak():
 @app.route('/transfer_funds', methods=['GET', 'POST'])
 def csrf_vulnerability():
     # --------------------------------------------
+    import html
     if request.method == 'POST' or request.method == 'GET':
         from_account = request.values.get('from')
         to_account = request.values.get('to')
@@ -326,7 +327,7 @@ def csrf_vulnerability():
         conn.commit()
         conn.close()
         
-        return f"<h2>Transferred ${amount} from {from_account} to {to_account}</h2>"
+        return f"<h2>Transferred ${html.escape(str(amount))} from {html.escape(str(from_account))} to {html.escape(str(to_account))}</h2>"
     
     return '''
         <h2>Transfer Funds</h2>
