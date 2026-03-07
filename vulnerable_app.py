@@ -16,6 +16,7 @@ import urllib.request
 import xml.etree.ElementTree as ET
 from Crypto.Cipher import DES
 import html
+from werkzeug.utils import secure_filename
 
 # --------------------------------------------
 ADMIN_USERNAME = "admin"
@@ -294,6 +295,11 @@ def sql_injection_orm():
 def resource_leak():
     # --------------------------------------------
     log_file = request.args.get('log', 'app.log')
+    
+    import os
+    
+    # Sanitize the filename to prevent path traversal
+    log_file = secure_filename(log_file)
     
     # --------------------------------------------
     f = open(log_file, 'w')
