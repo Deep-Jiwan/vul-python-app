@@ -160,7 +160,7 @@ def frame_content():
         <h2>External Content</h2>
         <iframe src="{frame_url}" width="800" height="600"></iframe>
     '''
-    return render_template_string(html_content)
+    return render_template_string("{{ content|safe }}", content=html_content)
 
 
 # ============================================================================
