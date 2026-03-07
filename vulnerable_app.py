@@ -235,6 +235,7 @@ def trust_boundary():
 
 @app.route('/download')
 def directory_traversal():
+    import logging
     # --------------------------------------------
     filename = request.args.get('file', 'readme.txt')
     
@@ -244,7 +245,8 @@ def directory_traversal():
             content = f.read()
         return f"<pre>{content}</pre>"
     except Exception as e:
-        return f"Error reading file: {str(e)}"
+        logging.error(f"Error reading file: {e}")
+        return "Error reading file: An internal error occurred"
 
 
 # ============================================================================
