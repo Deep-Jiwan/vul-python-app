@@ -16,6 +16,13 @@ import urllib.request
 import xml.etree.ElementTree as ET
 from Crypto.Cipher import DES
 import html
+import logging
+import defusedxml.ElementTree as ET
+import json
+from urllib.parse import urlparse
+from urllib.parse import urlunparse
+from werkzeug.utils import secure_filename
+from Crypto.Cipher import AES
 
 # --------------------------------------------
 ADMIN_USERNAME = "admin"
@@ -74,6 +81,8 @@ def init_database():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    import logging
+    import html
     # --------------------------------------------
     if request.method == 'GET':
         # --------------------------------------------
@@ -98,8 +107,8 @@ def login():
         cursor = conn.cursor()
         
         # --------------------------------------------
-        query = f"SELECT * FROM users WHERE username = '{username}' AND password = '{password}'"
-        cursor.execute(query)
+        query = "SELECT * FROM users WHERE username = ? AND password = ?"
+        cursor.execute(query, (username, password))
         user = cursor.fetchone()
         conn.close()
         
@@ -109,11 +118,12 @@ def login():
             return f"<h2>Login successful! Welcome {user[1]}</h2><br><a href='/profile'>View Profile</a>"
         else:
             # --------------------------------------------
-            return f"<h2>Login failed for user: {username}</h2><p>Invalid credentials provided</p>"
+            return f"<h2>Login failed for user: {html.escape(username, quote=True)}</h2><p>Invalid credentials provided</p>"
     
     except Exception as e:
         # --------------------------------------------
-        return f"<h2>Database Error</h2><pre>{str(e)}</pre>"
+        logging.error(f"Database error: {e}")
+        return "<h2>Database Error</h2><p>An internal error occurred</p>"
 
 
 # ============================================================================
@@ -122,21 +132,22 @@ def login():
 
 @app.route('/profile')
 def profile():
+    import html
     # --------------------------------------------
-    username = request.args.get('name', session.get('username', 'Guest'))
+    username = html.escape(str(request.args.get('name', session.get('username', 'Guest'))))
     
     # --------------------------------------------
     html_content = f'''
         <h1>User Profile</h1>
         <p>Welcome, {username}!</p>
-        <p>Your comment: {request.args.get('comment', 'No comment')}</p>
+        <p>Your comment: {html.escape(str(request.args.get('comment', 'No comment')))}</p>
     '''
     
     # --------------------------------------------
     if username == 'admin':
         html_content += f'<p style="color:red;">Password Hint: {ADMIN_PASSWORD}</p>'
     
-    return render_template_string(html_content)
+    return render_template_string("{{ content|safe }}", content=html_content)
 
 
 # ============================================================================
@@ -145,15 +156,16 @@ def profile():
 
 @app.route('/frame_content')
 def frame_content():
+    import html
     # --------------------------------------------
-    frame_url = request.args.get('url', 'https://example.com')
+    frame_url = html.escape(request.args.get('url', 'https://example.com'), quote=True)
     
     # --------------------------------------------
-    html_content = f'''
+    html_content = '''
         <h2>External Content</h2>
-        <iframe src="{frame_url}" width="800" height="600"></iframe>
+        <iframe src="{{ frame_url }}" width="800" height="600"></iframe>
     '''
-    return render_template_string(html_content)
+    return render_template_string(html_content, frame_url=frame_url)
 
 
 # ============================================================================
@@ -162,11 +174,17 @@ def frame_content():
 
 @app.route('/redirect')
 def open_redirect():
+    from urllib.parse import urlparse
     # --------------------------------------------
     target_url = request.args.get('url', '/')
     
     # --------------------------------------------
-    return redirect(target_url)
+    parsed = urlparse(target_url)
+    ALLOWED_PATHS = ['/', '/home', '/profile', '/settings']
+    if parsed.path in ALLOWED_PATHS and not parsed.netloc and not parsed.scheme:
+        safe_path = next(p for p in ALLOWED_PATHS if p == parsed.path)
+        return redirect(safe_path)
+    return redirect('/')
 
 
 # ============================================================================
@@ -179,8 +197,8 @@ def encrypt_data():
     data = request.args.get('data', 'secret message')
     
     # --------------------------------------------
-    key = b'8bytekey'
-    cipher = DES.new(key, DES.MODE_ECB)
+    key = b'key32bytes1234567890123456789012'
+    cipher = AES.new(key, AES.MODE_GCM)
     
     # --------------------------------------------
     padded_data = data + ' ' * (8 - len(data) % 8)
@@ -212,8 +230,10 @@ def crlf_injection():
 
 @app.route('/process_data')
 def trust_boundary():
+    import html
     # --------------------------------------------
     user_input = request.args.get('input', '')
+    user_input = html.escape(user_input, quote=True)
     
     # --------------------------------------------
     trusted_role = session.get('role', 'guest')
@@ -229,16 +249,24 @@ def trust_boundary():
 
 @app.route('/download')
 def directory_traversal():
+    import logging
+    import os
     # --------------------------------------------
     filename = request.args.get('file', 'readme.txt')
     
+    base_dir = os.getcwd()
+    safe_path = os.path.normpath(os.path.join(base_dir, filename))
+    if not safe_path.startswith(base_dir + os.sep):
+        raise ValueError("Path traversal detected")
+    
     try:
         # --------------------------------------------
-        with open(filename, 'r') as f:
+        with open(safe_path, 'r') as f:
             content = f.read()
         return f"<pre>{content}</pre>"
     except Exception as e:
-        return f"Error reading file: {str(e)}"
+        logging.error(f"Error reading file: {e}")
+        return "Error reading file: An internal error occurred"
 
 
 # ============================================================================
@@ -247,6 +275,7 @@ def directory_traversal():
 
 @app.route('/login_with_session')
 def session_fixation():
+    import html
     # --------------------------------------------
     username = request.args.get('username')
     password = request.args.get('password')
@@ -256,7 +285,7 @@ def session_fixation():
         # --------------------------------------------
         if session_id:
             user_sessions[session_id] = username
-            return f"Logged in with session: {session_id}"
+            return f"Logged in with session: {html.escape(session_id, quote=True)}"
         else:
             new_session = secrets.token_hex(16)
             user_sessions[new_session] = username
@@ -278,8 +307,8 @@ def sql_injection_orm():
     cursor = conn.cursor()
     
     # --------------------------------------------
-    query = f"SELECT username, email FROM users WHERE username LIKE '%{search_term}%'"
-    cursor.execute(query)
+    query = "SELECT username, email FROM users WHERE username LIKE ?"
+    cursor.execute(query, ('%' + search_term + '%',))
     results = cursor.fetchall()
     conn.close()
     
@@ -293,7 +322,7 @@ def sql_injection_orm():
 @app.route('/read_log')
 def resource_leak():
     # --------------------------------------------
-    log_file = request.args.get('log', 'app.log')
+    log_file = secure_filename(request.args.get('log', 'app.log'))
     
     # --------------------------------------------
     f = open(log_file, 'w')
@@ -310,6 +339,7 @@ def resource_leak():
 
 @app.route('/transfer_funds', methods=['GET', 'POST'])
 def csrf_vulnerability():
+    import html
     # --------------------------------------------
     if request.method == 'POST' or request.method == 'GET':
         from_account = request.values.get('from')
@@ -319,12 +349,12 @@ def csrf_vulnerability():
         # --------------------------------------------
         conn = sqlite3.connect('vulnerable_app.db')
         cursor = conn.cursor()
-        cursor.execute(f"UPDATE accounts SET balance = balance - {amount} WHERE username = '{from_account}'")
-        cursor.execute(f"UPDATE accounts SET balance = balance + {amount} WHERE username = '{to_account}'")
+        cursor.execute("UPDATE accounts SET balance = balance - ? WHERE username = ?", (amount, from_account))
+        cursor.execute("UPDATE accounts SET balance = balance + ? WHERE username = ?", (amount, to_account))
         conn.commit()
         conn.close()
         
-        return f"<h2>Transferred ${amount} from {from_account} to {to_account}</h2>"
+        return f"<h2>Transferred ${html.escape(amount, quote=True)} from {html.escape(from_account, quote=True)} to {html.escape(to_account, quote=True)}</h2>"
     
     return '''
         <h2>Transfer Funds</h2>
@@ -343,16 +373,21 @@ def csrf_vulnerability():
 
 @app.route('/fetch_url')
 def ssrf_vulnerability():
-    # --------------------------------------------
+    import logging
     url = request.args.get('url', 'http://example.com')
+    parsed = urlparse(url)
+    if parsed.scheme not in ('http', 'https') or parsed.netloc not in {'example.com'}:
+        return "URL not permitted", 400
+    safe_url = urlunparse(parsed)
     
     try:
         # --------------------------------------------
-        response = urllib.request.urlopen(url, timeout=5)
+        response = urllib.request.urlopen(safe_url, timeout=5)
         content = response.read().decode('utf-8', errors='ignore')
         return f"<h2>Fetched Content:</h2><pre>{content[:500]}</pre>"
     except Exception as e:
-        return f"Error fetching URL: {str(e)}"
+        logging.error(f"Error fetching URL: {e}")
+        return "Error fetching URL"
 
 
 # ============================================================================
@@ -366,7 +401,7 @@ def idor_vulnerability(account_id):
     cursor = conn.cursor()
     
     # --------------------------------------------
-    cursor.execute(f"SELECT * FROM accounts WHERE id = {account_id}")
+    cursor.execute("SELECT * FROM accounts WHERE id = ?", (account_id,))
     account = cursor.fetchone()
     conn.close()
     
@@ -382,15 +417,18 @@ def idor_vulnerability(account_id):
 
 @app.route('/load_object', methods=['POST'])
 def insecure_deserialization():
+    import html
+    import logging
     # --------------------------------------------
     data = request.data
     
     try:
         # --------------------------------------------
-        obj = pickle.loads(data)
-        return f"<h2>Deserialized Object:</h2><pre>{obj}</pre>"
+        obj = json.loads(data)
+        return f"<h2>Deserialized Object:</h2><pre>{html.escape(str(obj), quote=True)}</pre>"
     except Exception as e:
-        return f"Error deserializing: {str(e)}"
+        logging.error(f"Error deserializing: {e}")
+        return "Error deserializing: An internal error occurred"
 
 
 # ============================================================================
@@ -399,20 +437,26 @@ def insecure_deserialization():
 
 @app.route('/ping')
 def command_injection():
+    import logging
     # --------------------------------------------
     host = request.args.get('host', 'localhost')
+    ALLOWED_HOSTS = {'localhost', '127.0.0.1'}
+    if host not in ALLOWED_HOSTS:
+        return "Invalid host", 400
+    safe_host = next(h for h in ALLOWED_HOSTS if h == host)
     
     # --------------------------------------------
     if os.name == 'nt':  # Windows
-        command = f'ping -n 2 {host}'
+        command = ['ping', '-n', '2', safe_host]
     else:  # Linux/Mac
-        command = f'ping -c 2 {host}'
+        command = ['ping', '-c', '2', safe_host]
     
     try:
-        result = subprocess.check_output(command, shell=True, stderr=subprocess.STDOUT, timeout=5)
+        result = subprocess.check_output(command, shell=False, stderr=subprocess.STDOUT, timeout=5)
         return f"<h2>Ping Results:</h2><pre>{result.decode()}</pre>"
     except Exception as e:
-        return f"Error executing command: {str(e)}"
+        logging.error(f"Error executing command: {e}")
+        return "An internal error occurred"
 
 
 # ============================================================================
@@ -430,7 +474,8 @@ def xxe_vulnerability():
         result = [(child.tag, child.text) for child in root]
         return f"<h2>Parsed XML:</h2><pre>{result}</pre>"
     except Exception as e:
-        return f"Error parsing XML: {str(e)}"
+        logging.error(f"Error parsing XML: {e}")
+        return "Error parsing XML: An internal error occurred"
 
 
 # ============================================================================
@@ -505,7 +550,7 @@ def main():
     print("[+] Press Ctrl+C to stop\n")
     
     # --------------------------------------------
-    app.run(debug=True, host='127.0.0.1', port=3000)
+    app.run(debug=False, host='127.0.0.1', port=3000)
 
 
 if __name__ == '__main__':
