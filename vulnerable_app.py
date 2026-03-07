@@ -17,6 +17,7 @@ import xml.etree.ElementTree as ET
 from Crypto.Cipher import DES
 import html
 import logging
+import defusedxml.ElementTree as ET
 
 # --------------------------------------------
 ADMIN_USERNAME = "admin"
