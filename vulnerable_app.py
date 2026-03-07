@@ -230,7 +230,9 @@ def trust_boundary():
 @app.route('/download')
 def directory_traversal():
     # --------------------------------------------
+    import os
     filename = request.args.get('file', 'readme.txt')
+    filename = os.path.basename(filename)
     
     try:
         # --------------------------------------------
