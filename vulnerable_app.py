@@ -298,10 +298,18 @@ def sql_injection_orm():
 @app.route('/read_log')
 def resource_leak():
     # --------------------------------------------
+    import os
+    
     log_file = request.args.get('log', 'app.log')
     
     # --------------------------------------------
-    f = open(log_file, 'w')
+    # Validate path to prevent path traversal
+    base_dir = os.path.dirname(os.path.abspath(__file__)) or '.'
+    abs_path = os.path.normpath(os.path.join(base_dir, log_file))
+    if not abs_path.startswith(base_dir + os.sep):
+        return "Invalid log file path"
+    
+    f = open(abs_path, 'w')
     f.write('Log entry: ' + str(time.time()))
     # --------------------------------------------
     open_files.append(f)
