@@ -324,7 +324,8 @@ def csrf_vulnerability():
         conn.commit()
         conn.close()
         
-        return f"<h2>Transferred ${amount} from {from_account} to {to_account}</h2>"
+        import html
+        return f"<h2>Transferred ${html.escape(str(amount))} from {html.escape(from_account or '')} to {html.escape(to_account or '')}</h2>"
     
     return '''
         <h2>Transfer Funds</h2>
