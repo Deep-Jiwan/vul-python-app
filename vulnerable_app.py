@@ -213,12 +213,13 @@ def crlf_injection():
 
 @app.route('/process_data')
 def trust_boundary():
+    import html
     # --------------------------------------------
     user_input = request.args.get('input', '')
     
     # --------------------------------------------
     trusted_role = session.get('role', 'guest')
-    combined_data = user_input + ':' + trusted_role
+    combined_data = html.escape(user_input, quote=True) + ':' + html.escape(trusted_role, quote=True)
     
     # --------------------------------------------
     return f"<h2>Processing: {combined_data}</h2>"
