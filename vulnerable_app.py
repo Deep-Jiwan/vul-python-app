@@ -16,6 +16,7 @@ import urllib.request
 import xml.etree.ElementTree as ET
 from Crypto.Cipher import DES
 import html
+from urllib.parse import urlparse
 
 # --------------------------------------------
 ADMIN_USERNAME = "admin"
@@ -166,6 +167,9 @@ def open_redirect():
     target_url = request.args.get('url', '/')
     
     # --------------------------------------------
+    parsed = urlparse(target_url)
+    if parsed.scheme or parsed.netloc:
+        target_url = '/'
     return redirect(target_url)
 
 
