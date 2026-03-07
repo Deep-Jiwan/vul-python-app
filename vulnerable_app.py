@@ -16,6 +16,7 @@ import urllib.request
 import xml.etree.ElementTree as ET
 from Crypto.Cipher import DES
 import html
+import logging
 
 # --------------------------------------------
 ADMIN_USERNAME = "admin"
@@ -390,7 +391,8 @@ def insecure_deserialization():
         obj = pickle.loads(data)
         return f"<h2>Deserialized Object:</h2><pre>{obj}</pre>"
     except Exception as e:
-        return f"Error deserializing: {str(e)}"
+        logging.error(f"Error deserializing: {str(e)}")
+        return "Error deserializing data"
 
 
 # ============================================================================
