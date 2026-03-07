@@ -18,6 +18,7 @@ from Crypto.Cipher import DES
 import html
 from urllib.parse import urlparse
 import re
+from markupsafe import escape
 
 # --------------------------------------------
 ADMIN_USERNAME = "admin"
@@ -138,7 +139,7 @@ def profile():
     if username == 'admin':
         html_content += f'<p style="color:red;">Password Hint: {ADMIN_PASSWORD}</p>'
     
-    return render_template_string(html_content, username=username, comment=request.args.get('comment', 'No comment'))
+    return render_template_string(html_content, username=escape(username), comment=escape(request.args.get('comment', 'No comment')))
 
 
 # ============================================================================
