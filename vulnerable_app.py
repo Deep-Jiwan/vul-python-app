@@ -179,11 +179,12 @@ def encrypt_data():
     data = request.args.get('data', 'secret message')
     
     # --------------------------------------------
-    key = b'8bytekey'
-    cipher = DES.new(key, DES.MODE_ECB)
+    key = b'8bytekey!'  # 16 bytes for AES-128
+    iv = b'1234567890123456'  # 16 bytes IV for CBC mode
+    cipher = AES.new(key, AES.MODE_CBC, iv)
     
     # --------------------------------------------
-    padded_data = data + ' ' * (8 - len(data) % 8)
+    padded_data = data + ' ' * (16 - len(data) % 16)
     encrypted = cipher.encrypt(padded_data.encode())
     
     return f"<h2>Encrypted Data:</h2><p>{encrypted.hex()}</p>"
