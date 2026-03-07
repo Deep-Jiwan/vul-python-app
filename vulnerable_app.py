@@ -236,11 +236,16 @@ def trust_boundary():
 def directory_traversal():
     # --------------------------------------------
     import logging
+    import os
     filename = request.args.get('file', 'readme.txt')
     
     try:
         # --------------------------------------------
-        with open(filename, 'r') as f:
+        base_dir = os.path.abspath('static')
+        safe_path = os.path.normpath(os.path.join(base_dir, filename))
+        if not safe_path.startswith(base_dir + os.sep):
+            return "Invalid file path"
+        with open(safe_path, 'r') as f:
             content = f.read()
         return f"<pre>{content}</pre>"
     except Exception as e:
