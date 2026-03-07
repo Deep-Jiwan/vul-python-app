@@ -321,6 +321,10 @@ def csrf_vulnerability():
         to_account = request.values.get('to')
         amount = request.values.get('amount')
         
+        # Validate input types
+        if not isinstance(amount, (int, float)) and amount and not amount.replace('.', '', 1).isdigit():
+            return "<h2>Invalid amount</h2>"
+        
         # --------------------------------------------
         conn = sqlite3.connect('vulnerable_app.db')
         cursor = conn.cursor()
