@@ -151,6 +151,7 @@ def profile():
 
 @app.route('/frame_content')
 def frame_content():
+    import html
     # --------------------------------------------
     frame_url = request.args.get('url', 'https://example.com')
     
@@ -158,7 +159,7 @@ def frame_content():
     return render_template_string('''
         <h2>External Content</h2>
         <iframe src="{{ frame_url }}" width="800" height="600"></iframe>
-    ''', frame_url=frame_url)
+    ''', frame_url=html.escape(frame_url, quote=True))
 
 
 # ============================================================================
