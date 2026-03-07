@@ -152,8 +152,9 @@ def profile():
 
 @app.route('/frame_content')
 def frame_content():
+    import html
     # --------------------------------------------
-    frame_url = request.args.get('url', 'https://example.com')
+    frame_url = html.escape(request.args.get('url', 'https://example.com'), quote=True)
     
     # --------------------------------------------
     html_content = '''
