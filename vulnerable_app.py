@@ -119,7 +119,9 @@ def login():
     
     except Exception as e:
         # --------------------------------------------
-        return f"<h2>Database Error</h2><pre>{str(e)}</pre>"
+        import logging
+        logging.error(f"Error: {e}")
+        return "<h2>Database Error</h2><p>An internal error occurred</p>"
 
 
 # ============================================================================
