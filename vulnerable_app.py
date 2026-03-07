@@ -323,6 +323,9 @@ def csrf_vulnerability():
         amount = request.values.get('amount')
         
         # --------------------------------------------
+        if not from_account or not to_account or not amount:
+            return "<h2>Error: Missing required parameters</h2>"
+        
         conn = sqlite3.connect('vulnerable_app.db')
         cursor = conn.cursor()
         cursor.execute("UPDATE accounts SET balance = balance - ? WHERE username = ?", (amount, from_account))
