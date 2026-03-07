@@ -18,6 +18,8 @@ from Crypto.Cipher import DES
 import html
 import logging
 import json
+from urllib.parse import urlparse
+from urllib.parse import urlunparse
 
 # --------------------------------------------
 ADMIN_USERNAME = "admin"
@@ -347,11 +349,15 @@ def csrf_vulnerability():
 def ssrf_vulnerability():
     # --------------------------------------------
     import logging
-    url = request.args.get('url', 'http://example.com')
     
     try:
         # --------------------------------------------
-        response = urllib.request.urlopen(url, timeout=5)
+        parsed = urlparse(url)
+        ALLOWED_HOSTS = {'example.com'}
+        if parsed.scheme not in ('http', 'https') or parsed.netloc not in ALLOWED_HOSTS:
+            return "URL not permitted", 400
+        safe_url = urlunparse(parsed)
+        response = urllib.request.urlopen(safe_url, timeout=5)
         content = response.read().decode('utf-8', errors='ignore')
         return f"<h2>Fetched Content:</h2><pre>{content[:500]}</pre>"
     except Exception as e:
