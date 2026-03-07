@@ -348,6 +348,21 @@ def ssrf_vulnerability():
     
     try:
         # --------------------------------------------
+        import urllib.parse
+        import socket
+        
+        parsed = urllib.parse.urlparse(url)
+        if parsed.scheme not in ['http', 'https']:
+            return "Error: Only HTTP/HTTPS URLs are allowed"
+        
+        hostname = parsed.hostname
+        if hostname:
+            ip_addresses = socket.getaddrinfo(hostname, None)
+            for addr in ip_addresses:
+                ip = addr[4][0]
+                if ip.startswith('127.') or ip.startswith('10.') or ip.startswith('192.168.') or ip.startswith('172.'):
+                    return "Error: Access to internal addresses is not allowed"
+        
         response = urllib.request.urlopen(url, timeout=5)
         content = response.read().decode('utf-8', errors='ignore')
         return f"<h2>Fetched Content:</h2><pre>{content[:500]}</pre>"
