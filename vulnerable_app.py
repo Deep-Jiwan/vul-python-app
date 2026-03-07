@@ -20,6 +20,7 @@ import logging
 import json
 from urllib.parse import urlparse
 from urllib.parse import urlunparse
+from werkzeug.utils import secure_filename
 
 # --------------------------------------------
 ADMIN_USERNAME = "admin"
@@ -300,7 +301,9 @@ def resource_leak():
     log_file = request.args.get('log', 'app.log')
     
     # --------------------------------------------
-    f = open(log_file, 'w')
+    import os
+    safe_log_file = secure_filename(log_file)
+    f = open(safe_log_file, 'w')
     f.write('Log entry: ' + str(time.time()))
     # --------------------------------------------
     open_files.append(f)
