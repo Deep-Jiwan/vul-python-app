@@ -129,6 +129,7 @@ def login():
 
 @app.route('/profile')
 def profile():
+    import html
     # --------------------------------------------
     username = request.args.get('name', session.get('username', 'Guest'))
     comment = request.args.get('comment', 'No comment')
@@ -144,7 +145,7 @@ def profile():
     if username == 'admin':
         html_content += '<p style="color:red;">Password Hint: {{ ADMIN_PASSWORD }}</p>'
     
-    return render_template_string(html_content, username=username, comment=comment, ADMIN_PASSWORD=ADMIN_PASSWORD)
+    return render_template_string(html_content, username=html.escape(username), comment=html.escape(comment), ADMIN_PASSWORD=ADMIN_PASSWORD)
 
 
 # ============================================================================
