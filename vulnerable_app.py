@@ -173,7 +173,13 @@ def open_redirect():
     target_url = request.args.get('url', '/')
     
     # --------------------------------------------
-    return redirect(target_url)
+    from urllib.parse import urlparse
+    parsed = urlparse(target_url)
+    ALLOWED_PATHS = ['/', '/home', '/profile', '/settings']
+    if parsed.path in ALLOWED_PATHS and not parsed.netloc and not parsed.scheme:
+        safe_path = next(p for p in ALLOWED_PATHS if p == parsed.path)
+        return redirect(safe_path)
+    return redirect('/')
 
 
 # ============================================================================
