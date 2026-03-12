@@ -74,6 +74,7 @@ def init_database():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    import logging
     # --------------------------------------------
     if request.method == 'GET':
         # --------------------------------------------
@@ -113,7 +114,8 @@ def login():
     
     except Exception as e:
         # --------------------------------------------
-        return f"<h2>Database Error</h2><pre>{str(e)}</pre>"
+        logging.error(f"Database error: {e}")
+        return "<h2>Database Error</h2><p>An internal error occurred</p>"
 
 
 # ============================================================================
