@@ -298,6 +298,12 @@ def resource_leak():
     log_file = request.args.get('log', 'app.log')
     
     # --------------------------------------------
+    import os
+    # Sanitize filename to prevent path traversal
+    log_file = os.path.basename(log_file)
+    if not log_file or log_file == '.' or log_file == '..':
+        log_file = 'app.log'
+    
     f = open(log_file, 'w')
     f.write('Log entry: ' + str(time.time()))
     # --------------------------------------------
