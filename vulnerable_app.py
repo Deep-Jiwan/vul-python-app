@@ -175,16 +175,19 @@ def open_redirect():
 
 @app.route('/encrypt')
 def encrypt_data():
+    from Crypto.Cipher import AES
+    from Crypto.Random import get_random_bytes
     # --------------------------------------------
     data = request.args.get('data', 'secret message')
     
     # --------------------------------------------
-    key = b'8bytekey'
-    cipher = DES.new(key, DES.MODE_ECB)
+    key = b'32bytekey32bytekey32bytekey32byt'
+    iv = get_random_bytes(16)
+    cipher = AES.new(key, AES.MODE_CBC, iv)
     
     # --------------------------------------------
-    padded_data = data + ' ' * (8 - len(data) % 8)
-    encrypted = cipher.encrypt(padded_data.encode())
+    padded_data = data + ' ' * (16 - len(data) % 16)
+    encrypted = iv + cipher.encrypt(padded_data.encode())
     
     return f"<h2>Encrypted Data:</h2><p>{encrypted.hex()}</p>"
 
