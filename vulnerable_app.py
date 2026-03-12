@@ -179,14 +179,19 @@ def encrypt_data():
     data = request.args.get('data', 'secret message')
     
     # --------------------------------------------
-    key = b'8bytekey'
-    cipher = DES.new(key, DES.MODE_ECB)
+    from Crypto.Cipher import AES
+    from Crypto.Util.Padding import pad
+    import os
+    
+    key = b'0123456789abcdef0123456789abcdef'
+    iv = os.urandom(16)
+    cipher = AES.new(key, AES.MODE_GCM, nonce=iv)
     
     # --------------------------------------------
-    padded_data = data + ' ' * (8 - len(data) % 8)
-    encrypted = cipher.encrypt(padded_data.encode())
+    padded_data = pad(data.encode(), AES.block_size)
+    encrypted, tag = cipher.encrypt_and_digest(padded_data)
     
-    return f"<h2>Encrypted Data:</h2><p>{encrypted.hex()}</p>"
+    return f"<h2>Encrypted Data:</h2><p>{encrypted.hex()}:{tag.hex()}</p>"
 
 
 # ============================================================================
