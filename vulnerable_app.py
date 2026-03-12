@@ -317,6 +317,15 @@ def csrf_vulnerability():
         to_account = request.values.get('to')
         amount = request.values.get('amount')
         
+        # Validate input types
+        if not from_account or not to_account or not amount:
+            return "<h2>Error: All fields are required</h2>"
+        
+        try:
+            amount = float(amount)
+        except ValueError:
+            return "<h2>Error: Amount must be a number</h2>"
+        
         # --------------------------------------------
         conn = sqlite3.connect('vulnerable_app.db')
         cursor = conn.cursor()
@@ -325,7 +334,7 @@ def csrf_vulnerability():
         conn.commit()
         conn.close()
         
-        return f"<h2>Transferred ${html.escape(amount)} from {html.escape(from_account)} to {html.escape(to_account)}</h2>"
+        return f"<h2>Transferred ${html.escape(str(amount))} from {html.escape(from_account)} to {html.escape(to_account)}</h2>"
     
     return '''
         <h2>Transfer Funds</h2>
