@@ -232,9 +232,15 @@ def directory_traversal():
     # --------------------------------------------
     filename = request.args.get('file', 'readme.txt')
     
+    # Validate filename to prevent path traversal
+    import os
+    safe_filename = os.path.normpath(filename)
+    if safe_filename.startswith('..') or os.path.isabs(safe_filename):
+        return "Invalid file path", 400
+    
     try:
         # --------------------------------------------
-        with open(filename, 'r') as f:
+        with open(safe_filename, 'r') as f:
             content = f.read()
         return f"<pre>{content}</pre>"
     except Exception as e:
