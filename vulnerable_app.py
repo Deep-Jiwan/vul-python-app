@@ -383,11 +383,12 @@ def idor_vulnerability(account_id):
 @app.route('/load_object', methods=['POST'])
 def insecure_deserialization():
     # --------------------------------------------
+    import json
     data = request.data
     
     try:
         # --------------------------------------------
-        obj = pickle.loads(data)
+        obj = json.loads(data)
         return f"<h2>Deserialized Object:</h2><pre>{html.escape(str(obj), quote=True)}</pre>"
     except Exception as e:
         logging.error(f"Error deserializing: {e}")
