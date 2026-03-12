@@ -344,12 +344,19 @@ def csrf_vulnerability():
 @app.route('/fetch_url')
 def ssrf_vulnerability():
     import logging
+    from urllib.parse import urlparse, urlunparse
     # --------------------------------------------
     url = request.args.get('url', 'http://example.com')
     
+    ALLOWED_HOSTS = {'example.com'}
+    parsed = urlparse(url)
+    if parsed.scheme not in ('http', 'https') or parsed.netloc not in ALLOWED_HOSTS:
+        return "URL not permitted", 400
+    safe_url = urlunparse(parsed)
+    
     try:
         # --------------------------------------------
-        response = urllib.request.urlopen(url, timeout=5)
+        response = urllib.request.urlopen(safe_url, timeout=5)
         content = response.read().decode('utf-8', errors='ignore')
         return f"<h2>Fetched Content:</h2><pre>{content[:500]}</pre>"
     except Exception as e:
