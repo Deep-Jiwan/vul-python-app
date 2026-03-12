@@ -390,7 +390,17 @@ def insecure_deserialization():
     
     try:
         # --------------------------------------------
-        obj = pickle.loads(data)
+        import pickle
+        class RestrictedUnpickler(pickle.Unpickler):
+            def find_class(self, module, name):
+                # Only allow safe built-in types
+                if module == "builtins" and name in ["str", "int", "float", "bool", "list", "dict", "tuple"]:
+                    return super().find_class(module, name)
+                # Forbid everything else
+                raise pickle.UnpicklingError(f"Unsafe deserialization: {module}.{name}")
+        
+        import io
+        obj = RestrictedUnpickler(io.BytesIO(data)).load()
         return f"<h2>Deserialized Object:</h2><pre>{html.escape(str(obj))}</pre>"
     except Exception:
         return "Error deserializing: Invalid data"
