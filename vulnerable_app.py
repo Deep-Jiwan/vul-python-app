@@ -349,6 +349,13 @@ def ssrf_vulnerability():
     url = request.args.get('url', 'http://example.com')
     
     try:
+        # Validate URL to prevent SSRF
+        parsed = urllib.parse.urlparse(url)
+        if parsed.scheme not in ('http', 'https'):
+            return "Invalid URL scheme"
+        if parsed.hostname not in ('example.com', 'localhost', '127.0.0.1'):
+            return "Access to this host is not allowed"
+        
         # --------------------------------------------
         response = urllib.request.urlopen(url, timeout=5)
         content = response.read().decode('utf-8', errors='ignore')
