@@ -122,17 +122,17 @@ def login():
 
 @app.route('/profile')
 def profile():
-    # --------------------------------------------
-    username = request.args.get('name', session.get('username', 'Guest'))
+    import html
     
-    # --------------------------------------------
+    username = request.args.get('name', session.get('username', 'Guest'))
+    comment = request.args.get('comment', 'No comment')
+    
     html_content = f'''
         <h1>User Profile</h1>
-        <p>Welcome, {username}!</p>
-        <p>Your comment: {request.args.get('comment', 'No comment')}</p>
+        <p>Welcome, {html.escape(username)}!</p>
+        <p>Your comment: {html.escape(comment)}</p>
     '''
     
-    # --------------------------------------------
     if username == 'admin':
         html_content += f'<p style="color:red;">Password Hint: {ADMIN_PASSWORD}</p>'
     
