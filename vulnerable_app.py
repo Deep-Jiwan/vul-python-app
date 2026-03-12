@@ -152,11 +152,11 @@ def frame_content():
     frame_url = request.args.get('url', 'https://example.com')
     
     # --------------------------------------------
-    html_content = f'''
+    template = '''
         <h2>External Content</h2>
-        <iframe src="{frame_url}" width="800" height="600"></iframe>
+        <iframe src="{{ url }}" width="800" height="600"></iframe>
     '''
-    return render_template_string(html_content)
+    return render_template_string(template, url=frame_url)
 
 
 # ============================================================================
