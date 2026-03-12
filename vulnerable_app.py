@@ -388,7 +388,7 @@ def insecure_deserialization():
     try:
         # --------------------------------------------
         obj = pickle.loads(data)
-        return f"<h2>Deserialized Object:</h2><pre>{obj}</pre>"
+        return f"<h2>Deserialized Object:</h2><pre>{html.escape(str(obj), quote=True)}</pre>"
     except Exception as e:
         logging.error(f"Error deserializing: {e}")
         return "Error deserializing data"
