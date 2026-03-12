@@ -21,6 +21,7 @@ import shlex
 from Crypto.Cipher import AES
 from Crypto.Util.Padding import pad
 from urllib.parse import urlparse
+import markupsafe
 
 # --------------------------------------------
 ADMIN_USERNAME = "admin"
@@ -156,7 +157,7 @@ def frame_content():
     # --------------------------------------------
     html_content = f'''
         <h2>External Content</h2>
-        <iframe src="{frame_url}" width="800" height="600"></iframe>
+        <iframe src="{markupsafe.escape(frame_url)}" width="800" height="600"></iframe>
     '''
     return render_template_string(html_content)
 
