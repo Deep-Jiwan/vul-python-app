@@ -422,6 +422,7 @@ def command_injection():
 @app.route('/parse_xml', methods=['POST'])
 def xxe_vulnerability():
     import logging
+    import defusedxml.ElementTree as ET
     # --------------------------------------------
     xml_data = request.data.decode()
     
