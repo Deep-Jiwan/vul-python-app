@@ -146,7 +146,11 @@ def profile():
 @app.route('/frame_content')
 def frame_content():
     # --------------------------------------------
+    from urllib.parse import urlparse
     frame_url = request.args.get('url', 'https://example.com')
+    parsed = urlparse(frame_url)
+    if parsed.scheme.lower() not in ('http', 'https'):
+        frame_url = 'https://example.com'
     
     # --------------------------------------------
     return render_template_string('''
