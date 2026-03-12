@@ -326,7 +326,8 @@ def csrf_vulnerability():
         conn.commit()
         conn.close()
         
-        return f"<h2>Transferred ${amount} from {from_account} to {to_account}</h2>"
+        from markupsafe import escape
+        return f"<h2>Transferred ${escape(amount)} from {escape(from_account)} to {escape(to_account)}</h2>"
     
     return '''
         <h2>Transfer Funds</h2>
