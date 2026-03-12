@@ -141,7 +141,7 @@ def profile():
     
     # --------------------------------------------
     if username == 'admin':
-        html_content += f'<p style="color:red;">Password Hint: {ADMIN_PASSWORD}</p>'
+        html_content += f'<p style="color:red;">Password Hint: {escape(ADMIN_PASSWORD)}</p>'
     
     return render_template_string(html_content)
 
