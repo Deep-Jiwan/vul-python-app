@@ -20,6 +20,7 @@ import defusedxml.ElementTree as defused_ET
 import shlex
 from Crypto.Cipher import AES
 from Crypto.Util.Padding import pad
+from urllib.parse import urlparse
 
 # --------------------------------------------
 ADMIN_USERNAME = "admin"
@@ -168,6 +169,12 @@ def frame_content():
 def open_redirect():
     # --------------------------------------------
     target_url = request.args.get('url', '/')
+    
+    # Validate redirect URL to prevent open redirects
+    parsed_url = urlparse(target_url)
+    if parsed_url.netloc and parsed_url.netloc != request.host:
+        # If URL has a different host, redirect to home instead
+        target_url = '/'
     
     # --------------------------------------------
     return redirect(target_url)
