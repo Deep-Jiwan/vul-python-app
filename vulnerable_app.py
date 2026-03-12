@@ -234,6 +234,11 @@ def directory_traversal():
     # --------------------------------------------
     filename = request.args.get('file', 'readme.txt')
     
+    import os
+    # Prevent directory traversal
+    if '..' in filename or '/' in filename or '\\' in filename:
+        return "Invalid filename"
+    
     try:
         # --------------------------------------------
         with open(filename, 'r') as f:
