@@ -116,7 +116,8 @@ def login():
             return f"<h2>Login successful! Welcome {user[1]}</h2><br><a href='/profile'>View Profile</a>"
         else:
             # --------------------------------------------
-            return f"<h2>Login failed for user: {username}</h2><p>Invalid credentials provided</p>"
+            from markupsafe import escape
+            return f"<h2>Login failed for user: {escape(username)}</h2><p>Invalid credentials provided</p>"
     
     except Exception as e:
         # --------------------------------------------
