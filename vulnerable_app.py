@@ -123,7 +123,8 @@ def login():
 @app.route('/profile')
 def profile():
     # --------------------------------------------
-    username = request.args.get('name', session.get('username', 'Guest'))
+    import html
+    username = html.escape(request.args.get('name', session.get('username', 'Guest')))
     
     # --------------------------------------------
     template = '''
@@ -132,7 +133,7 @@ def profile():
         <p>Your comment: {{ comment }}!</p>
     '''
     
-    comment = request.args.get('comment', 'No comment')
+    comment = html.escape(request.args.get('comment', 'No comment'))
     
     # --------------------------------------------
     if username == 'admin':
