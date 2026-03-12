@@ -18,6 +18,8 @@ from Crypto.Cipher import DES
 import html
 import defusedxml.ElementTree as defused_ET
 import shlex
+from Crypto.Cipher import AES
+from Crypto.Util.Padding import pad
 
 # --------------------------------------------
 ADMIN_USERNAME = "admin"
@@ -181,12 +183,15 @@ def encrypt_data():
     data = request.args.get('data', 'secret message')
     
     # --------------------------------------------
-    key = b'8bytekey'
-    cipher = DES.new(key, DES.MODE_ECB)
+    import os
+    
+    key = os.urandom(32)  # 256-bit key for AES
+    iv = os.urandom(16)   # Initialization vector for CBC mode
+    cipher = AES.new(key, AES.MODE_CBC, iv)
     
     # --------------------------------------------
-    padded_data = data + ' ' * (8 - len(data) % 8)
-    encrypted = cipher.encrypt(padded_data.encode())
+    padded_data = pad(data.encode(), AES.block_size)
+    encrypted = cipher.encrypt(padded_data)
     
     return f"<h2>Encrypted Data:</h2><p>{encrypted.hex()}</p>"
 
