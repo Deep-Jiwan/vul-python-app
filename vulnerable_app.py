@@ -313,9 +313,16 @@ def csrf_vulnerability():
     # --------------------------------------------
     if request.method == 'POST' or request.method == 'GET':
         import html
+        import re
         from_account = request.values.get('from')
         to_account = request.values.get('to')
         amount = request.values.get('amount')
+        
+        # Validate account names to prevent SQL injection
+        if not from_account or not re.match(r'^[a-zA-Z0-9_]+$', from_account):
+            return "<h2>Invalid from account</h2>"
+        if not to_account or not re.match(r'^[a-zA-Z0-9_]+$', to_account):
+            return "<h2>Invalid to account</h2>"
         
         # --------------------------------------------
         conn = sqlite3.connect('vulnerable_app.db')
