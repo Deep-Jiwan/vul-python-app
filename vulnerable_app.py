@@ -296,7 +296,12 @@ def resource_leak():
     log_file = request.args.get('log', 'app.log')
     
     # --------------------------------------------
-    f = open(log_file, 'w')
+    import os
+    from werkzeug.utils import secure_filename
+    safe_log_file = secure_filename(log_file)
+    if safe_log_file != log_file:
+        return "Invalid filename", 400
+    f = open(safe_log_file, 'w')
     f.write('Log entry: ' + str(time.time()))
     # --------------------------------------------
     open_files.append(f)
