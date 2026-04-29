@@ -384,11 +384,12 @@ def idor_vulnerability(account_id):
 def insecure_deserialization():
     # --------------------------------------------
     import html
+    import json
     data = request.data
     
     try:
         # --------------------------------------------
-        obj = pickle.loads(data)
+        obj = json.loads(data)
         escaped_obj = html.escape(str(obj), quote=True)
         return f"<h2>Deserialized Object:</h2><pre>{escaped_obj}</pre>"
     except Exception as e:
