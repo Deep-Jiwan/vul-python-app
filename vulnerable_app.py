@@ -247,6 +247,7 @@ def directory_traversal():
 
 @app.route('/login_with_session')
 def session_fixation():
+    import html
     # --------------------------------------------
     username = request.args.get('username')
     password = request.args.get('password')
@@ -256,11 +257,11 @@ def session_fixation():
         # --------------------------------------------
         if session_id:
             user_sessions[session_id] = username
-            return f"Logged in with session: {session_id}"
+            return f"Logged in with session: {html.escape(session_id)}"
         else:
             new_session = secrets.token_hex(16)
             user_sessions[new_session] = username
-            return f"Logged in with new session: {new_session}"
+            return f"Logged in with new session: {html.escape(new_session)}"
     
     return "Login failed"
 
