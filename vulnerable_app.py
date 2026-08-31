@@ -426,11 +426,14 @@ def xxe_vulnerability():
     
     try:
         # --------------------------------------------
+        import defusedxml.ElementTree as ET
         root = ET.fromstring(xml_data)
         result = [(child.tag, child.text) for child in root]
         return f"<h2>Parsed XML:</h2><pre>{result}</pre>"
     except Exception as e:
-        return f"Error parsing XML: {str(e)}"
+        import logging
+        logging.error(f"Error parsing XML: {e}")
+        return "Error parsing XML"
 
 
 # ============================================================================
@@ -505,7 +508,7 @@ def main():
     print("[+] Press Ctrl+C to stop\n")
     
     # --------------------------------------------
-    app.run(debug=True, host='127.0.0.1', port=3000)
+    app.run(debug=False, host='127.0.0.1', port=3000)
 
 
 if __name__ == '__main__':
