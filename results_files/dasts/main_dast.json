@@ -1,8 +1,8 @@
 {
 	"@programName": "ZAP",
 	"@version": "2.17.0",
-	"@generated": "Sun, 20 Sept 2026 07:28:26",
-	"created": "2026-09-20T07:28:26.600237282Z",
+	"@generated": "Sun, 27 Sept 2026 07:36:54",
+	"created": "2026-09-27T07:36:54.598312741Z",
 	"insights":[
 		{
 			"level": "Low",
@@ -34,7 +34,7 @@
 			"site": "http://localhost:3000",
 			"key": "insight.code.3xx",
 			"description": "Percentage of responses with status code 3xx",
-			"statistic": "2"
+			"statistic": "1"
 		},
 		{
 			"level": "Info",
@@ -181,7 +181,7 @@
 							"otherinfo": ""
 						},
 						{
-							"id": "130",
+							"id": "131",
 							"uri": "http://localhost:3000/ping?host=%3CscrIpt%3Ealert%281%29%3B%3C%2FscRipt%3E",
 							"nodeName": "http:\/\/localhost:3000\/ping (host)",
 							"method": "GET",
@@ -201,7 +201,7 @@
 							"otherinfo": ""
 						},
 						{
-							"id": "131",
+							"id": "130",
 							"uri": "http://localhost:3000/profile?name=%3C%2Fp%3E%3CscrIpt%3Ealert%281%29%3B%3C%2FscRipt%3E%3Cp%3E",
 							"nodeName": "http:\/\/localhost:3000\/profile (name)",
 							"method": "GET",
@@ -238,7 +238,7 @@
 					"reference": "<p>https://owasp.org/www-community/attacks/xss/</p><p>https://cwe.mitre.org/data/definitions/79.html</p>",
 					"cweid": "79",
 					"wascid": "8",
-					"sourceid": "1189"
+					"sourceid": "1185"
 				},
 				{
 					"pluginid": "20019",
@@ -252,12 +252,12 @@
 					"instances":[ 
 						{
 							"id": "124",
-							"uri": "http://localhost:3000/redirect?url=https%3A%2F%2F6696906930079876287.owasp.org",
+							"uri": "http://localhost:3000/redirect?url=https%3A%2F%2F5272772236678381205.owasp.org",
 							"nodeName": "http:\/\/localhost:3000\/redirect (url)",
 							"method": "GET",
 							"param": "url",
-							"attack": "https://6696906930079876287.owasp.org",
-							"evidence": "https://6696906930079876287.owasp.org",
+							"attack": "https://5272772236678381205.owasp.org",
+							"evidence": "https://5272772236678381205.owasp.org",
 							"otherinfo": "The response contains a redirect in its Location header which allows an external Url to be set."
 						}
 					],
@@ -268,7 +268,7 @@
 					"reference": "<p>https://cheatsheetseries.owasp.org/cheatsheets/Unvalidated_Redirects_and_Forwards_Cheat_Sheet.html</p><p>https://cwe.mitre.org/data/definitions/601.html</p>",
 					"cweid": "601",
 					"wascid": "38",
-					"sourceid": "1014"
+					"sourceid": "998"
 				},
 				{
 					"pluginid": "10028",
@@ -281,7 +281,7 @@
 					"desc": "<p>Open redirects are one of the OWASP 2010 Top Ten vulnerabilities. This check looks at user-supplied input in query string parameters and POST data to identify where open redirects might be possible. Open redirects occur when an application allows user-supplied input (e.g. https://nottrusted.com) to control an off-site destination. This is generally a pretty accurate way to find where 301 or 302 redirects could be exploited by spammers or phishing attacks.</p><p></p><p>For example an attacker could supply a user with the following link: https://example.com/example.php?url=https://malicious.example.com.</p><p></p><p>NOTE: For the purposes of the passive check the authority portion of the origin and destination were compared. Manual testing may be required to validate the impact of this finding.</p>",
 					"instances":[ 
 						{
-							"id": "92",
+							"id": "89",
 							"uri": "http://localhost:3000/redirect?url=https://example.com",
 							"nodeName": "http:\/\/localhost:3000\/redirect (url)",
 							"method": "GET",
@@ -298,7 +298,7 @@
 					"reference": "<p>https://cheatsheetseries.owasp.org/cheatsheets/Unvalidated_Redirects_and_Forwards_Cheat_Sheet.html</p><p>https://cwe.mitre.org/data/definitions/601.html</p>",
 					"cweid": "601",
 					"wascid": "38",
-					"sourceid": "29"
+					"sourceid": "23"
 				},
 				{
 					"pluginid": "6",
@@ -328,7 +328,7 @@
 					"reference": "<p>https://owasp.org/www-community/attacks/Path_Traversal</p><p>https://cwe.mitre.org/data/definitions/22.html</p>",
 					"cweid": "22",
 					"wascid": "33",
-					"sourceid": "150"
+					"sourceid": "154"
 				},
 				{
 					"pluginid": "90020",
@@ -388,7 +388,7 @@
 					"reference": "<p>https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html</p>",
 					"cweid": "89",
 					"wascid": "19",
-					"sourceid": "1649"
+					"sourceid": "1660"
 				},
 				{
 					"pluginid": "40018",
@@ -448,7 +448,7 @@
 							"param": "url",
 							"attack": "",
 							"evidence": "",
-							"otherinfo": "Received out-of-band interaction [GET http://10.1.0.116:37699/12009b6e-a352-4f74-ba0c-197956d0949c HTTP/1.1]\nRequest\nGET http://10.1.0.116:37699/12009b6e-a352-4f74-ba0c-197956d0949c HTTP/1.1\r\nAccept-Encoding: identity\r\nHost: 10.1.0.116:37699\r\nUser-Agent: Python-urllib/3.11\r\nConnection: close\r\n\r\n\nResponse\nHTTP/1.1 200\r\nContent-Length: 0\r\nConnection: close\r\n\r\n\n--------------------------------"
+							"otherinfo": "Received out-of-band interaction [GET http://10.1.0.238:34951/0061f71a-f95a-4d0e-9928-6b7f64059248 HTTP/1.1]\nRequest\nGET http://10.1.0.238:34951/0061f71a-f95a-4d0e-9928-6b7f64059248 HTTP/1.1\r\nAccept-Encoding: identity\r\nHost: 10.1.0.238:34951\r\nUser-Agent: Python-urllib/3.11\r\nConnection: close\r\n\r\n\nResponse\nHTTP/1.1 200\r\nContent-Length: 0\r\nConnection: close\r\n\r\n\n--------------------------------"
 						},
 						{
 							"id": "238",
@@ -458,17 +458,17 @@
 							"param": "url",
 							"attack": "",
 							"evidence": "",
-							"otherinfo": "Received out-of-band interaction [GET http://10.1.0.116:37699/046a9e2f-29de-43f5-b498-9a9f7bbbb700 HTTP/1.1]\nRequest\nGET http://10.1.0.116:37699/046a9e2f-29de-43f5-b498-9a9f7bbbb700 HTTP/1.1\r\nhost: 10.1.0.116:37699\r\nuser-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36\r\npragma: no-cache\r\ncache-control: no-cache\r\nreferer: http://localhost:3000/\r\n\r\n\nResponse\nHTTP/1.1 200\r\nContent-Length: 0\r\nConnection: close\r\n\r\n\n--------------------------------"
+							"otherinfo": "Received out-of-band interaction [GET http://10.1.0.238:34951/477e5112-0fb2-4088-a6bd-e421ec3d22a5 HTTP/1.1]\nRequest\nGET http://10.1.0.238:34951/477e5112-0fb2-4088-a6bd-e421ec3d22a5 HTTP/1.1\r\nhost: 10.1.0.238:34951\r\nuser-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36\r\npragma: no-cache\r\ncache-control: no-cache\r\nreferer: http://localhost:3000/\r\n\r\n\nResponse\nHTTP/1.1 200\r\nContent-Length: 0\r\nConnection: close\r\n\r\n\n--------------------------------"
 						}
 					],
 					"count": "2",
 					"systemic": false,
 					"solution": "<p>Do not accept remote addresses as request parameters, and if you must, ensure that they are validated against an allow-list of expected values.</p>",
-					"otherinfo": "<p>Received out-of-band interaction [GET http://10.1.0.116:37699/12009b6e-a352-4f74-ba0c-197956d0949c HTTP/1.1]</p><p>Request</p><p>GET http://10.1.0.116:37699/12009b6e-a352-4f74-ba0c-197956d0949c HTTP/1.1</p><p>Accept-Encoding: identity</p><p>Host: 10.1.0.116:37699</p><p>User-Agent: Python-urllib/3.11</p><p>Connection: close</p><p></p><p></p><p>Response</p><p>HTTP/1.1 200</p><p>Content-Length: 0</p><p>Connection: close</p><p></p><p></p><p>--------------------------------</p>",
+					"otherinfo": "<p>Received out-of-band interaction [GET http://10.1.0.238:34951/0061f71a-f95a-4d0e-9928-6b7f64059248 HTTP/1.1]</p><p>Request</p><p>GET http://10.1.0.238:34951/0061f71a-f95a-4d0e-9928-6b7f64059248 HTTP/1.1</p><p>Accept-Encoding: identity</p><p>Host: 10.1.0.238:34951</p><p>User-Agent: Python-urllib/3.11</p><p>Connection: close</p><p></p><p></p><p>Response</p><p>HTTP/1.1 200</p><p>Content-Length: 0</p><p>Connection: close</p><p></p><p></p><p>--------------------------------</p>",
 					"reference": "<p>https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html</p>",
 					"cweid": "918",
 					"wascid": "20",
-					"sourceid": "6800"
+					"sourceid": "6788"
 				},
 				{
 					"pluginid": "90035",
@@ -482,33 +482,33 @@
 					"instances":[ 
 						{
 							"id": "137",
-							"uri": "http://localhost:3000/frame_content?url=zj%7B%7B9296*7896%7D%7Dzj",
+							"uri": "http://localhost:3000/frame_content?url=zj%7B%7B6890*9617%7D%7Dzj",
 							"nodeName": "http:\/\/localhost:3000\/frame_content (url)",
 							"method": "GET",
 							"param": "url",
-							"attack": "zj{{9296*7896}}zj",
+							"attack": "zj{{6890*9617}}zj",
 							"evidence": "",
-							"otherinfo": "Proof found at [http://localhost:3000/frame_content?url=https://example.com]\ncontent:\n[\n        <h2>External Content</h2>\n        <iframe src=\"zj73401216zj\" width=\"800\" height=\"600\"></iframe>\n    Server: Werkzeug/3.1.8 Python/3.11.16\r\nDate: Sun, 20 Sep 2026 07:27:03 GMT\r\nContent-Type: text/html; charset=utf-8\r\nContent-Length: 109\r\nConnection: close\r\n]"
+							"otherinfo": "Proof found at [http://localhost:3000/frame_content?url=https://example.com]\ncontent:\n[\n        <h2>External Content</h2>\n        <iframe src=\"zj66261130zj\" width=\"800\" height=\"600\"></iframe>\n    Server: Werkzeug/3.1.8 Python/3.11.16\r\nDate: Sun, 27 Sep 2026 07:35:31 GMT\r\nContent-Type: text/html; charset=utf-8\r\nContent-Length: 109\r\nConnection: close\r\n]"
 						},
 						{
 							"id": "138",
-							"uri": "http://localhost:3000/profile?name=zj%7B%7B8504*4929%7D%7Dzj",
+							"uri": "http://localhost:3000/profile?name=zj%7B%7B8215*3471%7D%7Dzj",
 							"nodeName": "http:\/\/localhost:3000\/profile (name)",
 							"method": "GET",
 							"param": "name",
-							"attack": "zj{{8504*4929}}zj",
+							"attack": "zj{{8215*3471}}zj",
 							"evidence": "",
-							"otherinfo": "Proof found at [http://localhost:3000/profile?name=test]\ncontent:\n[\n        <h1>User Profile</h1>\n        <p>Welcome, zj41916216zj!</p>\n        <p>Your comment: No comment</p>\n    Server: Werkzeug/3.1.8 Python/3.11.16\r\nDate: Sun, 20 Sep 2026 07:27:03 GMT\r\nContent-Type: text/html; charset=utf-8\r\nContent-Length: 113\r\nConnection: close\r\n]"
+							"otherinfo": "Proof found at [http://localhost:3000/profile?name=test]\ncontent:\n[\n        <h1>User Profile</h1>\n        <p>Welcome, zj28514265zj!</p>\n        <p>Your comment: No comment</p>\n    Server: Werkzeug/3.1.8 Python/3.11.16\r\nDate: Sun, 27 Sep 2026 07:35:31 GMT\r\nContent-Type: text/html; charset=utf-8\r\nContent-Length: 113\r\nConnection: close\r\n]"
 						}
 					],
 					"count": "2",
 					"systemic": false,
 					"solution": "<p>Instead of inserting the user input in the template, use it as rendering argument.</p>",
-					"otherinfo": "<p>Proof found at [http://localhost:3000/frame_content?url=https://example.com]</p><p>content:</p><p>[</p><p>        <h2>External Content</h2></p><p>        <iframe src=\"zj73401216zj\" width=\"800\" height=\"600\"></iframe></p><p>    Server: Werkzeug/3.1.8 Python/3.11.16</p><p>Date: Sun, 20 Sep 2026 07:27:03 GMT</p><p>Content-Type: text/html; charset=utf-8</p><p>Content-Length: 109</p><p>Connection: close</p><p>]</p>",
+					"otherinfo": "<p>Proof found at [http://localhost:3000/frame_content?url=https://example.com]</p><p>content:</p><p>[</p><p>        <h2>External Content</h2></p><p>        <iframe src=\"zj66261130zj\" width=\"800\" height=\"600\"></iframe></p><p>    Server: Werkzeug/3.1.8 Python/3.11.16</p><p>Date: Sun, 27 Sep 2026 07:35:31 GMT</p><p>Content-Type: text/html; charset=utf-8</p><p>Content-Length: 109</p><p>Connection: close</p><p>]</p>",
 					"reference": "<p>https://portswigger.net/research/server-side-template-injection</p>",
 					"cweid": "1336",
 					"wascid": "20",
-					"sourceid": "3598"
+					"sourceid": "3610"
 				},
 				{
 					"pluginid": "43",
@@ -528,27 +528,27 @@
 							"param": "file",
 							"attack": "download",
 							"evidence": "",
-							"otherinfo": "The output for the source code filename [download] differs sufficiently from that of the random parameter [dvsaonwpmubvkwfgaxvwqndabhdxrfcjjcrjyv], at [72%], compared to a threshold of [75%]"
+							"otherinfo": "The output for the source code filename [download] differs sufficiently from that of the random parameter [wajkhwlvsxhlxvfkfexicjhvqhzneimdhfesnd], at [71%], compared to a threshold of [75%]"
 						},
 						{
-							"id": "233",
+							"id": "232",
 							"uri": "http://localhost:3000/encrypt?data=secret",
 							"nodeName": "http:\/\/localhost:3000\/encrypt (data)",
 							"method": "GET",
 							"param": "data",
 							"attack": "encrypt",
 							"evidence": "",
-							"otherinfo": "The output for the source code filename [encrypt] differs sufficiently from that of the random parameter [dvsaonwpmubvkwfgaxvwqndabhdxrfcjjcrjyv], at [41%], compared to a threshold of [75%]"
+							"otherinfo": "The output for the source code filename [encrypt] differs sufficiently from that of the random parameter [wajkhwlvsxhlxvfkfexicjhvqhzneimdhfesnd], at [44%], compared to a threshold of [75%]"
 						},
 						{
-							"id": "232",
+							"id": "233",
 							"uri": "http://localhost:3000/fetch_url?url=http://localhost:5000",
 							"nodeName": "http:\/\/localhost:3000\/fetch_url (url)",
 							"method": "GET",
 							"param": "url",
 							"attack": "fetch_url",
 							"evidence": "",
-							"otherinfo": "The output for the source code filename [fetch_url] differs sufficiently from that of the random parameter [dvsaonwpmubvkwfgaxvwqndabhdxrfcjjcrjyv], at [62%], compared to a threshold of [75%]"
+							"otherinfo": "The output for the source code filename [fetch_url] differs sufficiently from that of the random parameter [wajkhwlvsxhlxvfkfexicjhvqhzneimdhfesnd], at [64%], compared to a threshold of [75%]"
 						},
 						{
 							"id": "234",
@@ -558,7 +558,7 @@
 							"param": "url",
 							"attack": "frame_content",
 							"evidence": "",
-							"otherinfo": "The output for the source code filename [frame_content] differs sufficiently from that of the random parameter [dvsaonwpmubvkwfgaxvwqndabhdxrfcjjcrjyv], at [74%], compared to a threshold of [75%]"
+							"otherinfo": "The output for the source code filename [frame_content] differs sufficiently from that of the random parameter [wajkhwlvsxhlxvfkfexicjhvqhzneimdhfesnd], at [73%], compared to a threshold of [75%]"
 						},
 						{
 							"id": "236",
@@ -568,7 +568,7 @@
 							"param": "host",
 							"attack": "webapps/ping",
 							"evidence": "",
-							"otherinfo": "The output for the source code filename [webapps/ping] differs sufficiently from that of the random parameter [dvsaonwpmubvkwfgaxvwqndabhdxrfcjjcrjyv], at [74%], compared to a threshold of [75%]"
+							"otherinfo": "The output for the source code filename [webapps/ping] differs sufficiently from that of the random parameter [wajkhwlvsxhlxvfkfexicjhvqhzneimdhfesnd], at [75%], compared to a threshold of [75%]"
 						},
 						{
 							"id": "235",
@@ -578,7 +578,7 @@
 							"param": "input",
 							"attack": "process_data",
 							"evidence": "",
-							"otherinfo": "The output for the source code filename [process_data] differs sufficiently from that of the random parameter [dvsaonwpmubvkwfgaxvwqndabhdxrfcjjcrjyv], at [50%], compared to a threshold of [75%]"
+							"otherinfo": "The output for the source code filename [process_data] differs sufficiently from that of the random parameter [wajkhwlvsxhlxvfkfexicjhvqhzneimdhfesnd], at [50%], compared to a threshold of [75%]"
 						},
 						{
 							"id": "230",
@@ -588,13 +588,13 @@
 							"param": "username",
 							"attack": "login",
 							"evidence": "",
-							"otherinfo": "The output for the source code filename [login] differs sufficiently from that of the random parameter [dvsaonwpmubvkwfgaxvwqndabhdxrfcjjcrjyv], at [74%], compared to a threshold of [75%]"
+							"otherinfo": "The output for the source code filename [login] differs sufficiently from that of the random parameter [wajkhwlvsxhlxvfkfexicjhvqhzneimdhfesnd], at [74%], compared to a threshold of [75%]"
 						}
 					],
 					"count": "7",
 					"systemic": false,
 					"solution": "<p>Assume all input is malicious. Use an \"accept known good\" input validation strategy, i.e., use an allow list of acceptable inputs that strictly conform to specifications. Reject any input that does not strictly conform to specifications, or transform it into something that does. Do not rely exclusively on looking for malicious or malformed inputs (i.e., do not rely on a deny list). However, deny lists can be useful for detecting potential attacks or determining which inputs are so malformed that they should be rejected outright.</p><p></p><p>When performing input validation, consider all potentially relevant properties, including length, type of input, the full range of acceptable values, missing or extra inputs, syntax, consistency across related fields, and conformance to business rules. As an example of business rule logic, \"boat\" may be syntactically valid because it only contains alphanumeric characters, but it is not valid if you are expecting colors such as \"red\" or \"blue.\"</p><p></p><p>For filenames, use stringent allow lists that limit the character set to be used. If feasible, only allow a single \".\" character in the filename to avoid weaknesses, and exclude directory separators such as \"/\". Use an allow list of allowable file extensions.</p><p></p><p>Warning: if you attempt to cleanse your data, then do so that the end result is not in the form that can be dangerous. A sanitizing mechanism can remove characters such as '.' and ';' which may be required for some exploits. An attacker can try to fool the sanitizing mechanism into \"cleaning\" data into a dangerous form. Suppose the attacker injects a '.' inside a filename (e.g. \"sensi.tiveFile\") and the sanitizing mechanism removes the character resulting in the valid filename, \"sensitiveFile\". If the input data are now assumed to be safe, then the file may be compromised. </p><p></p><p>Inputs should be decoded and canonicalized to the application's current internal representation before being validated. Make sure that your application does not decode the same input twice. Such errors could be used to bypass allow list schemes by introducing dangerous inputs after they have been checked.</p><p></p><p>Use a built-in path canonicalization function (such as realpath() in C) that produces the canonical version of the pathname, which effectively removes \"..\" sequences and symbolic links.</p><p></p><p>Run your code using the lowest privileges that are required to accomplish the necessary tasks. If possible, create isolated accounts with limited privileges that are only used for a single task. That way, a successful attack will not immediately give the attacker access to the rest of the software or its environment. For example, database applications rarely need to run as the database administrator, especially in day-to-day operations.</p><p></p><p>When the set of acceptable objects, such as filenames or URLs, is limited or known, create a mapping from a set of fixed input values (such as numeric IDs) to the actual filenames or URLs, and reject all other inputs.</p><p></p><p>Run your code in a \"jail\" or similar sandbox environment that enforces strict boundaries between the process and the operating system. This may effectively restrict which files can be accessed in a particular directory or which commands can be executed by your software.</p><p></p><p>OS-level examples include the Unix chroot jail, AppArmor, and SELinux. In general, managed code may provide some protection. For example, java.io.FilePermission in the Java SecurityManager allows you to specify restrictions on file operations.</p><p></p><p>This may not be a feasible solution, and it only limits the impact to the operating system; the rest of your application may still be subject to compromise.</p><p></p>",
-					"otherinfo": "<p>The output for the source code filename [download] differs sufficiently from that of the random parameter [dvsaonwpmubvkwfgaxvwqndabhdxrfcjjcrjyv], at [72%], compared to a threshold of [75%]</p>",
+					"otherinfo": "<p>The output for the source code filename [download] differs sufficiently from that of the random parameter [wajkhwlvsxhlxvfkfexicjhvqhzneimdhfesnd], at [71%], compared to a threshold of [75%]</p>",
 					"reference": "<p>https://owasp.org/www-community/attacks/Path_Traversal</p><p>https://cwe.mitre.org/data/definitions/22.html</p>",
 					"cweid": "541",
 					"wascid": "33",
@@ -616,27 +616,27 @@
 							"nodeName": "http:\/\/localhost:3000\/read_log (log)",
 							"method": "GET",
 							"param": "log",
-							"attack": "xtKnDMIXgFKwhHtUlDXhLpADUuXoDSRbMuWTrmyphkpODFZksWrnIYXsWcOfDhHYkxJFJVlAnjYZQFaavAsDSJmiqRcQAaeLXQdPXRbmIitxjPvuMZbmRqoKlIZiwmxSmLJgAXfvABTEfSPEVkMFCJJWYXBXWaLpRRxUdbqMsaDPOEZdVwIIiKjoElcecTwesdpLjalYUdeiLorVRUSWjjxvxtacAoZfsdtZdEpwswYLRFbBeuKoUxfVmOiZENZhioAOagPwFiPruFDpjliEQZBEprUJjfXTbJhhTwNgnXUWAZurQPYROSuBGCXLWHlMObRLbbPkvfylaqsYhjXMcrYihuIyfSSsgFkRVxfNIQtOBceamcAapnkJfYTaEuKQgoxbjcxoJbcTPpnsTwWvqTEnERsQYmphqYLxxVNldywxioniqUKQiTFEdTPGqeCvXKFtVxGZHAQaOQhrsjlXohwsfjrMCSvvBuOUfQAnpQonGiWQjysluUCFDdoAEWVflleBxDWVfUtYRPuyHYZxTxcDAhCQNvtYwlTqsOJptpqLuVwWMyTcaoItklLvkKfhJmqeGtmOcXuTYhvRWndisegxOSHedDJAdbKMGseXGBulWwdpRaITrEOiSFugSTlEBJwYAiYSdZPtrjCadKvUmyNIIxwHhHNsHDsQAgStoCsCNWSqApGPrLMDuvrqTPxIXXliHmHlllafMBOjCNyNSiFJbsFIybjWWNiUMZHOwsZoKsNNBxNDLVlGDJNFAEXSFjPZFjmncIolDTHYoPdVNyfyVmbApCFEeUAfsTaxKRHjpBIqAIimyHXbKrACwvWERoAoHIHeGXqBDXqBANGwAQPCsJFxvVUypkZihEVkPThvxZFnvhrKTVoYRtcDiGnrDWXAjccafogmPrslifnbLrOZYmEaYoRxbmFjDLULUcPEfTksIVEhYUHdMGMyAdAiJisJedluLBIMCeUqmispNSAbyMMCKItjtSfQMuxAgDGSREiMjonfMFeXaOYKdxPBjeUkXBSrNUJbiwBKkCBwFQwTskAWygMjlbJwNJyGwviahWvBaxkbOAPjguqcLmJoOpLVcgkRSlWekpdEMrIPKWjcaNlntnfdigGsvRpjJiNCnpPvfhIUQpjcwiNcOSTubKbZnfcqPdWLNcTnVewFeYMcAOnnttdJwnnDMpQtYjrUmKQFUVHrjRcJePSStIXlWwESvCcVelKAMKxkmZwcOxIMaxOcgUTBlPZxWsGcCjAKJJPeAGxBKGwuUYZfuxOuEcdRGbBeqWxFQwvekgcNNGhFwmpdpbwOVwRDAGfYCTCMNrqrLSHvLPDKVVutkLKZfrEhGVEyjlTrrmpJLGUVYUwCfcQXKOrmkktrtPQErjEPYCIwqeBUwtawCAYrBVejmrecdMnQDfIfGpndPQmonGrZJGRXIuWpDUMJgYVkCjYCdHIuOyTKJAFjhYhSBUhgTZSlwIjMArOoIDbVxQYHyySAswJXugqkimJffCtqsqdJPuaBkdJnyAPtqAhQWOmrRelDpDLZlOOrdjHqAZLCTJdCVCfNZiRqFDPLdAaZyUmdVduJhQcLruMeASPFPJPZvyEleSOLqLFLweHdoMwJlVLMwPDrHmskelfsqiSPxuPkSMEJukZUVdjODyqNZdfTSgcjhLqPYpQbpaVvbYHxvIksPkbULowusmNLJHiJUfdYyONUSGGGYBnJvLEKhJMYjxmSscKqEclYWprQprxVfQZplWfGloytMeCloQXoCPtaYTKSpAGTBLVfhsxvDLHBpTCxPrerksBIhSdqoEYLqcYrDZEVCFRyXXqovDlWIrqlybovNFRZEubXspLLYcCmLhFcahgbTiJLIBVRGupxQxEnqSOQpnjGQQwOrXKQZvZdhQTCppDyxfSPhIZZjetcdCpllMmEfyNMyNpiuueSKLkatLmMEOUYvfxICBuTePdjupVuHNYsccvURaIWRFnvAHvWMJqtmEJmImJTRRKXyqSuABMdInNjxxlJLRlIkPIOVVVFhaCctumgYhWyZVydKTIjlyUAQmrBfYlvbpiPrZioglqDufWnfbccqgJIidNoZHuFLlbZ",
+							"attack": "nrMcViwxsQwxuhEKCrFBCElcqKeBoFJuBtoGLpPbRoTshOpeOLslXCnipIsZXHsIGxdaLjHVMDrYICjfQLaTXGvTnjCOQbsUbPOnHsyWRxTguibTrgCGhAKmCNydnBgHnsJsSdKBChwlDVtfqAMNXCQSErWnDgrIxhiKNBSRZAlbrCaCQEiwCByDTEEJQrQsdfEWOWWEQjmqGIdBwPWYERWDoGuXPixgSNIvyptTbUqjLeyYDQqGPhklVOBgxIvKIrIPyXxbmbFVBBkOwBnsgomQPZdlneocMkFviRVWXLIaAnrvXsjobsEAoFlLXuNLVjJdjncWYhcZtJiWCRIpjtIbWjPOlaxHvloaSsEiBFlwFuaYWGbmlCXePhEieZVAWiFhlHvjYITqnyIIbNfbBvIUVDNtWrpTqNKGpJvtbXlPPypjAXLZMNgMtnhqLNGPiRFTQRLDVTjYcuYlRfpwRecPctqbKuwxGIVvEsivDwlGjncNFNFRRJTdDdvVHUAwXpopMMcLRGcJRgYZYeHwrEqrdULPBwFiBioOKZAvKWnQiFquoiGathcWOQGsltqOgpteDbjDXUNoKUVPmYlNnNoBlXGRLdMmiYETbMOyVtLDOMHSYdTEUTeNtiXldKPdLfOiPDxJpvUvlSgdZsxWEFLwohZugdaUuJQrJJwfNgKDhlkwvamiBsnGCfQSAsFBcyFXsbKiitWCbwmkrtamuuuvIZJEohoZSxvfIGBojfMExYnygdyRtvvItWIUDoxqklIGKMNSBedWTnRKeEigApKAkWcZBoLxHiqdwUCSytPfEBxnoHTnTCYfSNrNJCamNSsafmCmxoZDciDDtBQslgSsjBqTZLjFcoDtyiKmINGGPSjNWvMqQXYUUHlBXVhuQWsobgJiAowQmRFSkQcItyrDvihcsybLISMJxesuGHOVZNisSWGIGREMSAQjaMuGfiVNFEVMBxFjtNCVhZRksFJIeHGqPighOWjZdMGSWptuYIWKQKyokLIwQtscqqVJaIyIgnvaisynlFlPgRwkctnOkyBBpZwYLKFGmHIDTgsDpYgwEfEvMUvhfkCLpZHBYNyHyENrYHLRVobxUDMNSDyZXurNJvXYsyIsigIFGYtssjvDVRZQxLFbinNMvejpKrfSVusHWSUxNwCwpcXhVOGLkalfcVnkUSdUBiyscZkKxjZqxagaChhYZLeSPYytnkbPSRwcyaWaIcxEwSjtGmEMXbNCajbJjZDENyZTWeRKRaeenTAnXONUDwftxxbIxTEFIchIDVeUoFZjrBaYoYgDuwwWdTwZYakyLqkUVIcTbAXhDNSummaPDCvxXvCyYdQmwnvHTsDAAWQrjQpUYbXKubmvsYovRTBlcffPWlFtybogGnKvBWbTDvCNwRucErKJViSQjbPtlFeYigRmWfXMpxdcQxZjhiEsSgbANRXDgOYANhAwtuFXAHxbkWMEaamXJERNQDrtFqeWRPoCDPxblnqSaaVSpWToabRcrKavgyvoEJGJpnOISkWJQhWQcTgrimwtsLwYFfxUsxspmkXHofkZlkXTnjgxPHQbeRQfSvdmFFZdtCkIGqyxkwKRiAWLssjecDaGhSSPyWdZHlGsWOVnIGxtBljXETQNsNkgilZShfMwyYjkjGgIkmVZlgKrPPTGlsJbWywAIYcdsygZUAOGAVePdhUjhPKCehUbCWFpnrImqMEbTFnQIvlfcWuTlGZBofmYYAAIxfqKPiBFvPiLQTiFYMlNtwnoBaGIySraVYGQsupZVqtlGrpSLvvajbMWBCOvmdbPrhZbEKaBCcjeirVaOUtCbGiRLjyfJRxRlUuxBQLJXKORjPZVxXPfEibKYjjWHEPmDyEUnwLVqrXWWIGqqnHOgXYNYCiOdMGOgKXiVCGTDrbwTbcGcaqbLDGdeElQaSRTXdlmQAyjqeNRRxGvZZXApAKbAseGCUGLGHlLexOZaKemmHHUWsKELhRfxiiWJvnUJEdexPBwSfhRGfVKuGxoikgkTLmvPTdWEusRICdGewZKrWdxLoRLPtHRCAqBZdxYaKrsohhfTUWKhufDimcwCdyaHwiQdEhOqtaN",
 							"evidence": "Connection: close",
 							"otherinfo": "Potential Buffer Overflow. The script closed the connection and threw a 500 Internal Server Error."
 						},
 						{
 							"id": "141",
-							"uri": "http://localhost:3000/transfer_funds?__debugger__=yes&cmd=resource&f=console.png",
+							"uri": "http://localhost:3000/transfer_funds?__debugger__=yes&cmd=resource&f=debugger.js",
 							"nodeName": "http:\/\/localhost:3000\/transfer_funds (__debugger__,cmd,f)",
 							"method": "GET",
 							"param": "__debugger__",
-							"attack": "QEgatcurUJEoerpjbXeEtIbCXQcywsIpFdjPwrjjCAnVqQSfuaMEVPUHPngoDbkDotgeuccOJIpVNGooHjZkSNQFmgcsbXXLYelsmCYbQFBwiKpTlZfEoStNXHwdAJWKQkcGXxoZLEUjBhCPVMZglGDDGQyITMElmdSlIYVLnqmSLhUoHrbwrstIhMLOKSOnUhAVLFYUfnUwZxRiQvNXsGRSSlwUkfmkPYEUgOvOchkXhLlYBEUcLMYrChSsTBgFvIhWXmchObEfMOueojyfNfaHVKfUmKvFxCDmppVaDWTUmqXQxqiyZMNCnmPaCTYHcVDjiaCfEmniGfayWPQagZGasMkxjCdUFBWEGYUuTGWKvwNNcwEpWMrrCWAkGZZSORKfXlPYxiTqVWbnRJbcwXWmGlFHiINQvmOcoCMYRXkyxTjEuvESOwHqtrGVtuEaZcGhvcnqOYheOKLVbXyCEyLCOTSnqAUBqyygrWoBNCPhGsIUENcvNTOPQUdgtdIKTvSEpKtQVgbnIAJocomFWKegutELJhAllQSihiHNoMZXJcONSmWRRyacMpYRWOkyposxENuUoaJwbYMGdHKbtoqCWcWklcqZgpvdJcZgvRiKHKPpbZiHNdNrcVrEUOpMdfXNOtKMNbLgHjHfsZQULtZoFkmUpbvucyUTBgMDKMrlEGlFjQIKXZGaXReAepbcWhHWHgsLUcFlMkBwibASxAWvIpIMhaYfEYnSnwUXmBPNBYFnpQJeeyyPaQAiNpeupiZXjfvSBsHrebZvUJRKCEtLyFNwXeCMyVvNQmUfysPVSWipUcSVFDOuiSBqmQJHpNPcecJvDXICglqNHVpNIylFZQqFJwcHXeathBLaBAmOifFhlLuwWOFAYEkRDjWxBvtawrrUjhEtfjAYwHTmmULAAqLVjeoweCWfUTBfjNTSIVdjtYjcpnFbtGjtEiwyOHEXmGbThbqYLFmpfFjbxKerJriiVllKkoQUygteptHBqFuEVxTRofSoaqTlRwtViJGRXNoWOnytGodNYeniDMkGiIOwlLOJEoCQuWjvZbQLbvUysHLAYEpTTsQauYdOarDcFtmHpWbXowcCKQksOqGDuneNPCrAqYSxhKWeOKKRKddWCmFMrRPjmOxGvHQqmdWIHesBRuncfhHepLpQCrmsBXRZAuQwuvYjEXwNDaVnHSKLSOiuKodcjiocdYscaiKhiPRSqKWytoHlcVMSTHKvdYWMHZdDyyiyuCwraqSdtPWyARitdGhfyYbalGyIvDtDxpwVOtcpjwQZhpIYnAJxtVNsTpGkJpdrcDSpeUMaXBWIBwLwDNSMSjFKaeHxArLuBRwfjLZfqxHgvNwWfTBPQUNIlmIHtAsDggLtlbyHWrGPIqUiuJAsiVtuJNKayUjnBPSaJBCIuMtFpCXhTDihRmAtikotpvNTmdLvlNsAWoRWeTbqofMxNucJwaPxOOEZsjexSmHjHbBuapWjnxyNIUHELVPyGxwdkWWJywTqBYQrgTeMgarqSbsiZiftcBNNnVwujsHcPQumIMgICFGZmprLYJYexNPSbfjbtcLWgeroYkkXOLETjYKLjnGNJXJeLdqPNWUCBNZOfxASdHvuajuoGiKRQtWujuHEQPbbIxSLwwdCPaucXuhASyZAAcSWpRhiPsdoQmAftuGkgenZQTPbPmWODTrGNVUdyddtVEDWunOZKaoTufvkOWXcdoFwgQVGRjIsNVTIynLmViiHUYHOYewrfVgsdrcEwDyxplsqWPLoRwfmXlnpkPRgxJONTJsKEFVQNFmMahRaseuYAOnOjhbsjqECltYRKEgecKwhhpCRSbOwKSeVvwaBvEWLcplSZCXpIbVsVuyaRVYrEaFeaYgHUBSIJdkZAhdqSDPCDapnngseStDMZlLgQAVwtcLLqZXLbPGqEYIYdSiifFEMvoGmhApyPAvyWilHiILvhYekMSMnXZoINhSdtxmdaugFYilKcBjuInoQphRZjpkMWjZVvNBoCTMeyeglxjydtYStrDFFGGfNOhowemNSgrDYbGAgoZunVjdClMQDsTHMPSotyOewkaGJyqhMaudrwSIL",
+							"attack": "ABWTPXFinoNwqSRudZcLjLoiRcxAmonxToJnFNechfQWRKbYVhcAjbsiDKKbaPuwxesJVbjGEbrWwxMVsTnxPMdGEgIyaWJIYeSlnuTOSpwYGWRrTVgxouypbitbcnAaUFwCGEMmJGFCcfMJhDHRKdXsiodBeOWPaiBvhxSbFSYbERQInfZAZraYeRLkvVyOXQBafKSpIQIEjmxpsHtmYxkstNSeGZtIZQmBkYNhSkNwihqJgnrcAMghAWgbqeAhZOrgRSCcMwxVSNTDmVlETceHBFHbVawkxXTkJdLmATFHQsoOpLLoXQLqNAncsMFSmBbDDGLiJUWYkqAjjDihkAuruVQZXNuLTOllyFRowkyfrDsxMsQEPyNaikxKHnfHuxWONEoYZEbBGGGTeZYrMWclOLqemELsapMkfvMArnBYtYWEfEHDpfJcEQYFJniujFaUStGxcWqdAcWCuLhFPdLMsBQouyVuEcJElbxtxiqpQtPuMMJVnIBYqNxiHiADgBvoGYroKdyqPPeJitAIodWMtXmIoVTMFXwCNTWFGjFDOEGPKKbGnsDyAsWBagvyKidJvYduHehrVxSHJoRRxSsNRIQEvtAoEIYLBqRcBZKbtjHxhVpcvLtfbHATsalwYIjjHkyYGMcgVZidMySCCVVGCRsptbFcyffWwvoFlPchJsjAAFFtxSJgxoDIvStDIBfOIoUNZWXBIWkcSAaUmQIsgqVHdPsjYmOVgDBvZApKqedXVTcOGPfjNVCKDKsbKoeEKWUEdHAGNsvESSbOkGREuwDMPkmxLSetEpoxqxiogSbbewAmCnIheeLVUZcDtieZGnfAVTdHwEBFUYKRSUnOkADUXDiKwjHbrAxorPtQCZVLqUgdXlMeAaMsFHgTLXjAQdeYgMDJyQKIsamkEexEhvLvERDmibfXORTYnHRmOOEeKDwVKieWyRZrjCfMgvsHVvXlsjiDCoOLvMSkFDJpeOFUnBYyrGKRBrtYNKpdyBGMiEKAcvqpmQrUfjHHLtSuiTNXMjjEOOXhYyRyWqVlqBkqYLLJLbaWyPLvADvWjERDaAaDTduWeDvgmXblXILSLoNbyQpxpZXHxqgtiTRRMFeFNecJZiSwVNwmZLdiaKFFRyTUSVnGvSlywXmGwGByvtXqXZdCXKtutGaAjPmybSGMqoyPmCWbuFmqmfNYmTmASsTcvQAduceVyOebVLGNsjvhBunANUUrWgJqEDFNeiUmicLkVXnCMuPxMUtNASfYlAhjwdxrHSbxvWmKMdMugRHTjnBDkCfmJgbmASkTnFQQZUqcFxokfMhdykmPRtQObpleedbGBrOHAHanifpFITKWofXltagDTUAhadGYYKuiEpRAJgLBiGSGcnHZDpDrAlcuwMabFMHhUEIFJyxMNaNtLtsfZWkJrXnfMnaKCketRNGipRFNNwDjLppqpsvnKeUbMxkCIyUevoWVqIhPpKZGxmeRxRxEfmxKPsVBiKqAQuGVdHlTbtgrnBWwvidRPelQwSgkceuuEcHrIOgaHZWqjWVMokHaTSVHCoABFNUIGVwjdNOLbYkmdolSHILrjnnGuOuHCsmPLAPaTVIgvDKmFTIxQnJjmdDBrvAuBDnlHlXCAXkjRsRpeajgnlRIJLjcoKKHBGtcFCcLkSdKKsXGVgTCelDiehpGwcrdonBVnIHWcHSDDVOfpQAkhxkTRTMXPpGuCDyLhRmNbcIXiFQnqbmGFygdCMOChIioEVyCXaBUDsfKRhNllErVNPXWTWCsMfkqYGBgNbwOOkapCBFlSZxQgLWAhZQCnHeIfStqxpINPgsKywUPxNCDOFUWfFCZTPTxjUQpZyildMLuTuiKUVWeNtuUgHvdOSqOZubndLeKpaRgOLJtcOKrqRVRLvpOXrjRJjfpKgTqUCxcxBtXOStTPkfROYeIjfMHKUioaIJVguCueNDRaASEvgxljkLxFINNFmpEiivaAlOOnidCgAGULkWOwcjhUtwFnqLkJTwDyXvrjNrYKUulNJBiGKLpfZGROlwikoMakVHGfhncJmHUCFqQUqUXAGHkLdKnNwoYGrwKNPxeDNbZBSxvExJE",
 							"evidence": "Connection: close",
 							"otherinfo": "Potential Buffer Overflow. The script closed the connection and threw a 500 Internal Server Error."
 						},
 						{
 							"id": "142",
-							"uri": "http://localhost:3000/transfer_funds?__debugger__=yes&cmd=resource&f=console.png",
+							"uri": "http://localhost:3000/transfer_funds?__debugger__=yes&cmd=resource&f=debugger.js",
 							"nodeName": "http:\/\/localhost:3000\/transfer_funds (__debugger__,cmd,f)",
 							"method": "GET",
 							"param": "cmd",
-							"attack": "PnpHNRywAsuiSBkmvSEOvPfuxvmmdLVrWopaCwUyHApSZrPDefHdYYIQPMqWhKXwfhyxtoQjySOAGTBiWQayPdOPbLBIrhiwVSHrCvVcquMmbORQoeHNwgDCJJpGslpflmCHJUgdiDdvmRfQydKkGsQSdJqSLjSlCFWcKecHjQmLpOZghxVUKAHFeacwIeJdmLyEYrcTlgPaMSoxUgpskbIoHPGSGnbAQZxymPPrPtchIWtxguMgejLUlkyeZrPjansXkoBhklVIxwhmSRinQGYTIBqhqUZQfvNxCSIKTNOswQstpsRgHrxHqUlUPEgOsxAHXlJvijkVMCqRpuAxKQIaUhUBKJNDIxQSuXxMsihspByLwCThmyilywsiVfNNkjAFogMAbiONcZHPxouLdrndWBdllEEUltAmLTFwctrbHUQtcpcrnBGRXSDyXHiaerCmyIjUmKbVQVsCkFYTgoyGdHqVFKmFMVmfArBgBJGYMPGTOBmhfKWumJYStYpcAaDjmyOjovmMrnftChwyXEnbfSNvcHypNACEcwVfAtTGKlEYJDuKScZJccLwnAyWZEbmmZLxHUqFieGfiNoYUHKgmePcjYOOQKgubWlnrtIHjWlWwEvgkULSqoQkFmQjOwQYrYTKceReWrjTKwIVJNBCuZkXvGaLPdIbtKVuqnOpZsUOriHETyQYlmIsMtaeJSRRcdhEODbJISEuWRYPPaddaAxdcFXnOtQAaUqZjDIcclxBgofhpDgGSlgYlRJCyGwKJngLStXVrMbSkOXDsTjUpHBNUSsqEUVKZIRcWIBWoARgSVfQuHdIRHjUxUYwxAKCElgaFCfqaPcOpfcIJkYwEITAWWOaVJXhZFrFeEvnQIvfHdvMvmVqFSUMwriTgDGqiDOnUGqykuPmoFNKyjygjXQiopZxoKOxKOWLNSNnXFLyrlNHpufThvkNChnlQJxOcWRwJRcnmhtrbglDmYClwmXaKYuVgVZqBSBdhSabhHhsLTiVtyZdBiqZqvwCPZnpuTOoEJnZttLIZywwwBwoWQBayxEmSEVBbmDVUNMRlLvwGupWHueXCjOBbNvViNodSbHpIETDNQMOJdmkHldkeciVxCNtrtxKjOSGTGkgNhQXhgeCkeoIauJhWHQKcIqSFAqmAOChnAvRFINGqokcRajfXteXrLaVvqMZDbQNqoaxHvMqELQuIjqgJNNCUwZANXSmUqTSeOIgLxBPlbqTakKxYorwDRFMcvPIWxTRAxejYuRFkebRHxNaeqLNhZBYOFdVVuvPjTgycblsTPumgaZJolVenMMJnfRtZTAXScwvaLXRpdgVssZxLURuupNaTSPsLQxtvRFtpKPxuVgsmgtPPIcYGfTmnnMBSfTAFZgVNpRMyiwsytmoLPCMVTmIlImKIiUDFVFRPnEKlwHUolNCStNPXUBjkroTOkyYUXbgTTZlQCbAGCoqJsKcwVvMlZhcfMxkAPHcmMKpMULIFeRBGFZThXEHRjvnyNjVXQnpXqPTEfpGxwFNZPEaAAyOjyXBbJUgCuBrjLBMUVPlQfScVTlDunJgPtNfrawYLnFvpvvEabduDStXuGWCrwImSGxqdShkjKumFPwdDtVperlNLjRWqvKLxmyZGwvitKWCthldtcuokSYMriBiYRGpTgybvjcETHMvYOqliGGAuJrHDACILVNbUQnvFNvqpJeCcXSMujWswCRQkBDdSwlvVlUfTCGeWmoeUtrhOrStVsTqOmfkfnEkSVZoAIZTVbPyBeehlgthiGbZkswUmSYBBJUqQVsNmgRgUrbakbBYRXRNQJLavjrUtsDWCQACfrXIBuStGfkNLinOFICGFuLDTIAPmAsYNeNVnQFVBMVlkxgjlBFqnewCJdESpDjKMXaIAnBIENRFRTQSMmsThwIEEZVMrufyqLPjCLIUImeNRfMHosJAdYbgxhMihlfHbArAEhuPKanRaRpdURYVYfxgLdmansgHOtqPSYjtGrUjjDhriLpVIPLQCiYlfPEBiAofrZbucTvYWTOMEvHOjiXQWTZcbBmoGdihBWuPycSMcnhfVgNqbEubqQIRvDTsEmtFfwas",
+							"attack": "LaynxJSbOowvSJvWMfVrgxArboGGBKJXuAtVYJWebYUdhayrNErsAxYGOSKHEqhVmykUbZjLWhHoqcdXSFWIHfbLXBddDnOcjwsnoofyjKtdsebGuMoUBfrscoAYHsctPmAsUQNkwfFgUHvXYykQOFuRZjMiLImVWtRLTYrZfljDEqqBPehoMqfbjwqKGJvTljCyMUkicsRWHOrCBstXNLklChdRNjJplVqeZhVscjoPiRjZSwyILPdPsFRuCEfBtAYHCPUJPNacyZKuCWKavZTWNebdFSaUAMspgmBWOgbarCEYoGncsnUVNZiNNZQGFbAxPUHOkBopsrYiZHpsVPTxaHURjbUiJgqrHZyBaCEYfZycXauStcTnwdDkOoREjFGjoNfRRSOSINLSMKaCSMrZdwnNpTfitQFOdGDchCCbVaKgdkYkMvSSiHCimBUbmUlLmVjBmQiigqHtWmcjpRSFOagUKDtxuOlKKOSSBttayHrKRXGsbEoqyYFyMknirEBJIYqYbbsvyiCJvvGDJsNooYRKLJGdxokoMEeYskDrNxnSVTGOZUGMvFgmpVUpjShZIZoqYnScTWSfxDgXDqeAMjqEGQFYypyvleHlrWSpDWfLWhblwxgKOIJGEejcKHaXTprOUrGuRYSNSQAYtymNYQfKdkoUoFRXTZQwIBQrKKTyaiTuJoHiZWgNXaDoDokVAUTAHBxjLkLNoYiRpXOAKdaybeFuYgWDtqPlgHMtTtNIIcdyxsPanPMkjNNmHQUgYsaQTidwJrlsJnQEbrpVGwCcPFUqaijnGbPHdtdjciAyaDtgxEIjlxKoBPQxqBMsumCebfnrXAilaXxlnTNXiWHlWRGDkGWQhQlPnEkjDFFXWBTPTvuywsCSVmJaDpbAbsRfWsmqsrlnDtkkiIJGJlZAMGOvvGmUvqWDYRHcIYpkCSliXypkkqnMWtxPLSgqFsnlSxChQoywpnDtVWegygrYLxtByAYCWNiZCTRcPpTvTqNNKXxQvWbDIOBBbnZBgTsxqOIHWmmeuDhTSjFNyyiMOBrISKcomARPYqUxxuTqgciYApPXCfrFyXltxrZvHkXFKyqZNCwTmrQwkUFRMOPtKIJrbBofMydtHdrkFPChBFivlvPbruMEQwgrnZkpUnIKsZTkkLSGAdEMbUChuBxUXhNVKiIoykphEwEklegyOjstPZqitmodQfpZRsKNsPnpVpipZmQVTffnYiujZFaJKebJaPeJswenJLkWmVpmAfUHMOlkpWqvxYvYaoAQHJtMSZTYkpJQRlPqpcRbmKWnNYmZWDDTfpYiohGKywjeINkQYxYolxEkOafmDrAuhHSNyNvjcOUrGRnGHenlCPaiwggDfEZSvpLinFXGEBKQMDBYytoNpJwdrxpTepsWuatZQvhJUBesfgelqBhWfsTIcCXChfdvhhvrVuvNtGrYNruwjXWfvaFeKqJqMmKZqMMfulEtfoVfQgGQUOecjccAMjnDrXNUyrbwKchgsMTEibXslgxwuwajnKdhTVLpZIltQomfKdZjWtrdgGCbYmgMshcKBpEuViCxkrvxkZALWthQoSNYidQoNsljbDOhXwGuoFaHesvZXJZVktsjQeerAslruGuDYgvlyRIDfVLpFquLCIlrEsrxlvVGdQCbHrUkQCCqrgbfOJqoQvNPLuwWbJmEowqiNtRTNWpelhEukJsqGNRFBiipspnAWNUkqlPOEUxjZshSNQierFpLnMMIhseBnkxLlpgEXPTpsKknUnMNcUtQCjgtYcwAffxoiLRjNtqfdFvJQpiXlmZqPsUkKThsnqCpukCaTXRvnGPgqmKUiqiHSjZUmcYuZNfJPUVAPYvCksHjbCXHWYCFOcSmsCPxSMqBmUAnOXlNThUeJyxLRaTMctFvquZNiIZktTNAZBvroNIJutpURfDCjphyyFDXhTKglXwObGkBpKyfnMQuobpCucwGTAQaldxHvuFAmMRIICYCLCrpfGSmJmmvnSpvfXrWBpPCPMosmBqBnsjSjGISGnYuKJuJOcAOtaHglPBYveMFaKebBCHMVbxJYcAKGhoATUHfCFHDeiFAAFtj",
 							"evidence": "Connection: close",
 							"otherinfo": "Potential Buffer Overflow. The script closed the connection and threw a 500 Internal Server Error."
 						}
@@ -648,7 +648,7 @@
 					"reference": "<p>https://owasp.org/www-community/attacks/Buffer_overflow_attack</p>",
 					"cweid": "120",
 					"wascid": "7",
-					"sourceid": "4485"
+					"sourceid": "4486"
 				},
 				{
 					"pluginid": "10038",
@@ -671,7 +671,7 @@
 							"otherinfo": ""
 						},
 						{
-							"id": "52",
+							"id": "53",
 							"uri": "http://localhost:3000/frame_content?url=https://example.com",
 							"nodeName": "http:\/\/localhost:3000\/frame_content (url)",
 							"method": "GET",
@@ -681,9 +681,9 @@
 							"otherinfo": ""
 						},
 						{
-							"id": "48",
-							"uri": "http://localhost:3000/profile?name=test",
-							"nodeName": "http:\/\/localhost:3000\/profile (name)",
+							"id": "20",
+							"uri": "http://localhost:3000/login",
+							"nodeName": "http:\/\/localhost:3000\/login",
 							"method": "GET",
 							"param": "",
 							"attack": "",
@@ -691,7 +691,7 @@
 							"otherinfo": ""
 						},
 						{
-							"id": "15",
+							"id": "16",
 							"uri": "http://localhost:3000/robots.txt",
 							"nodeName": "http:\/\/localhost:3000\/robots.txt",
 							"method": "GET",
@@ -802,21 +802,21 @@
 					"instances":[ 
 						{
 							"id": "239",
-							"uri": "http://localhost:3000/transfer_funds?__debugger__=yes&cmd=resource&f=console.png",
+							"uri": "http://localhost:3000/transfer_funds?__debugger__=yes&cmd=resource&f=debugger.js",
 							"nodeName": "http:\/\/localhost:3000\/transfer_funds (__debugger__,cmd,f)",
 							"method": "GET",
 							"param": "__debugger__",
-							"attack": "58777770703243585291636553997826131531563540",
+							"attack": "32372190392934741403933987275056889677341604",
 							"evidence": "HTTP/1.1 500 INTERNAL SERVER ERROR",
 							"otherinfo": "Potential Integer Overflow. Status code changed on the input of a long string of random integers."
 						},
 						{
 							"id": "240",
-							"uri": "http://localhost:3000/transfer_funds?__debugger__=yes&cmd=resource&f=console.png",
+							"uri": "http://localhost:3000/transfer_funds?__debugger__=yes&cmd=resource&f=debugger.js",
 							"nodeName": "http:\/\/localhost:3000\/transfer_funds (__debugger__,cmd,f)",
 							"method": "GET",
 							"param": "cmd",
-							"attack": "75602551445409689655197317970247921416927580",
+							"attack": "30684393532971455778976614292478407892438292",
 							"evidence": "HTTP/1.1 500 INTERNAL SERVER ERROR",
 							"otherinfo": "Potential Integer Overflow. Status code changed on the input of a long string of random integers."
 						}
@@ -828,7 +828,7 @@
 					"reference": "<p>https://en.wikipedia.org/wiki/Integer_overflow</p><p>https://cwe.mitre.org/data/definitions/190.html</p>",
 					"cweid": "190",
 					"wascid": "3",
-					"sourceid": "7923"
+					"sourceid": "7911"
 				},
 				{
 					"pluginid": "10020",
@@ -852,16 +852,6 @@
 						},
 						{
 							"id": "51",
-							"uri": "http://localhost:3000/encrypt?data=secret",
-							"nodeName": "http:\/\/localhost:3000\/encrypt (data)",
-							"method": "GET",
-							"param": "x-frame-options",
-							"attack": "",
-							"evidence": "",
-							"otherinfo": ""
-						},
-						{
-							"id": "46",
 							"uri": "http://localhost:3000/frame_content?url=https://example.com",
 							"nodeName": "http:\/\/localhost:3000\/frame_content (url)",
 							"method": "GET",
@@ -871,7 +861,7 @@
 							"otherinfo": ""
 						},
 						{
-							"id": "49",
+							"id": "15",
 							"uri": "http://localhost:3000/login",
 							"nodeName": "http:\/\/localhost:3000\/login",
 							"method": "GET",
@@ -881,9 +871,19 @@
 							"otherinfo": ""
 						},
 						{
-							"id": "40",
+							"id": "52",
 							"uri": "http://localhost:3000/profile?name=test",
 							"nodeName": "http:\/\/localhost:3000\/profile (name)",
+							"method": "GET",
+							"param": "x-frame-options",
+							"attack": "",
+							"evidence": "",
+							"otherinfo": ""
+						},
+						{
+							"id": "55",
+							"uri": "http://localhost:3000/set_header?username=test",
+							"nodeName": "http:\/\/localhost:3000\/set_header (username)",
 							"method": "GET",
 							"param": "x-frame-options",
 							"attack": "",
@@ -938,7 +938,7 @@
 					"reference": "<p>https://nhimg.org/twitter-breach</p>",
 					"cweid": "540",
 					"wascid": "13",
-					"sourceid": "43"
+					"sourceid": "35"
 				},
 				{
 					"pluginid": "90022",
@@ -951,7 +951,7 @@
 					"desc": "<p>This page contains an error/warning message that may disclose sensitive information like the location of the file that produced the unhandled exception. This information can be used to launch further attacks against the web application. The alert could be a false positive if the error message is found inside a documentation page.</p>",
 					"instances":[ 
 						{
-							"id": "111",
+							"id": "93",
 							"uri": "http://localhost:3000/transfer_funds",
 							"nodeName": "http:\/\/localhost:3000\/transfer_funds",
 							"method": "GET",
@@ -978,7 +978,7 @@
 					"reference": "",
 					"cweid": "550",
 					"wascid": "13",
-					"sourceid": "43"
+					"sourceid": "35"
 				},
 				{
 					"pluginid": "90004",
@@ -1002,16 +1002,6 @@
 						},
 						{
 							"id": "76",
-							"uri": "http://localhost:3000/encrypt?data=secret",
-							"nodeName": "http:\/\/localhost:3000\/encrypt (data)",
-							"method": "GET",
-							"param": "Cross-Origin-Embedder-Policy",
-							"attack": "",
-							"evidence": "",
-							"otherinfo": ""
-						},
-						{
-							"id": "75",
 							"uri": "http://localhost:3000/frame_content?url=https://example.com",
 							"nodeName": "http:\/\/localhost:3000\/frame_content (url)",
 							"method": "GET",
@@ -1021,9 +1011,19 @@
 							"otherinfo": ""
 						},
 						{
-							"id": "67",
-							"uri": "http://localhost:3000/profile?name=test",
-							"nodeName": "http:\/\/localhost:3000\/profile (name)",
+							"id": "48",
+							"uri": "http://localhost:3000/login",
+							"nodeName": "http:\/\/localhost:3000\/login",
+							"method": "GET",
+							"param": "Cross-Origin-Embedder-Policy",
+							"attack": "",
+							"evidence": "",
+							"otherinfo": ""
+						},
+						{
+							"id": "79",
+							"uri": "http://localhost:3000/set_header?username=test",
+							"nodeName": "http:\/\/localhost:3000\/set_header (username)",
 							"method": "GET",
 							"param": "Cross-Origin-Embedder-Policy",
 							"attack": "",
@@ -1061,17 +1061,7 @@
 							"otherinfo": ""
 						},
 						{
-							"id": "81",
-							"uri": "http://localhost:3000/encrypt?data=secret",
-							"nodeName": "http:\/\/localhost:3000\/encrypt (data)",
-							"method": "GET",
-							"param": "Cross-Origin-Opener-Policy",
-							"attack": "",
-							"evidence": "",
-							"otherinfo": ""
-						},
-						{
-							"id": "79",
+							"id": "77",
 							"uri": "http://localhost:3000/frame_content?url=https://example.com",
 							"nodeName": "http:\/\/localhost:3000\/frame_content (url)",
 							"method": "GET",
@@ -1081,9 +1071,19 @@
 							"otherinfo": ""
 						},
 						{
-							"id": "71",
-							"uri": "http://localhost:3000/profile?name=test",
-							"nodeName": "http:\/\/localhost:3000\/profile (name)",
+							"id": "50",
+							"uri": "http://localhost:3000/login",
+							"nodeName": "http:\/\/localhost:3000\/login",
+							"method": "GET",
+							"param": "Cross-Origin-Opener-Policy",
+							"attack": "",
+							"evidence": "",
+							"otherinfo": ""
+						},
+						{
+							"id": "80",
+							"uri": "http://localhost:3000/set_header?username=test",
+							"nodeName": "http:\/\/localhost:3000\/set_header (username)",
 							"method": "GET",
 							"param": "Cross-Origin-Opener-Policy",
 							"attack": "",
@@ -1121,16 +1121,6 @@
 							"otherinfo": ""
 						},
 						{
-							"id": "74",
-							"uri": "http://localhost:3000/encrypt?data=secret",
-							"nodeName": "http:\/\/localhost:3000\/encrypt (data)",
-							"method": "GET",
-							"param": "Cross-Origin-Resource-Policy",
-							"attack": "",
-							"evidence": "",
-							"otherinfo": ""
-						},
-						{
 							"id": "72",
 							"uri": "http://localhost:3000/frame_content?url=https://example.com",
 							"nodeName": "http:\/\/localhost:3000\/frame_content (url)",
@@ -1141,7 +1131,7 @@
 							"otherinfo": ""
 						},
 						{
-							"id": "25",
+							"id": "67",
 							"uri": "http://localhost:3000/health",
 							"nodeName": "http:\/\/localhost:3000\/health",
 							"method": "GET",
@@ -1151,9 +1141,19 @@
 							"otherinfo": ""
 						},
 						{
-							"id": "63",
-							"uri": "http://localhost:3000/profile?name=test",
-							"nodeName": "http:\/\/localhost:3000\/profile (name)",
+							"id": "42",
+							"uri": "http://localhost:3000/login",
+							"nodeName": "http:\/\/localhost:3000\/login",
+							"method": "GET",
+							"param": "Cross-Origin-Resource-Policy",
+							"attack": "",
+							"evidence": "",
+							"otherinfo": ""
+						},
+						{
+							"id": "78",
+							"uri": "http://localhost:3000/set_header?username=test",
+							"nodeName": "http:\/\/localhost:3000\/set_header (username)",
 							"method": "GET",
 							"param": "Cross-Origin-Resource-Policy",
 							"attack": "",
@@ -1208,7 +1208,7 @@
 					"reference": "<p>https://owasp.org/www-community/attacks/Full_Path_Disclosure</p>",
 					"cweid": "209",
 					"wascid": "13",
-					"sourceid": "43"
+					"sourceid": "35"
 				},
 				{
 					"pluginid": "10063",
@@ -1231,7 +1231,7 @@
 							"otherinfo": ""
 						},
 						{
-							"id": "69",
+							"id": "70",
 							"uri": "http://localhost:3000/frame_content?url=https://example.com",
 							"nodeName": "http:\/\/localhost:3000\/frame_content (url)",
 							"method": "GET",
@@ -1241,9 +1241,9 @@
 							"otherinfo": ""
 						},
 						{
-							"id": "60",
-							"uri": "http://localhost:3000/profile?name=test",
-							"nodeName": "http:\/\/localhost:3000\/profile (name)",
+							"id": "41",
+							"uri": "http://localhost:3000/login",
+							"nodeName": "http:\/\/localhost:3000\/login",
 							"method": "GET",
 							"param": "",
 							"attack": "",
@@ -1251,7 +1251,7 @@
 							"otherinfo": ""
 						},
 						{
-							"id": "23",
+							"id": "27",
 							"uri": "http://localhost:3000/robots.txt",
 							"nodeName": "http:\/\/localhost:3000\/robots.txt",
 							"method": "GET",
@@ -1261,7 +1261,7 @@
 							"otherinfo": ""
 						},
 						{
-							"id": "27",
+							"id": "25",
 							"uri": "http://localhost:3000/sitemap.xml",
 							"nodeName": "http:\/\/localhost:3000\/sitemap.xml",
 							"method": "GET",
@@ -1301,7 +1301,7 @@
 							"otherinfo": ""
 						},
 						{
-							"id": "17",
+							"id": "54",
 							"uri": "http://localhost:3000/health",
 							"nodeName": "http:\/\/localhost:3000\/health",
 							"method": "GET",
@@ -1311,9 +1311,9 @@
 							"otherinfo": ""
 						},
 						{
-							"id": "50",
-							"uri": "http://localhost:3000/profile?name=test",
-							"nodeName": "http:\/\/localhost:3000\/profile (name)",
+							"id": "28",
+							"uri": "http://localhost:3000/login",
+							"nodeName": "http:\/\/localhost:3000\/login",
 							"method": "GET",
 							"param": "",
 							"attack": "",
@@ -1331,7 +1331,7 @@
 							"otherinfo": ""
 						},
 						{
-							"id": "14",
+							"id": "18",
 							"uri": "http://localhost:3000/sitemap.xml",
 							"nodeName": "http:\/\/localhost:3000\/sitemap.xml",
 							"method": "GET",
@@ -1371,7 +1371,7 @@
 							"otherinfo": "This issue still applies to error type pages (401, 403, 500, etc.) as those pages are often still affected by injection issues, in which case there is still concern for browsers sniffing pages away from their actual content type.\nAt \"High\" threshold this scan rule will not alert on client or server error responses."
 						},
 						{
-							"id": "61",
+							"id": "63",
 							"uri": "http://localhost:3000/frame_content?url=https://example.com",
 							"nodeName": "http:\/\/localhost:3000\/frame_content (url)",
 							"method": "GET",
@@ -1381,7 +1381,7 @@
 							"otherinfo": "This issue still applies to error type pages (401, 403, 500, etc.) as those pages are often still affected by injection issues, in which case there is still concern for browsers sniffing pages away from their actual content type.\nAt \"High\" threshold this scan rule will not alert on client or server error responses."
 						},
 						{
-							"id": "18",
+							"id": "62",
 							"uri": "http://localhost:3000/health",
 							"nodeName": "http:\/\/localhost:3000\/health",
 							"method": "GET",
@@ -1391,7 +1391,7 @@
 							"otherinfo": "This issue still applies to error type pages (401, 403, 500, etc.) as those pages are often still affected by injection issues, in which case there is still concern for browsers sniffing pages away from their actual content type.\nAt \"High\" threshold this scan rule will not alert on client or server error responses."
 						},
 						{
-							"id": "65",
+							"id": "33",
 							"uri": "http://localhost:3000/login",
 							"nodeName": "http:\/\/localhost:3000\/login",
 							"method": "GET",
@@ -1401,9 +1401,9 @@
 							"otherinfo": "This issue still applies to error type pages (401, 403, 500, etc.) as those pages are often still affected by injection issues, in which case there is still concern for browsers sniffing pages away from their actual content type.\nAt \"High\" threshold this scan rule will not alert on client or server error responses."
 						},
 						{
-							"id": "53",
-							"uri": "http://localhost:3000/profile?name=test",
-							"nodeName": "http:\/\/localhost:3000\/profile (name)",
+							"id": "68",
+							"uri": "http://localhost:3000/set_header?username=test",
+							"nodeName": "http:\/\/localhost:3000\/set_header (username)",
 							"method": "GET",
 							"param": "x-content-type-options",
 							"attack": "",
@@ -1431,7 +1431,7 @@
 					"desc": "<p>The given request has been identified as an authentication request. The 'Other Info' field contains a set of key=value lines which identify any relevant fields. If the request is in a context which has an Authentication Method set to \"Auto-Detect\" then this rule will change the authentication to match the request identified.</p>",
 					"instances":[ 
 						{
-							"id": "108",
+							"id": "102",
 							"uri": "http://localhost:3000/login_with_session?password=password123&username=admin",
 							"nodeName": "http:\/\/localhost:3000\/login_with_session (password,username)",
 							"method": "GET",
@@ -1441,7 +1441,7 @@
 							"otherinfo": "userParam=username\nuserValue=admin\npasswordParam=password\nreferer=http://localhost:3000/"
 						},
 						{
-							"id": "112",
+							"id": "114",
 							"uri": "http://localhost:3000/login",
 							"nodeName": "http:\/\/localhost:3000\/login ()(password,username)",
 							"method": "POST",
@@ -1458,7 +1458,7 @@
 					"reference": "<p>https://www.zaproxy.org/docs/desktop/addons/authentication-helper/auth-req-id/</p>",
 					"cweid": "-1",
 					"wascid": "-1",
-					"sourceid": "31"
+					"sourceid": "36"
 				},
 				{
 					"pluginid": "10058",
@@ -1501,7 +1501,7 @@
 					"desc": "<p>The request appeared to contain sensitive information leaked in the URL. This can violate PCI and most organizational compliance policies. You can configure the list of strings for this check to add or remove values specific to your environment.</p>",
 					"instances":[ 
 						{
-							"id": "104",
+							"id": "106",
 							"uri": "http://localhost:3000/login_with_session?password=password123&username=admin",
 							"nodeName": "http:\/\/localhost:3000\/login_with_session (password,username)",
 							"method": "GET",
@@ -1511,7 +1511,7 @@
 							"otherinfo": "The URL contains potentially sensitive information. The following string was found via the pattern: pass\npassword"
 						},
 						{
-							"id": "105",
+							"id": "107",
 							"uri": "http://localhost:3000/login_with_session?password=password123&username=admin",
 							"nodeName": "http:\/\/localhost:3000\/login_with_session (password,username)",
 							"method": "GET",
@@ -1521,7 +1521,7 @@
 							"otherinfo": "The URL contains potentially sensitive information. The following string was found via the pattern: user\nusername"
 						},
 						{
-							"id": "90",
+							"id": "60",
 							"uri": "http://localhost:3000/set_header?username=test",
 							"nodeName": "http:\/\/localhost:3000\/set_header (username)",
 							"method": "GET",
@@ -1538,7 +1538,7 @@
 					"reference": "",
 					"cweid": "598",
 					"wascid": "13",
-					"sourceid": "31"
+					"sourceid": "36"
 				},
 				{
 					"pluginid": "10027",
@@ -1551,7 +1551,7 @@
 					"desc": "<p>The response appears to contain suspicious comments which may help an attacker.</p>",
 					"instances":[ 
 						{
-							"id": "113",
+							"id": "108",
 							"uri": "http://localhost:3000/transfer_funds",
 							"nodeName": "http:\/\/localhost:3000\/transfer_funds",
 							"method": "GET",
@@ -1588,7 +1588,7 @@
 					"reference": "",
 					"cweid": "615",
 					"wascid": "13",
-					"sourceid": "43"
+					"sourceid": "35"
 				},
 				{
 					"pluginid": "10109",
@@ -1601,7 +1601,7 @@
 					"desc": "<p>The application appears to be a modern web application. If you need to explore it automatically then the Client Spider may well be more effective than the standard one.</p>",
 					"instances":[ 
 						{
-							"id": "114",
+							"id": "109",
 							"uri": "http://localhost:3000/transfer_funds",
 							"nodeName": "http:\/\/localhost:3000\/transfer_funds",
 							"method": "GET",
@@ -1628,7 +1628,7 @@
 					"reference": "",
 					"cweid": "-1",
 					"wascid": "-1",
-					"sourceid": "43"
+					"sourceid": "35"
 				},
 				{
 					"pluginid": "10049",
@@ -1641,7 +1641,7 @@
 					"desc": "<p>The response contents are not storable by caching components such as proxy servers. If the response does not contain sensitive, personal or user-specific information, it may benefit from being stored and cached, to improve performance.</p>",
 					"instances":[ 
 						{
-							"id": "97",
+							"id": "92",
 							"uri": "http://localhost:3000/redirect?url=https://example.com",
 							"nodeName": "http:\/\/localhost:3000\/redirect (url)",
 							"method": "GET",
@@ -1658,7 +1658,7 @@
 					"reference": "<p>https://datatracker.ietf.org/doc/html/rfc7234</p><p>https://datatracker.ietf.org/doc/html/rfc7231</p><p>https://www.w3.org/Protocols/rfc2616/rfc2616-sec13.html</p>",
 					"cweid": "524",
 					"wascid": "13",
-					"sourceid": "29"
+					"sourceid": "23"
 				},
 				{
 					"pluginid": "90005",
@@ -1681,17 +1681,7 @@
 							"otherinfo": ""
 						},
 						{
-							"id": "35",
-							"uri": "http://localhost:3000/health",
-							"nodeName": "http:\/\/localhost:3000\/health",
-							"method": "GET",
-							"param": "Sec-Fetch-Dest",
-							"attack": "",
-							"evidence": "",
-							"otherinfo": ""
-						},
-						{
-							"id": "41",
+							"id": "45",
 							"uri": "http://localhost:3000/robots.txt",
 							"nodeName": "http:\/\/localhost:3000\/robots.txt",
 							"method": "GET",
@@ -1701,7 +1691,7 @@
 							"otherinfo": ""
 						},
 						{
-							"id": "34",
+							"id": "40",
 							"uri": "http://localhost:3000/sitemap.xml",
 							"nodeName": "http:\/\/localhost:3000\/sitemap.xml",
 							"method": "GET",
@@ -1711,7 +1701,7 @@
 							"otherinfo": ""
 						}
 					],
-					"count": "4",
+					"count": "3",
 					"systemic": false,
 					"solution": "<p>Ensure that Sec-Fetch-Dest header is included in request headers.</p>",
 					"otherinfo": "",
@@ -1741,17 +1731,7 @@
 							"otherinfo": ""
 						},
 						{
-							"id": "29",
-							"uri": "http://localhost:3000/health",
-							"nodeName": "http:\/\/localhost:3000\/health",
-							"method": "GET",
-							"param": "Sec-Fetch-Mode",
-							"attack": "",
-							"evidence": "",
-							"otherinfo": ""
-						},
-						{
-							"id": "37",
+							"id": "39",
 							"uri": "http://localhost:3000/robots.txt",
 							"nodeName": "http:\/\/localhost:3000\/robots.txt",
 							"method": "GET",
@@ -1761,7 +1741,7 @@
 							"otherinfo": ""
 						},
 						{
-							"id": "31",
+							"id": "36",
 							"uri": "http://localhost:3000/sitemap.xml",
 							"nodeName": "http:\/\/localhost:3000\/sitemap.xml",
 							"method": "GET",
@@ -1771,7 +1751,7 @@
 							"otherinfo": ""
 						}
 					],
-					"count": "4",
+					"count": "3",
 					"systemic": false,
 					"solution": "<p>Ensure that Sec-Fetch-Mode header is included in request headers.</p>",
 					"otherinfo": "",
@@ -1801,17 +1781,7 @@
 							"otherinfo": ""
 						},
 						{
-							"id": "26",
-							"uri": "http://localhost:3000/health",
-							"nodeName": "http:\/\/localhost:3000\/health",
-							"method": "GET",
-							"param": "Sec-Fetch-Site",
-							"attack": "",
-							"evidence": "",
-							"otherinfo": ""
-						},
-						{
-							"id": "33",
+							"id": "31",
 							"uri": "http://localhost:3000/robots.txt",
 							"nodeName": "http:\/\/localhost:3000\/robots.txt",
 							"method": "GET",
@@ -1821,7 +1791,7 @@
 							"otherinfo": ""
 						},
 						{
-							"id": "30",
+							"id": "32",
 							"uri": "http://localhost:3000/sitemap.xml",
 							"nodeName": "http:\/\/localhost:3000\/sitemap.xml",
 							"method": "GET",
@@ -1831,7 +1801,7 @@
 							"otherinfo": ""
 						}
 					],
-					"count": "4",
+					"count": "3",
 					"systemic": false,
 					"solution": "<p>Ensure that Sec-Fetch-Site header is included in request headers.</p>",
 					"otherinfo": "",
@@ -1861,17 +1831,7 @@
 							"otherinfo": ""
 						},
 						{
-							"id": "36",
-							"uri": "http://localhost:3000/health",
-							"nodeName": "http:\/\/localhost:3000\/health",
-							"method": "GET",
-							"param": "Sec-Fetch-User",
-							"attack": "",
-							"evidence": "",
-							"otherinfo": ""
-						},
-						{
-							"id": "43",
+							"id": "49",
 							"uri": "http://localhost:3000/robots.txt",
 							"nodeName": "http:\/\/localhost:3000\/robots.txt",
 							"method": "GET",
@@ -1881,7 +1841,7 @@
 							"otherinfo": ""
 						},
 						{
-							"id": "38",
+							"id": "43",
 							"uri": "http://localhost:3000/sitemap.xml",
 							"nodeName": "http:\/\/localhost:3000\/sitemap.xml",
 							"method": "GET",
@@ -1891,7 +1851,7 @@
 							"otherinfo": ""
 						}
 					],
-					"count": "4",
+					"count": "3",
 					"systemic": false,
 					"solution": "<p>Ensure that Sec-Fetch-User header is included in user initiated requests.</p>",
 					"otherinfo": "",
@@ -1921,7 +1881,7 @@
 							"otherinfo": "In the absence of an explicitly specified caching lifetime directive in the response, a liberal lifetime heuristic of 1 year was assumed. This is permitted by rfc7234."
 						},
 						{
-							"id": "22",
+							"id": "66",
 							"uri": "http://localhost:3000/health",
 							"nodeName": "http:\/\/localhost:3000\/health",
 							"method": "GET",
@@ -1931,9 +1891,9 @@
 							"otherinfo": "In the absence of an explicitly specified caching lifetime directive in the response, a liberal lifetime heuristic of 1 year was assumed. This is permitted by rfc7234."
 						},
 						{
-							"id": "57",
-							"uri": "http://localhost:3000/profile?name=test",
-							"nodeName": "http:\/\/localhost:3000\/profile (name)",
+							"id": "37",
+							"uri": "http://localhost:3000/login",
+							"nodeName": "http:\/\/localhost:3000\/login",
 							"method": "GET",
 							"param": "",
 							"attack": "",
@@ -1941,7 +1901,7 @@
 							"otherinfo": "In the absence of an explicitly specified caching lifetime directive in the response, a liberal lifetime heuristic of 1 year was assumed. This is permitted by rfc7234."
 						},
 						{
-							"id": "21",
+							"id": "24",
 							"uri": "http://localhost:3000/robots.txt",
 							"nodeName": "http:\/\/localhost:3000\/robots.txt",
 							"method": "GET",
@@ -1951,7 +1911,7 @@
 							"otherinfo": "In the absence of an explicitly specified caching lifetime directive in the response, a liberal lifetime heuristic of 1 year was assumed. This is permitted by rfc7234."
 						},
 						{
-							"id": "20",
+							"id": "23",
 							"uri": "http://localhost:3000/sitemap.xml",
 							"nodeName": "http:\/\/localhost:3000\/sitemap.xml",
 							"method": "GET",
@@ -2038,7 +1998,7 @@
 					"reference": "<p>https://owasp.org/wstg</p>",
 					"cweid": "0",
 					"wascid": "0",
-					"sourceid": "5475"
+					"sourceid": "5476"
 				},
 				{
 					"pluginid": "10031",
@@ -2051,7 +2011,7 @@
 					"desc": "<p>This check looks at user-supplied input in query string parameters and POST data to identify where certain HTML attribute values might be controlled. This provides hot-spot detection for XSS (cross-site scripting) that will require further review by a security analyst to determine exploitability.</p>",
 					"instances":[ 
 						{
-							"id": "56",
+							"id": "58",
 							"uri": "http://localhost:3000/frame_content?url=https://example.com",
 							"nodeName": "http:\/\/localhost:3000\/frame_content (url)",
 							"method": "GET",
@@ -2068,7 +2028,7 @@
 					"reference": "<p>https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html</p>",
 					"cweid": "20",
 					"wascid": "20",
-					"sourceid": "16"
+					"sourceid": "17"
 				}
 			]
 		}
